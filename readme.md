@@ -5,7 +5,7 @@ Ace FT is the very first web3 file transfer application that is built with the [
 The choice of the iExec stack was a no-brainer given that it covers the key requirements for the implementation a trustworthy web3 file transfer application.
 Moreover, the iExec protocols has a built-in data monetization capability that we are leveraging in this project.
 
-## What are we fixing
+## What are we fixing?
 We believe that Web 2 is broken and it’s time for a new paradigm shift that can restore our right to privacy and security. 
 Up until the emergence of Web3 we were forced to endure untrustworthy corporations selling our data to other corporation or even governments and centralized databases containing our personal details being hacked on a regular basis.
 Ace is an illustration that 
