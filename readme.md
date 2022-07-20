@@ -41,18 +41,17 @@ The processing capacity required to execute the application is provided by worke
 _Users types_  
 - Provider: This is the content creator who want to send its assets to someone (the beneficiary) with or without monetization.
 - Beneficiary: This is the recipient of the files
-- Requester: This is the person who is authorised to trigger the (download) application with the dataset as an input. In our case, the beneficiary of a file transfer and the requester are just the same user.
+- Requester: This is the person who is authorized to trigger the (download) application with the dataset as an input. In our case, the beneficiary of a file transfer and the requester are just the same user.
  
 
 **File Transfer process**
 
 - Step 1 - Preparation  
-The preparation stage consists of the File encryption, the ipfs upload and the dataset deployment (registration on the iExec marketplace)
-
+The preparation stage consists in encrypting the File, uploading to ipfs and deploying the dataset (registration on the iExec marketplace)  
 ![IMAGE_DESCRIPTION](https://bafybeigb3aodzwkqsf3kdffjodbluzxpvvpe5ixzz542jcec4swzl3wbqi.ipfs.infura-ipfs.io)
  
 
-The encryption and deployment are handled with the [iExec SDK](https://github.com/iExecBlockchainComputing/iexec-sdk) whilst the IPFS upload is a pretty straight forward process when using a library like [ipfs-http-client](https://www.npmjs.com/package/ipfs-http-client).
+The encryption and deployment steps are handled with the [iExec SDK](https://github.com/iExecBlockchainComputing/iexec-sdk) whilst the IPFS upload is a pretty straight forward process when using a library like [ipfs-http-client](https://www.npmjs.com/package/ipfs-http-client).
 You can refer to [This section of the iExec documentation](https://docs.iex.ec/for-developers/confidential-computing/sgx-encrypted-dataset) to get a more detailed explaination on how to use confidentials assets with iExec.
 
 
