@@ -56,12 +56,12 @@ You can refer to [This section of the iExec documentation](https://docs.iex.ec/f
 
 
 - Step 2 - Set Governance rules  
-The second step of the process is to set the authorization for the beneficiary and requester and an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
+The second step of the process is to set the authorization for the beneficiary/requester together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
 **From an iExec prospective this step is just an order being placed on the marketplace.**
 
 Step 3 -  Beneficiary notification (non-iExec service)  
 
-Step 4 - Optional payment and file download  
+Step 4 - (Optional) payment and file download  
 
 ## Notification system
 
