@@ -1,9 +1,18 @@
 # Ace
 ## _Web3 file transfer app powered by iExec_ 
 
-Ace FT is the very first decentralised file transfer application that is built with the iExec protocol. 
+Ace FT is the very first web3 file transfer application that is built with the iExec protocol. 
 The choice of the iExec stack was a no-brainer given that it covers the key requirements for the implementation a trustworthy web3 file transfer application.
 Moreover, the iExec protocols has a built-in data monetization capability that we are leveraging in this project.
+
+## What are we fixing
+We believe that Web 2 is broken and it’s time for a new paradigm shift that can restore our right to privacy and security. 
+Up until the emergence of Web3 we were forced to endure untrustworthy corporations selling our data to other corporation or even governments and centralized databases containing our personal details being hacked on a regular basis.
+Ace is an illustration that 
+- there is a better way to do business when it comes to file transfer, one which doesn’t call for sacrificing our security nor our need for great level of service and experience. 
+- there is no need for a man in the middle when I am sending personal holiday pics to my family!
+- nobody would be able to sell my data without my consent that is enforced and verifiable onchain.
+
 
 ## Features
 
@@ -64,6 +73,7 @@ Here are some features that could be implemented after v1.
 - **Copyright protection and licensing:** Making the application more intelligent with the integration of a library for creating invisible watermark over images, videos and PDFs.
 - **KYC:** Add the ability for the content provider to get proofs about the beneficiary's identity. For example creator of adult material will be able to check that the beneficiary is over 18.
 - **Subscriptions:** The version 1 works on the basis that the content creator manages the list of beneficiaries on a seperate system. The subscription model will allow people to register their interest and join a "fan" club. Content providers will be able to chose their subscription list rather than selecting beneficiaries one by one
+
 
 ## License
 
