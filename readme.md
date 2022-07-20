@@ -7,7 +7,7 @@ Moreover, the iExec protocols has a built-in data monetization capability that w
 
 ## What are we fixing?
 We believe that Web 2 is broken and it’s time for a new paradigm shift that can restore our right to privacy and security. 
-Up until the emergence of Web3 we were forced to endure untrustworthy corporations selling our data to other corporation or even governments and centralized databases containing our personal details being hacked on a regular basis.
+Up until the emergence of Web3 we were forced to endure untrustworthy corporations selling our data to other corporations or even governments and centralized databases containing our personal details being hacked on a regular basis.
 Ace is an illustration that 
 - there is a better way to do business when it comes to file transfer, one which doesn’t call for sacrificing our security nor our need for great level of service and experience. 
 - there is no need for a man in the middle when I am sending personal holiday pics to my family!
