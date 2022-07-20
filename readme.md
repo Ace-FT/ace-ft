@@ -19,7 +19,7 @@ Ace is an illustration that:
 - "WeTransfer-like" experience,  simply drag and drop files you want to share
 - Set the beneficiary in the form of 0x address or use a ENS
 - Beneficiary email notification 
-- Built-in monetization! You can sell your added value content and get paid in $RLC
+- Built-in monetization! You can sell your added value content and get paid in [$RLC](https://coinmarketcap.com/currencies/rlc/)
 - Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API
 
 
