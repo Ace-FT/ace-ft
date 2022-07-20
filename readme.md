@@ -17,10 +17,10 @@ Ace is an illustration that:
 ## Features
 
 - "WeTransfer-like" experience,  simply drag and drop files you want to share
-- Set the beneficiary in the form of 0x address or ENS
+- Set the beneficiary in the form of 0x address or use a ENS
 - Beneficiary email notification 
 - Built-in monetization! You can sell your added value content and get paid in $RLC
-- Cool visual background randomly sourced from [unsplash](https://unsplash.com) API
+- Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API
 
 
 ## Core principles
@@ -29,16 +29,16 @@ Ace's system design is making use of all three types of computing assets that ar
 
 **Modelization**
 
-_Datasets_
+_Datasets_  
 Files that are being transferred are represented as iExec encrypted datasets
 
-_Application_
+_Application_  
 Our application is trivial as it consists of simply downloading the transferred file. In fact, the iExec protocol is taking care the authorization by ensuring that only the selected requester can trigger the download application for the given dataset (i.e transferred files)
 
-_Processing power (CPU)_
+_Processing power (CPU)_  
 The processing capacity required to execute the application is provided by workers in the iExec network. The execution relies on Intel SGX compatible workers only.
 
-_Users types_
+_Users types_  
 - Provider: This is the content creator who want to send its assets to someone (the beneficiary) with or without monetization.
 - Beneficiary: This is the recipient of the files
 - Requester: This is the person who is authorised to trigger the (download) application with the dataset as an input. In our case, the beneficiary of a file transfer and the requester are just the same user.
@@ -46,7 +46,7 @@ _Users types_
 
 **File Transfer process**
 
-- Step 1 - Preparation
+- Step 1 - Preparation  
 The preparation stage consists of the File encryption, the ipfs upload and the dataset deployment (registration on the iExec marketplace)
 
 ![IMAGE_DESCRIPTION](https://bafybeigb3aodzwkqsf3kdffjodbluzxpvvpe5ixzz542jcec4swzl3wbqi.ipfs.infura-ipfs.io)
@@ -56,13 +56,13 @@ The encryption and deployment are handled with the [iExec SDK](https://github.co
 You can refer to [This section of the iExec documentation](https://docs.iex.ec/for-developers/confidential-computing/sgx-encrypted-dataset) to get a more detailed explaination on how to use confidentials assets with iExec.
 
 
-- Step 2 - Governance rules
-The second step of the process is to set the authorization for the beneficiary and requester and an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).
+- Step 2 - Set Governance rules  
+The second step of the process is to set the authorization for the beneficiary and requester and an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
 **From an iExec prospective this step is just an order being placed on the marketplace.**
 
-Step 3 -  Beneficiary notification (non-iExec service)
+Step 3 -  Beneficiary notification (non-iExec service)  
 
-Step 4 - Optional payment and file download
+Step 4 - Optional payment and file download  
 
 ## Notification system
 
