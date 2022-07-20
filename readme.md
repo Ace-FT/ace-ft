@@ -11,7 +11,7 @@ Moreover, the iExec protocols has a built-in data monetization capability that w
 - Set the beneficiary in the form of 0x address or ENS
 - Beneficiary email notification 
 - Built-in monetization! You can sell your added value content and get paid in $RLC
-- Cool visual background randomly sourced from [unsplash] API
+- Cool visual background randomly sourced from [unsplash](https://unsplash.com) API
 
 
 ## Core principles
