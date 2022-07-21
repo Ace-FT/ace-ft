@@ -5,8 +5,6 @@ Ace FT is the very first web3 file transfer application that is built with the [
 The choice of the iExec stack was a no-brainer given that it covers the key requirements for the implementation a trustworthy web3 file transfer application.  
 Moreover, the iExec protocols has a built-in data monetization capability that we are leveraging in this project.
 
----
-
 ## Contents
 - [What are we fixing?](#what-are-we-fixing)
 - [Features](#features)
@@ -58,8 +56,6 @@ The processing capacity required to execute the application is provided by worke
 - Beneficiary: This is **the recipient** of the files
 - Requester: This is the person who is authorized to run the application (download) with the dataset as an input. **In our case, the beneficiary of a file transfer and the requester are just the same user**.  
  
----
-
 ### File Transfer process
 
 - Step 1 - Preparation  
@@ -72,9 +68,7 @@ You can refer to [This section of the iExec documentation](https://docs.iex.ec/f
 
 - Step 2 - Set governance rules  
 The second step of the process is to set the authorization for the beneficiary/requester together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
-  
-**From an iExec prospective this step is just dataset order being placed on the marketplace.**
-The following arguments of the dataset order method will be used to defined the governance rules:
+**From an iExec prospective this step is just dataset order being placed on the marketplace.** The following arguments of the dataset order method will be used to defined the governance rules:
 
 | Argument | Description |
 | ------ | ------ |
@@ -94,11 +88,8 @@ Triggering the download application is handled with iExec SDK, including making 
 - Step 5 - Provider notification (non-iExec service)
 Senders (providers) can optionaly register for their email addresses to get notified whenever the benefeciary downloaded the file (i.e in iExec terms : when the task execution completed)
 
----
-
 ## Notification system
 
----
 
 ## Transfer fees
 In order to understand the cost structure, it is very important to first understand how iExec marketplace order system works. 
@@ -130,11 +121,7 @@ Total transfer fees = worker usage fee
 
 Hey, doesn't that look great? At last with Ace we can benefit from a trustworthy, privacy-preserving decentralised file transfer application whose revenue model is not correlated to the monetization of my personal and private data! 
 
----
-
 ## Use cases
-
----
 
 ## Future considerations
 Here are some features that could be implemented after v1. 
@@ -145,7 +132,6 @@ Add the ability for the content provider to get proofs about the beneficiary's i
 ### Subscriptions  
 The version 1 works on the basis that the content creator manages the list of beneficiaries on a seperate system. The subscription model will allow people to register their interest and join a "fan" club. Content providers will be able to chose their subscription list rather than selecting beneficiaries one by one.
 
----
 
 ## License
 
