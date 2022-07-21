@@ -5,6 +5,8 @@ Ace FT is the very first web3 file transfer application that is built with the [
 The choice of the iExec stack was a no-brainer given that it covers the key requirements for the implementation a trustworthy web3 file transfer application.  
 Moreover, the iExec protocols has a built-in data monetization capability that we are leveraging in this project.
 
+---
+
 ## Contents
 - [What are we fixing?](#what-are-we-fixing)
 - [Features](#features)
@@ -15,7 +17,9 @@ Moreover, the iExec protocols has a built-in data monetization capability that w
 - [Transfer fees](#transfer-fees)
 - [Use cases](#use-cases)
 - [Future considerations](#future-considerations)
-- [Licence](#licence)
+- [Licence](#licence)  
+
+---
 
 ## What are we fixing?
 We believe that Web 2 is broken and it’s time for a new paradigm shift that can restore our right to privacy and security. 
@@ -36,24 +40,25 @@ Ace is an illustration that:
 
 
 ## Core principles  
-Ace's system design is making use of all three types of computing assets that are part of iExec’s marketplace model : application, processing power (CPU) and dataset. The section below explains how Ace is mapped against iExec core concepts. 
+Ace's system design is making use of all three types of computing assets that are part of the iExec marketplace model: application, processing power (CPU) and dataset. The section below explains how Ace is mapped against iExec core concepts. 
 
 ### Modelization
 
-**_Datasets_**
+**_Datasets_**  
 Files that are being transferred are represented as iExec encrypted datasets
 
-**_Application_** 
+**_Application_**  
 Our application is trivial as it consists of simply downloading the transferred file. In fact, the iExec protocol is taking care the authorization by ensuring that only the selected requester can trigger the download application for the given dataset (i.e transferred files)
 
-**_Processing power (CPU)_**
+**_Processing power (CPU)_**  
 The processing capacity required to execute the application is provided by workers in the iExec network. The execution relies on Intel SGX compatible workers only.
 
 **_Users roles_**  
-- Provider: This is **the sender**, or the content creator who want to send its assets to someone (the beneficiary) with or without monetization.
+- Provider: This is **the sender**/the content creator who want to send its assets to someone (the beneficiary) with or without monetization.
 - Beneficiary: This is **the recipient** of the files
-- Requester: This is the person who is authorized to trigger the (download) application with the dataset as an input. **In our case, the beneficiary of a file transfer and the requester are just the same user**.
+- Requester: This is the person who is authorized to run the application (download) with the dataset as an input. **In our case, the beneficiary of a file transfer and the requester are just the same user**.  
  
+---
 
 ### File Transfer process
 
@@ -64,7 +69,6 @@ The preparation stage consists in encrypting the File, uploading to ipfs and dep
 
 The encryption and deployment steps are handled with the [iExec SDK](https://github.com/iExecBlockchainComputing/iexec-sdk) whilst the IPFS upload is a pretty straight forward process when using a library like [ipfs-http-client](https://www.npmjs.com/package/ipfs-http-client).
 You can refer to [This section of the iExec documentation](https://docs.iex.ec/for-developers/confidential-computing/sgx-encrypted-dataset) to get a more detailed explaination on how to use confidential assets with iExec.
-
 
 - Step 2 - Set governance rules  
 The second step of the process is to set the authorization for the beneficiary/requester together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
@@ -90,9 +94,11 @@ Triggering the download application is handled with iExec SDK, including making 
 - Step 5 - Provider notification (non-iExec service)
 Senders (providers) can optionaly register for their email addresses to get notified whenever the benefeciary downloaded the file (i.e in iExec terms : when the task execution completed)
 
+---
 
 ## Notification system
 
+---
 
 ## Transfer fees
 In order to understand the cost structure, it is very important to first understand how iExec marketplace order system works. 
@@ -124,7 +130,11 @@ Total transfer fees = worker usage fee
 
 Hey, doesn't that look great? At last with Ace we can benefit from a trustworthy, privacy-preserving decentralised file transfer application whose revenue model is not correlated to the monetization of my personal and private data! 
 
+---
+
 ## Use cases
+
+---
 
 ## Future considerations
 Here are some features that could be implemented after v1. 
@@ -135,6 +145,7 @@ Add the ability for the content provider to get proofs about the beneficiary's i
 ### Subscriptions  
 The version 1 works on the basis that the content creator manages the list of beneficiaries on a seperate system. The subscription model will allow people to register their interest and join a "fan" club. Content providers will be able to chose their subscription list rather than selecting beneficiaries one by one.
 
+---
 
 ## License
 
