@@ -8,8 +8,14 @@ Moreover, the iExec protocols has a built-in data monetization capability that w
 ## Contents
 - [What are we fixing](#fixing)
 - [Features](#features)
-- [Core principles](#principles)
-- [Core principles](#principles)
+- [Core principles](#principles)  
+[Modelization](#modelization)  ``
+[File Transfer process](#ft-process)  
+- [Notification system](#notification)
+- [Transfer fees](#fees)
+- [Use cases](#use-cases)
+- [Future considerations](#future)
+- [Licence](#licence)
 
 ## What are we fixing?
 We believe that Web 2 is broken and it’s time for a new paradigm shift that can restore our right to privacy and security. 
@@ -63,6 +69,7 @@ You can refer to [This section of the iExec documentation](https://docs.iex.ec/f
 
 - Step 2 - Set governance rules  
 The second step of the process is to set the authorization for the beneficiary/requester together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
+  
 **From an iExec prospective this step is just dataset order being placed on the marketplace.**
 The following arguments of the dataset order method will be used to defined the governance rules:
 
