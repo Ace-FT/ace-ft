@@ -74,12 +74,12 @@ Senders (providers) can optionaly register for their email addresses to get noti
 
 
 ## Transfer fees
-In order to understand the cost structure, it is very important to understand how iExec marketplace order system works. 
+In order to understand the cost structure, it is very important to first understand how iExec marketplace order system works. 
 iExec marketplace allows anyone to monetize the usage of its application, CPU and dataset. In fact, each proiders indicates his conditions through orders.  
 
-- The Application Provider sets price to charge the requester for each execution of the app (in RLC)
+- Application providers sets price to charge the requester for each execution of the app (in RLC)
 [Check out this section of the SDK documentation for more details](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#sell-your-app-on-the-marketplace) 
-- The Dataset provider (i.e. sender / content creator) sets the price to charge the requester for each use of the dataset (in RLC)
+- Dataset providers (i.e. the sender / content creator in our case) sets the price to charge the requester for each use of the dataset (in RLC)
 [Check out this section of the SDK documentation for more details](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#sell-your-computing-power-at-limit-price-on-the-marketplace) 
 - The Workerpool sets the computing power price 
 [Check out this section of the SDK documentation for more details](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#sell-your-computing-power-at-limit-price-on-the-marketplace) 
