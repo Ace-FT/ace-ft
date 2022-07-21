@@ -86,9 +86,10 @@ User (recipients) can register their email addresses to get notified whenever a 
 Such mechanism is a must-have given it is not conceivable to check Ace UI to check if someone send something to me. 
 
 **Step 4 - (Optional) payment and file download**   
-Triggering the download application is handled with iExec SDK and protocol, including making the "payment" when monetization has been set as a governance conditions. **From an iExec prospective this step is just an computation order being placed on the marketplace by the requester (recipient).** The following arguments of the by computation order method will be used to defined the governance rules:
+Triggering the download application is handled with iExec SDK and protocol, including making the "payment" when monetization has been set as a governance conditions. **From an iExec prospective this step is just an computation order being placed on the marketplace by the requester (recipient).** The following arguments of the by computation order method will be used to defined the governance rules:  
 
-| Argument | Description |
+| Argument | Description |  
+| ------ | ------ |  
 | dataset 0x | 0x Address of the dataset representing the file being shared |  
 | beneficiary <address>  | Same as the request address in our case |  
 | tag | set to 'TEE' to ensure that that only the beneficiary will be able to decrypt the dowloaded file by using his private key |
