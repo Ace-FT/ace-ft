@@ -68,14 +68,16 @@ You can refer to [This section of the iExec documentation](https://docs.iex.ec/f
 
 - Step 2 - Set governance rules  
 The second step of the process is to set the authorization for the beneficiary/requester together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
-**From an iExec prospective this step is just dataset order being placed on the marketplace.** The following arguments of the dataset order method will be used to defined the governance rules:
+**From an iExec prospective this step is just a dataset order being placed on the marketplace.** The following arguments of the dataset order method will be used to defined the governance rules:
 
 | Argument | Description |
 | ------ | ------ |
-| dataset 0x | Dataset address |  
-| datasetprice | Set to a non-0 value to monetize | 
+| dataset 0x | 0x Address of the dataset representing the file being shared |  
+| datasetprice | Set to a non-0 value when monetizing | 
 | apprestrict | 0x address of our download app | 
 | requesterrestrict | 0x address or ENS of the recipient |
+
+A detailed description of datasets orders can be found [in this section of the documentation](https://docs.iex.ec/for-developers/advanced/manage-your-datasetorders#publish-a-custom-datasetorder)
 
 
 - Step 3 -  Beneficiary notification (non-iExec service)  
