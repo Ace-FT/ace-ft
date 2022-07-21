@@ -105,14 +105,13 @@ Senders (providers) can optionaly register their email addresses to get notified
 ## Notification system
 
 **Recipient notification**  
-The notification system is simple application that can is decentralised given that it will monitor "incoming" files (i.e. iExec marketplace orders) for the requester's 0x address. 
+The notification system is an application that will monitor "incoming" files (i.e. iExec marketplace orders) for the requester's 0x address and the dataset 0x address. This will be achieved nby polling the marketplace at a regular interval.
 
 **Sender nnotification that the file was downloaded**  
-For "downloaed complete" notification, the system will check the tasks status od the dataset order that was placed by the provider (sender/content creator).
+For "tranfer complete" notifications, the system will check the status of the dataset order that was placed by the provider (sender/content creator).
 
 **Decentralization of the notification service**  
-Users have to choice to either use the instance of the notification service that will be deployed as part of this project or run their own instance should they need the highest level of confidentiality of their email addresses
-
+Users have to choice to either use the instance of the notification service that will be deployed as part of this project or run their own instance should they need the highest level of confidentiality of their email addresses  
 
 
 ## Transfer fees
