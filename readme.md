@@ -33,6 +33,8 @@ Ace is an illustration that:
 - "WeTransfer-like" experience,  simply drag and drop files you want to share
 - Set the beneficiary in the form of 0x address or use a ENS
 - Beneficiary email notification 
+- No time limit for file download, other service require the recipient to download the file within x days
+- Cryptographic accès control to the file being transfered
 - Built-in monetization! You can sell your added value content and get paid in [$RLC](https://coinmarketcap.com/currencies/rlc/)
 - Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API.  
 
@@ -90,32 +92,27 @@ Triggering the download application is handled with iExec SDK and protocol, incl
 
 | Argument | Description |  
 | ------ | ------ |  
-| dataset 0x | 0x Address of the dataset representing the file being shared |  
+| dataset 0x | 0x Address of the dataset representing the file to download |  
 | beneficiary <address>  | Same as the request address in our case |  
 | tag | set to 'TEE' to ensure that that only the beneficiary will be able to decrypt the dowloaded file by using his private key |
-| encrypt-result | encrypt the result archive with the beneficiary public key |
-
-
---dataset <address|"deployed"> # dataset address, use "deployed" to use last deployed from "deployed.json"
---workerpool <address|"deployed"> # workerpool address, use "deployed" to use last deployed from "deployed.json"
---category <id> # id of the task category
---tag <tag...> # specify tags (usage: --tag tee,gpu)
---trust <integer> # trust level
-
---callback <address> # specify the callback address of the request
---args <string> # specify the arguments to pass to the app
---input-files <fileUrl...> # specify the URL of input files to be used by the app (usage: --input-files https://example.com/foo.txt,https://example.com/bar.zip)
---secret <secretMapping> # specify the requester secrets mappings (<appSecretKey>=<requesterSecretName>) to use in the app (only available for TEE tasks, use with --tag tee)
---storage-provider <"ipfs"|"dropbox"> # specify the storage to use to store the result archive
---skip-request-check # skip request validity checks, this may result in task execution fail
---params <json> # specify the params of the request, this option is reserved to an advanced usage (usage: --params '{"iexec_args":"dostuff","iexec_input_files":["https://example.com/file.zip"]}')
---watch # watch execution status changes
+| encrypt-result | encrypt the result archive with the beneficiary public key |  
+| category <id> | id of the task category, defaulted to '1 – S' for the time being |  
 
 
 **Step 5 - Provider notification (non-iExec service)**  
 Senders (providers) can optionaly register for their email addresses to get notified whenever the benefeciary downloaded the file (i.e in iExec terms : when the task execution completed)
 
 ## Notification system
+
+**Recipient notification**
+The notification system is simple application that can is decentralised given that it will monitor "incoming" files (i.e. iExec marketplace orders) for the requester's 0x address. 
+
+**Sender nnotification that the file was downloaded**
+For "downloaed complete" notification, the system will check the tasks status od the dataset order that was placed by the provider (sender/content creator).
+
+**Decentralization of the notification service**
+Users have to choice to either use the instance of the notification service that will be deployed as part of this project or run their own instance should they need the highest level of confidentiality of their email addresses
+
 
 
 ## Transfer fees
@@ -149,6 +146,8 @@ Total transfer fees = worker usage fee
 Hey, doesn't that look great? At last with Ace we can benefit from a trustworthy, privacy-preserving decentralised file transfer application whose revenue model is not correlated to the monetization of my personal and private data! 
 
 ## Use cases
+- Ceontent monetization
+- Any use case that services like WeTransfer or Oroson 
 
 ## Future considerations
 Here are some features that could be implemented after v1. 
@@ -160,6 +159,8 @@ Add the ability for the content provider to get proofs about the beneficiary's i
 The version 1 works on the basis that the content creator manages the list of beneficiaries on a seperate system. The subscription model will allow people to register their interest and join a "fan" club. Content providers will be able to chose their subscription list rather than selecting beneficiaries one by one.
 ### Task categoru management
 The goal here will be to dynamically determine the task category depending on the transfered file size. For this v0, this value has been defaulted to '1 – S' (20 min task execution). Check out this section of the documentation to learn more about [iExec's pay per task model](https://docs.iex.ec/key-concepts/pay-per-task-model) 
+### Full privacy on the notification system
+
 
 
 
