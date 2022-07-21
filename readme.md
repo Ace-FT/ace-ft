@@ -76,6 +76,7 @@ The second step of the process is to set the authorization for the beneficiary/r
 | datasetprice | Set to a non-0 value when monetizing | 
 | apprestrict | 0x address of our download app | 
 | requesterrestrict | 0x address or ENS of the recipient |
+| tag | set to 'TEE' to ensure that that only the beneficiary will be able to decrypt the dowloaded file using his private key |
 
 A detailed description of datasets orders can be found [in this section of the documentation](https://docs.iex.ec/for-developers/advanced/manage-your-datasetorders#publish-a-custom-datasetorder)
 
