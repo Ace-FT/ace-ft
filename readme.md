@@ -6,15 +6,15 @@ The choice of the iExec stack was a no-brainer given that it covers the key requ
 Moreover, the iExec protocols has a built-in data monetization capability that we are leveraging in this project.
 
 ## Contents
-- [What are we fixing](#fixing)
+- [What are we fixing?](#what-are-we-fixing)
 - [Features](#features)
 - [Core principles](#principles)  
-[Modelization](#modelization)  ``
-[File Transfer process](#ft-process)  
-- [Notification system](#notification)
-- [Transfer fees](#fees)
+[Modelization](#modelization)  
+[File Transfer process](#file-transfer-process)  
+- [Notification system](#notification-system)
+- [Transfer fees](#transfer-fees)
 - [Use cases](#use-cases)
-- [Future considerations](#future)
+- [Future considerations](#future-considerations)
 - [Licence](#licence)
 
 ## What are we fixing?
