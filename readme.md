@@ -5,6 +5,12 @@ Ace FT is the very first web3 file transfer application that is built with the [
 The choice of the iExec stack was a no-brainer given that it covers the key requirements for the implementation a trustworthy web3 file transfer application.  
 Moreover, the iExec protocols has a built-in data monetization capability that we are leveraging in this project.
 
+## Contents
+- [What are we fixing](#fixing)
+- [Features](#features)
+- [Core principles](#principles)
+- [Core principles](#principles)
+
 ## What are we fixing?
 We believe that Web 2 is broken and it’s time for a new paradigm shift that can restore our right to privacy and security. 
 Up until the emergence of Web3 we were forced to endure untrustworthy corporations selling our data to other corporations or even governments and centralized databases containing our personal details being hacked on a regular basis.  
@@ -57,16 +63,25 @@ You can refer to [This section of the iExec documentation](https://docs.iex.ec/f
 
 - Step 2 - Set governance rules  
 The second step of the process is to set the authorization for the beneficiary/requester together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
-**From an iExec prospective this step is just an order being placed on the marketplace.**
+**From an iExec prospective this step is just dataset order being placed on the marketplace.**
+The following arguments of the dataset order method will be used to defined the governance rules:
 
-Step 3 -  Beneficiary notification (non-iExec service)  
+| Argument | Description |
+| ------ | ------ |
+| dataset 0x | Dataset address |  
+| datasetprice | Set to a non-0 value to monetize | 
+| apprestrict | 0x address of our download app | 
+| requesterrestrict | 0x address or ENS of the recipient |
+
+
+- Step 3 -  Beneficiary notification (non-iExec service)  
 User (recipients) can register their email addresses to get notified whenever a transfer is initiated with their 0x address as the beneficiary (i.e in iExec terms : when an order has been placed for the download app for that user as the beneficiary)
 Such mechanism is a must-have given it is not conceivable to check Ace UI to check if someone send something to me. 
 
-Step 4 - (Optional) payment and file download  
+- Step 4 - (Optional) payment and file download  
 Triggering the download application is handled with iExec SDK, including making the "payment" when monetization has been set as a governance condition.
 
-Step 5 - Provider notification (non-iExec service)
+- Step 5 - Provider notification (non-iExec service)
 Senders (providers) can optionaly register for their email addresses to get notified whenever the benefeciary downloaded the file (i.e in iExec terms : when the task execution completed)
 
 
@@ -96,7 +111,7 @@ This equation can be further simplified as we will be deploying the application 
 Total transfer fees = worker usage fee + content creation monetization fee
 ```
 
-When the sender/content creator does not charge for the content being share the equation becomes :
+When the sender/content creator does not charge for the content the equation becomes :
 ```sh
 Total transfer fees = worker usage fee
 ```
@@ -105,7 +120,7 @@ Hey, doesn't that look great? At last with Ace we can benefit from a trustworthy
 
 ## Use cases
 
-## Future consideration
+## Future considerations
 Here are some features that could be implemented after v1. 
 - **Copyright protection and licensing:** Making the application more intelligent with the integration of a library for creating invisible watermark over images, videos and PDFs.
 - **KYC:** Add the ability for the content provider to get proofs about the beneficiary's identity. For example a creator of adult materials will be able to check that the beneficiary is over 18.
