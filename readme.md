@@ -77,26 +77,26 @@ Senders (providers) can optionaly register for their email addresses to get noti
 In order to understand the cost structure, it is very important to first understand how iExec marketplace order system works. 
 iExec marketplace allows anyone to monetize the usage of its application, CPU and dataset. In fact, each proiders indicates his conditions through orders.  
 
-- Application providers sets price to charge the requester for each execution of the app (in RLC)
+- Application providers set the price to charge the requester for each execution of the app (in RLC)
 [Check out this section of the SDK documentation for more details](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#sell-your-app-on-the-marketplace) 
-- Dataset providers (i.e. the sender / content creator in our case) sets the price to charge the requester for each use of the dataset (in RLC)
+- Dataset providers (i.e. the sender / content creator in our case) set the price to charge the requester for each use of the dataset (in RLC)
 [Check out this section of the SDK documentation for more details](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#sell-your-computing-power-at-limit-price-on-the-marketplace) 
-- The Workerpool sets the computing power price 
+- The Workerpool managers set the computing power price 
 [Check out this section of the SDK documentation for more details](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#sell-your-computing-power-at-limit-price-on-the-marketplace) 
 
-Luckily enough there no blockchain Tx fee on iExec's sidechain and it makes the equation as simple as:  
+Luckily enough there are no blockchain Tx fees on iExec's sidechain (Bellecour) and it makes the pricing equation as simple as:  
 
 ```sh
 Total transfer fees = app usage fee + worker usage fee + dataset usage fee
 ```
 
-This equation can be further simplified as we will be deploying the application and set usage fee at 0RLC.  
+This equation can be further simplified as we will be deploying the application and setting usage fee at 0RLC.  
 
 ```sh
-Total transfer fees = worker usage fee + Content Creation Monetization fee
+Total transfer fees = worker usage fee + content creation monetization fee
 ```
 
-When the sender does not charge for the content being share the equation becomes :
+When the sender/content creator does not charge for the content being share the equation becomes :
 ```sh
 Total transfer fees = worker usage fee
 ```
