@@ -23,7 +23,7 @@ Up until the emergence of Web3 we were forced to endure untrustworthy corporatio
 Ace is an illustration that:  
 - there is a better way to do business when it comes to file transfer, one which doesn’t call for sacrificing our security nor our need for great level of service and experience. 
 - there is no need for a man in the middle when I am sending personal holiday pics to my family!
-- nobody would be able to sell my data without my consent that is enforced and verifiable onchain.
+- nobody would be able to sell my data without my consent that is enforced and verifiable onchain.  
 
 
 ### Features
@@ -32,11 +32,10 @@ Ace is an illustration that:
 - Set the beneficiary in the form of 0x address or use a ENS
 - Beneficiary email notification 
 - Built-in monetization! You can sell your added value content and get paid in [$RLC](https://coinmarketcap.com/currencies/rlc/)
-- Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API
+- Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API.  
 
 
-### Core principles
-
+### Core principles  
 Ace's system design is making use of all three types of computing assets that are part of iExec’s marketplace model : application, processing power (CPU) and dataset. The section below explains how Ace is mapped against iExec core concepts. 
 
 ## Modelization
