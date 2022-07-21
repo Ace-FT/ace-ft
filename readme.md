@@ -67,8 +67,8 @@ The encryption and deployment steps are handled with the [iExec SDK](https://git
 You can refer to [This section of the iExec documentation](https://docs.iex.ec/for-developers/confidential-computing/sgx-encrypted-dataset) to get a more detailed explaination on how to use confidential assets with iExec.
 
 **Step 2 - Set governance rules**   
-The second step of the process is to set the authorization for the beneficiary/requester together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
-**From an iExec prospective this step is just a dataset order being placed on the marketplace.** The following arguments of the dataset order method will be used to defined the governance rules:
+The second step of the process is for the sender/ceontent creator to set the authorization for the beneficiary/requester together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
+**From an iExec prospective this step is just a dataset order being placed on the marketplace by the provider (sender/content creator).** The following arguments of the dataset order method will be used to defined the governance rules:
 
 | Argument | Description |
 | ------ | ------ |
@@ -86,7 +86,30 @@ User (recipients) can register their email addresses to get notified whenever a 
 Such mechanism is a must-have given it is not conceivable to check Ace UI to check if someone send something to me. 
 
 **Step 4 - (Optional) payment and file download**   
-Triggering the download application is handled with iExec SDK, including making the "payment" when monetization has been set as a governance condition.
+Triggering the download application is handled with iExec SDK and protocol, including making the "payment" when monetization has been set as a governance conditions. **From an iExec prospective this step is just an computation order being placed on the marketplace by the requester (recipient).** The following arguments of the by computation order method will be used to defined the governance rules:
+
+| Argument | Description |
+| dataset 0x | 0x Address of the dataset representing the file being shared |  
+| beneficiary <address>  | Same as the request address in our case |  
+| tag | set to 'TEE' to ensure that that only the beneficiary will be able to decrypt the dowloaded file by using his private key |
+| encrypt-result | encrypt the result archive with the beneficiary public key |
+
+
+--dataset <address|"deployed"> # dataset address, use "deployed" to use last deployed from "deployed.json"
+--workerpool <address|"deployed"> # workerpool address, use "deployed" to use last deployed from "deployed.json"
+--category <id> # id of the task category
+--tag <tag...> # specify tags (usage: --tag tee,gpu)
+--trust <integer> # trust level
+
+--callback <address> # specify the callback address of the request
+--args <string> # specify the arguments to pass to the app
+--input-files <fileUrl...> # specify the URL of input files to be used by the app (usage: --input-files https://example.com/foo.txt,https://example.com/bar.zip)
+--secret <secretMapping> # specify the requester secrets mappings (<appSecretKey>=<requesterSecretName>) to use in the app (only available for TEE tasks, use with --tag tee)
+--storage-provider <"ipfs"|"dropbox"> # specify the storage to use to store the result archive
+--skip-request-check # skip request validity checks, this may result in task execution fail
+--params <json> # specify the params of the request, this option is reserved to an advanced usage (usage: --params '{"iexec_args":"dostuff","iexec_input_files":["https://example.com/file.zip"]}')
+--watch # watch execution status changes
+
 
 **Step 5 - Provider notification (non-iExec service)**  
 Senders (providers) can optionaly register for their email addresses to get notified whenever the benefeciary downloaded the file (i.e in iExec terms : when the task execution completed)
@@ -134,6 +157,9 @@ Making the application more intelligent with the integration of a library for cr
 Add the ability for the content provider to get proofs about the beneficiary's identity. For example a creator of adult materials will be able to check that the beneficiary is over 18.  
 ### Subscriptions  
 The version 1 works on the basis that the content creator manages the list of beneficiaries on a seperate system. The subscription model will allow people to register their interest and join a "fan" club. Content providers will be able to chose their subscription list rather than selecting beneficiaries one by one.
+### Task categoru management
+The goal here will be to dynamically determine the task category depending on the transfered file size. For this v0, this value has been defaulted to '1 – S' (20 min task execution). Check out this section of the documentation to learn more about [iExec's pay per task model](https://docs.iex.ec/key-concepts/pay-per-task-model) 
+
 
 
 ## License
