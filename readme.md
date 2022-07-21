@@ -23,7 +23,7 @@ Moreover, the iExec protocols has a built-in data monetization capability that w
 We believe that Web 2 is broken and it’s time for a new paradigm shift that can restore our right to privacy and security. 
 Up until the emergence of Web3 we were forced to endure untrustworthy corporations selling our data to other corporations or even governments and centralized databases containing our personal details being hacked on a regular basis.  
   
-Ace is an illustration that there is a better way to do business when it comes to file transfer, one which doesn’t call for sacrificing our security nor our need for great level of service and user experience. There is no need for a man in the middle when I am sending personal holiday pics to my family :-)
+Ace is an illustration that there is a better way to do business when it comes to file transfer, one which doesn’t call for sacrificing our security nor our need for great level of service and user experience. There is no need longer a man in the middle when I am sending personal holiday pics to my family :-)
 
 
 ## Features
@@ -67,7 +67,7 @@ The encryption and deployment steps are handled with the [iExec SDK](https://git
 You can refer to [This section of the iExec documentation](https://docs.iex.ec/for-developers/confidential-computing/sgx-encrypted-dataset) to get a more detailed explaination on how to use confidential assets with iExec.
 
 **Step 2 - Set governance rules**   
-The second step of the process is for the sender/ceontent creator to set the authorization for the beneficiary/requester together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
+The second step of the process is for the sender/content creator to set the authorization for the beneficiary/requester together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
 **From an iExec prospective this step is just a dataset order being placed on the marketplace by the provider (sender/content creator).** The following arguments of the dataset order method will be used to defined the governance rules:
 
 | Argument | Description |
