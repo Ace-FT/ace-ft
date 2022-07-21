@@ -58,7 +58,7 @@ The processing capacity required to execute the application is provided by worke
  
 ### File Transfer process
 
-- Step 1 - Preparation  
+**Step 1 - Preparation** 
 The preparation stage consists in encrypting the File, uploading to ipfs and deploying the dataset (registration on the iExec marketplace)  
 ![IMAGE_DESCRIPTION](https://bafybeigb3aodzwkqsf3kdffjodbluzxpvvpe5ixzz542jcec4swzl3wbqi.ipfs.infura-ipfs.io)
  
@@ -66,7 +66,7 @@ The preparation stage consists in encrypting the File, uploading to ipfs and dep
 The encryption and deployment steps are handled with the [iExec SDK](https://github.com/iExecBlockchainComputing/iexec-sdk) whilst the IPFS upload is a pretty straight forward process when using a library like [ipfs-http-client](https://www.npmjs.com/package/ipfs-http-client).
 You can refer to [This section of the iExec documentation](https://docs.iex.ec/for-developers/confidential-computing/sgx-encrypted-dataset) to get a more detailed explaination on how to use confidential assets with iExec.
 
-- Step 2 - Set governance rules  
+**Step 2 - Set governance rules**   
 The second step of the process is to set the authorization for the beneficiary/requester together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my files).  
 **From an iExec prospective this step is just a dataset order being placed on the marketplace.** The following arguments of the dataset order method will be used to defined the governance rules:
 
@@ -76,19 +76,19 @@ The second step of the process is to set the authorization for the beneficiary/r
 | datasetprice | Set to a non-0 value when monetizing | 
 | apprestrict | 0x address of our download app | 
 | requesterrestrict | 0x address or ENS of the recipient |
-| tag | set to 'TEE' to ensure that that only the beneficiary will be able to decrypt the dowloaded file using his private key |
+| tag | set to 'TEE' to ensure that that only the beneficiary will be able to decrypt the dowloaded file by using his private key |
 
 A detailed description of datasets orders can be found [in this section of the documentation](https://docs.iex.ec/for-developers/advanced/manage-your-datasetorders#publish-a-custom-datasetorder)
 
 
-- Step 3 -  Beneficiary notification (non-iExec service)  
+**Step 3 -  Beneficiary notification (non-iExec service)**   
 User (recipients) can register their email addresses to get notified whenever a transfer is initiated with their 0x address as the beneficiary (i.e in iExec terms : when an order has been placed for the download app for that user as the beneficiary)
 Such mechanism is a must-have given it is not conceivable to check Ace UI to check if someone send something to me. 
 
-- Step 4 - (Optional) payment and file download  
+**Step 4 - (Optional) payment and file download**   
 Triggering the download application is handled with iExec SDK, including making the "payment" when monetization has been set as a governance condition.
 
-- Step 5 - Provider notification (non-iExec service)
+**Step 5 - Provider notification (non-iExec service)**  
 Senders (providers) can optionaly register for their email addresses to get notified whenever the benefeciary downloaded the file (i.e in iExec terms : when the task execution completed)
 
 ## Notification system
