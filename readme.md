@@ -5,7 +5,7 @@ Ace FT is the very first web3 file transfer application that is built with the [
 The choice of the iExec stack was a no-brainer given that it covers the key requirements for the implementation a trustworthy web3 file transfer application.  
 Moreover, the iExec protocols has a built-in data monetization capability that we are leveraging in this project.
 
-### Contents
+## Contents
 - [What are we fixing?](#what-are-we-fixing)
 - [Features](#features)
 - [Core principles](#principles)  
@@ -17,7 +17,7 @@ Moreover, the iExec protocols has a built-in data monetization capability that w
 - [Future considerations](#future-considerations)
 - [Licence](#licence)
 
-### What are we fixing?
+## What are we fixing?
 We believe that Web 2 is broken and it’s time for a new paradigm shift that can restore our right to privacy and security. 
 Up until the emergence of Web3 we were forced to endure untrustworthy corporations selling our data to other corporations or even governments and centralized databases containing our personal details being hacked on a regular basis.  
 Ace is an illustration that:  
@@ -26,7 +26,7 @@ Ace is an illustration that:
 - nobody would be able to sell my data without my consent that is enforced and verifiable onchain.  
 
 
-### Features
+## Features
 
 - "WeTransfer-like" experience,  simply drag and drop files you want to share
 - Set the beneficiary in the form of 0x address or use a ENS
@@ -35,10 +35,10 @@ Ace is an illustration that:
 - Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API.  
 
 
-### Core principles  
+## Core principles  
 Ace's system design is making use of all three types of computing assets that are part of iExec’s marketplace model : application, processing power (CPU) and dataset. The section below explains how Ace is mapped against iExec core concepts. 
 
-## Modelization
+### Modelization
 
 **_Datasets_**
 Files that are being transferred are represented as iExec encrypted datasets
@@ -55,7 +55,7 @@ The processing capacity required to execute the application is provided by worke
 - Requester: This is the person who is authorized to trigger the (download) application with the dataset as an input. **In our case, the beneficiary of a file transfer and the requester are just the same user**.
  
 
-## File Transfer process
+### File Transfer process
 
 - Step 1 - Preparation  
 The preparation stage consists in encrypting the File, uploading to ipfs and deploying the dataset (registration on the iExec marketplace)  
@@ -91,10 +91,10 @@ Triggering the download application is handled with iExec SDK, including making 
 Senders (providers) can optionaly register for their email addresses to get notified whenever the benefeciary downloaded the file (i.e in iExec terms : when the task execution completed)
 
 
-### Notification system
+## Notification system
 
 
-### Transfer fees
+## Transfer fees
 In order to understand the cost structure, it is very important to first understand how iExec marketplace order system works. 
 iExec marketplace allows anyone to monetize the usage of its application, CPU and dataset. In fact, each proiders indicates his conditions through orders.  
 
@@ -124,19 +124,19 @@ Total transfer fees = worker usage fee
 
 Hey, doesn't that look great? At last with Ace we can benefit from a trustworthy, privacy-preserving decentralised file transfer application whose revenue model is not correlated to the monetization of my personal and private data! 
 
-### Use cases
+## Use cases
 
-### Future considerations
+## Future considerations
 Here are some features that could be implemented after v1. 
-## Copyright protection and licensing  
+### Copyright protection and licensing  
 Making the application more intelligent with the integration of a library for creating invisible watermark over images, videos and PDFs.  
-## KYC  
+### KYC  
 Add the ability for the content provider to get proofs about the beneficiary's identity. For example a creator of adult materials will be able to check that the beneficiary is over 18.  
-## Subscriptions  
+### Subscriptions  
 The version 1 works on the basis that the content creator manages the list of beneficiaries on a seperate system. The subscription model will allow people to register their interest and join a "fan" club. Content providers will be able to chose their subscription list rather than selecting beneficiaries one by one.
 
 
-### License
+## License
 
 MIT
 
