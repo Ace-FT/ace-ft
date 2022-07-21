@@ -155,7 +155,7 @@ Making the application more intelligent with the integration of a library for cr
 ### KYC  
 Add the ability for the content provider to get proofs about the beneficiary's identity. For example a creator of adult materials will be able to check that the beneficiary is over 18.  
 ### Subscriptions  
-The version 1 works on the basis that the content creator manages the list of beneficiaries on a seperate system. The subscription model will allow people to register their interest and join a "fan" club. Content providers will be able to chose their subscription list rather than selecting beneficiaries one by one.
+The version 0 will work on the basis that the content creator manages the list of beneficiaries on a seperate system. The subscription model will allow people to register their interest and join a "fan" club. Content providers will be able to chose their subscription list rather than selecting beneficiaries one by one.
 ### Task category management
 The goal here will be to dynamically determine the iExec task category depending on the transfered file size. For this v0, this value has been defaulted to `1 – S` (20 min task execution). Check out [this section](https://docs.iex.ec/key-concepts/pay-per-task-model) of the documentation to learn more about [iExec's pay per task model](https://docs.iex.ec/key-concepts/pay-per-task-model) 
 ### Full privacy on the notification system
