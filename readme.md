@@ -1,7 +1,7 @@
 # Ace
 ## _Web3 file transfer application powered by iExec_ 
 
-Ace FT is the very first web3 file transfer application that is built with the [iExec](https://iex.ec) protocol.  
+Ace is the very first web3 file transfer application that is built with the [iExec](https://iex.ec) protocol.  
 The choice of the iExec stack was a no-brainer given that it covers the key requirements for the implementation a trustworthy web3 file transfer application.  
 Moreover, the iExec protocols has a built-in data monetization capability that we are leveraging in this project.
 
@@ -22,19 +22,17 @@ Moreover, the iExec protocols has a built-in data monetization capability that w
 ## What are we fixing?
 We believe that Web 2 is broken and it’s time for a new paradigm shift that can restore our right to privacy and security. 
 Up until the emergence of Web3 we were forced to endure untrustworthy corporations selling our data to other corporations or even governments and centralized databases containing our personal details being hacked on a regular basis.  
-Ace is an illustration that:  
-- there is a better way to do business when it comes to file transfer, one which doesn’t call for sacrificing our security nor our need for great level of service and experience. 
-- there is no need for a man in the middle when I am sending personal holiday pics to my family!
-- nobody would be able to sell my data without my consent that is enforced and verifiable onchain.  
+  
+Ace is an illustration that there is a better way to do business when it comes to file transfer, one which doesn’t call for sacrificing our security nor our need for great level of service and user experience. There is no need for a man in the middle when I am sending personal holiday pics to my family :-)
 
 
 ## Features
 
 - "WeTransfer-like" experience,  simply drag and drop files you want to share
 - Set the beneficiary in the form of 0x address or use a ENS
-- Beneficiary email notification 
-- No time limit for file download, other service require the recipient to download the file within x days
 - Cryptographic accès control to the file being transfered
+- Beneficiary email notification for new shared content/file available 
+- No time limit for file download, other service require the recipient to download the file within x days
 - Built-in monetization! You can sell your added value content and get paid in [$RLC](https://coinmarketcap.com/currencies/rlc/)
 - Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API.  
 
