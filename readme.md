@@ -1,5 +1,5 @@
 # Ace
-## _Web3 file transfer app powered by iExec_ 
+## _Web3 file transfer application powered by iExec_ 
 
 Ace FT is the very first web3 file transfer application that is built with the [iExec](https://iex.ec) protocol.  
 The choice of the iExec stack was a no-brainer given that it covers the key requirements for the implementation a trustworthy web3 file transfer application.  
