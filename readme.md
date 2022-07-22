@@ -150,7 +150,7 @@ When the sender/content creator does not charge for the content the equation bec
 Total transfer fees = worker usage fee
 ```
 
-Hey, doesn't that look great? At last with Ace we can benefit from a trustworthy, privacy-preserving decentralised file transfer application whose revenue model is not correlated to the monetization of my personal and private data! 
+**Hey, doesn't that look great? At last with Ace we can benefit from a trustworthy, privacy-preserving decentralised file transfer application whose revenue model is not correlated to the monetization of my personal and private data!**  
 
 ## Use cases
 - Content monetization
