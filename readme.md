@@ -113,7 +113,7 @@ Senders (providers) can optionaly register their email addresses to get notified
 ## Notification system
 
 **Recipient notification**  
-The notification system is an application that will monitor pending file transfers (i.e. iExec marketplace orders) for the requester's 0x address and the dataset 0x address. This will be achieved nby polling the marketplace at a regular interval.
+The notification system is an application that will monitor pending file transfers i.e. iExec marketplace orders for the requester's 0x address the dataset 0x address and the download app 0x address. This will be achieved by polling the marketplace at a regular interval.
 
 **Sender nnotification that the file was downloaded**  
 For "tranfer complete" notifications, the system will check the status of the dataset order that was placed by the provider (sender/content creator).
