@@ -64,7 +64,7 @@ The diagram below illustrate the 5 steps involved in the file transfer process a
 
 
 **Step 1 - Preparation**  
-The preparation stage consists in encrypting the File, uploading to [IPFS](https://ipfs.io) and deploying the dataset (registration on the iExec marketplace)  
+The preparation stage consists in encrypting the File, uploading to [IPFS](https://ipfs.io) and deploying the dataset (registration on the iExec marketplace) and sharing the encryption key with secret management service.
 ![ace's prepearation stage](https://bafybeigb3aodzwkqsf3kdffjodbluzxpvvpe5ixzz542jcec4swzl3wbqi.ipfs.infura-ipfs.io)
  
 
