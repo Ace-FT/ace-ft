@@ -52,16 +52,16 @@ Our application is trivial as it consists of simply downloading the transferred 
 The processing capacity required to execute the application is provided by workers in the iExec network. The execution relies on Intel SGX compatible workers only.
 
 **_Users roles_**  
-- App provider : This is us! We will deploy the "Download" application.  
-- Dataset Provider: This is **the sender**/the content creator who want to send its assets to someone (the beneficiary) with or without monetization.
-- Beneficiary: This is **the recipient** of the files
+- App provider : This is us! We will deploy the "Download" application on the iExec marketplace.  
+- Dataset Provider: This is **the sender**/the content creator who want to share its assets with someone (the beneficiary) with or without monetization.
+- Beneficiary: This is **the recipient** of the files.  
 - Requester: This is the person who is authorized to run the application (download) with the dataset as an input. **In our case, the beneficiary of a file transfer and the requester are just the same user**.  
-- Processing power provider: This is a marketplace participant that is providing its machine. 
+- Processing power provider: This is a marketplace participant who is providing its machine for the execution of the application.  
  
 ### File Transfer process
 
-**Step 1 - Preparation** 
-The preparation stage consists in encrypting the File, uploading to ipfs and deploying the dataset (registration on the iExec marketplace)  
+**Step 1 - Preparation**  
+The preparation stage consists in encrypting the File, uploading to [IPFS](https://ipfs.io) and deploying the dataset (registration on the iExec marketplace)  
 ![IMAGE_DESCRIPTION](https://bafybeigb3aodzwkqsf3kdffjodbluzxpvvpe5ixzz542jcec4swzl3wbqi.ipfs.infura-ipfs.io)
  
 
@@ -71,7 +71,7 @@ You can refer to [This section of the iExec documentation](https://docs.iex.ec/f
 **Step 2 - Set governance rules**   
 The second step of the process is for the sender/content creator to set the authorization for the recipient (beneficiary/requester) together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my dataset).  
   
-**From an iExec prospective this step is just a dataset order being placed on the marketplace by the provider (sender/content creator).** The following arguments of the dataset order method will be used to defined the governance rules:
+**From an iExec prospective this step is just a dataset order being placed on the marketplace by the provider (sender/content creator).** The following arguments of the dataset order method will be used to define the governance rules:
 
 | Argument | Description |
 | ------ | ------ |
@@ -81,24 +81,27 @@ The second step of the process is for the sender/content creator to set the auth
 | requesterrestrict | 0x address or ENS of the recipient |
 | tag | set to 'TEE' to ensure that that only the beneficiary will be able to decrypt the dowloaded file by using his private key |
 
-A detailed description of datasets orders can be found [in this section of the documentation](https://docs.iex.ec/for-developers/advanced/manage-your-datasetorders#publish-a-custom-datasetorder)
+A detailed description of dataset orders can be found [in this section of the documentation](https://docs.iex.ec/for-developers/advanced/manage-your-datasetorders#publish-a-custom-datasetorder)
 
 
 **Step 3 -  Beneficiary notification (non-iExec service)**   
-User (recipients) can register their email addresses to get notified whenever a transfer is initiated with their 0x address as the beneficiary (i.e in iExec terms : when an order has been placed for the download app for that user as the beneficiary).  
+Users (recipients) can register their email addresses to get notified whenever a transfer is initiated with their 0x address as the beneficiary (i.e in iExec terms : when a dataset order has been placed for the download app for the user's 0x address as the `requesterrestrict` parameter).  
 Such mechanism is a must-have given it is not conceivable to check Ace's every minture to check if someone sent something to me. 
 
 **Step 4 - (optional) payment and file download**   
 Triggering the download application is handled with iExec SDK and protocol, including making the "payment" when monetization has been set as a governance condition.  
-**From an iExec prospective this step is just an computation order being placed on the marketplace by the requester (recipient).** The following arguments of the "buy computation" order method will be used to defined the governance rules:  
+**From an iExec prospective this step is just a computation order being placed on the marketplace by the requester (recipient).** The following arguments of the "buy computation" order method will be used to define the governance rules:  
 
 | Argument | Description |  
 | ------ | ------ |  
 | dataset 0x | 0x Address of the dataset representing the file to download |  
 | beneficiary <address>  | Same as the request address in our case |  
-| tag | set to 'TEE' to ensure that that only the beneficiary will be able to decrypt the dowloaded file by using his private key |
+| tag | set to 'TEE' to ensure that that only the beneficiary will be able to decrypt the dowloaded file using his private key |
 | encrypt-result | encrypt the result archive with the beneficiary public key |  
 | category <id> | id of the task category, defaulted to `1 – S` for the time being |  
+
+
+A detailed description of the app execution order can be found [in this section of the documentation](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#app-run)
 
 
 **Step 5 - Provider notification (non-iExec service)**  
