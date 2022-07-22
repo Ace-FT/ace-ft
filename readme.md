@@ -124,7 +124,7 @@ Users have the choice to either use the instance of the notification service tha
 
 ## Transfer fees
 In order to understand the cost structure, it is very important to first understand how iExec marketplace order system works. 
-iExec marketplace allows anyone to monetize the usage of its application, CPU or dataset. In fact, each provider indicates his conditions through orders.  
+The iExec marketplace allows anyone to monetize the usage of its application, CPU or dataset. In fact, each provider indicates his conditions through orders.  
 
 - Application providers set the price to charge the requester for each execution of the app (in RLC)
 [Check out this section of the SDK documentation for more details](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#sell-your-app-on-the-marketplace) 
