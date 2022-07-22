@@ -60,7 +60,7 @@ The processing capacity required to execute the application is provided by worke
  
 ### File Transfer process  
 The diagram below illustrate the 5 steps involved in the file transfer process and their corresponding implementation using the iExec stack.  
-![ace 5 step process](https://bafybeidkybbpzyhrapuk2kmspaywkd3vdhx44gatxvil2xvtkqszvbo6qi.ipfs.infura-ipfs.io)
+![ace 5 step process](https://bafybeifykunmnvm5nydyhvaf54i7bxip4gtva33b7ve2ysb4wvdnqfqbgm.ipfs.infura-ipfs.io)
 
 
 **Step 1 - Preparation**  
