@@ -34,7 +34,7 @@ Ace is an illustration that there is a better way to do business when it comes t
 - Beneficiary email notification for new shared content/file available 
 - No time limit for file download, other service require the recipient to download the file within x days
 - Built-in monetization! You can sell your added value content and get paid in [$RLC](https://coinmarketcap.com/currencies/rlc/)
-- Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API.  
+- Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API. 
 
 
 ## Core principles  
@@ -52,9 +52,11 @@ Our application is trivial as it consists of simply downloading the transferred 
 The processing capacity required to execute the application is provided by workers in the iExec network. The execution relies on Intel SGX compatible workers only.
 
 **_Users roles_**  
-- Provider: This is **the sender**/the content creator who want to send its assets to someone (the beneficiary) with or without monetization.
+- App provider : This is us! We will deploy the "Download" application.  
+- Dataset Provider: This is **the sender**/the content creator who want to send its assets to someone (the beneficiary) with or without monetization.
 - Beneficiary: This is **the recipient** of the files
 - Requester: This is the person who is authorized to run the application (download) with the dataset as an input. **In our case, the beneficiary of a file transfer and the requester are just the same user**.  
+- Processing power provider: This is a marketplace participant that is providing its machine. 
  
 ### File Transfer process
 
