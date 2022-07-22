@@ -124,7 +124,7 @@ Users have the choice to either use the instance of the notification service tha
 
 ## Transfer fees
 In order to understand the cost structure, it is very important to first understand how iExec marketplace order system works. 
-iExec marketplace allows anyone to monetize the usage of its application, CPU and dataset. In fact, each provider indicates his conditions through orders.  
+iExec marketplace allows anyone to monetize the usage of its application, CPU or dataset. In fact, each provider indicates his conditions through orders.  
 
 - Application providers set the price to charge the requester for each execution of the app (in RLC)
 [Check out this section of the SDK documentation for more details](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#sell-your-app-on-the-marketplace) 
@@ -133,7 +133,7 @@ iExec marketplace allows anyone to monetize the usage of its application, CPU an
 - The Workerpool managers set the computing power price 
 [Check out this section of the SDK documentation for more details](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#sell-your-computing-power-at-limit-price-on-the-marketplace) 
 
-Luckily enough there are no blockchain Tx fees on iExec's sidechain (Bellecour) and it makes the pricing equation as simple as:  
+Luckily enough there are no blockchain Tx fees on iExec's sidechain (Bellecour) which makes the pricing equation as simple as:  
 
 ```sh
 Total transfer fees = app usage fee + worker usage fee + dataset usage fee
