@@ -89,7 +89,7 @@ A detailed description of dataset orders can be found [in this section of the do
 
 **Step 3 -  Beneficiary notification (non-iExec service)**   
 Users (recipients) can register their email addresses to get notified whenever a transfer is initiated with their 0x address as the beneficiary (i.e in iExec terms : when a dataset order has been placed for the download app for the user's 0x address as the `requesterrestrict` parameter).  
-Such mechanism is a must-have given it is not conceivable to check Ace's every minture to check if someone sent something to me. 
+Such a notification mechanism is a must-have given it is not conceivable to check Ace's every minture to check if someone sent something to me. 
 
 **Step 4 - (optional) payment and file download**   
 Triggering the download application is handled with iExec SDK and protocol, including making the "payment" when monetization has been set as a governance condition.  
