@@ -58,11 +58,14 @@ The processing capacity required to execute the application is provided by worke
 - Requester: This is the person who is authorized to run the application (download) with the dataset as an input. **In our case, the beneficiary of a file transfer and the requester are just the same user**.  
 - Processing power provider: This is a marketplace participant who is providing its machine for the execution of the application.  
  
-### File Transfer process
+### File Transfer process  
+The diagram below illustrate the 5 steps involved in the file transfer process and their corresponding implementation using the iExec stack.  
+![ace 5 step process](https://bafybeigoyjebza4i4xuatyph4oqgj2qilwvuabamsk4bnzknykba6n6rj4.ipfs.infura-ipfs.io)
+
 
 **Step 1 - Preparation**  
 The preparation stage consists in encrypting the File, uploading to [IPFS](https://ipfs.io) and deploying the dataset (registration on the iExec marketplace)  
-![IMAGE_DESCRIPTION](https://bafybeigb3aodzwkqsf3kdffjodbluzxpvvpe5ixzz542jcec4swzl3wbqi.ipfs.infura-ipfs.io)
+![ace's prepearation stage](https://bafybeigb3aodzwkqsf3kdffjodbluzxpvvpe5ixzz542jcec4swzl3wbqi.ipfs.infura-ipfs.io)
  
 
 The encryption and deployment steps are handled with the [iExec SDK](https://github.com/iExecBlockchainComputing/iexec-sdk) whilst the IPFS upload is a pretty straight forward process when using a library like [ipfs-http-client](https://www.npmjs.com/package/ipfs-http-client).
