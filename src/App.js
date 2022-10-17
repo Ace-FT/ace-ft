@@ -3,7 +3,7 @@ import SendForm from "./components/SendForm";
 
 function App() {
   return (
-    <div className="App">
+    <div className="app bg-black text-white">
       <NavBar />
       <h1 class="text-5xl">Hello World!</h1>
       <SendForm />
@@ -12,4 +12,3 @@ function App() {
 }
 
 export default App;
- 
