@@ -10,7 +10,7 @@ export const AceProvider = ({children}) => {
     const [price, setPrice] = useState();
     const [message, setMessage] = useState('');
 
-    useEffect(() => {
+    useEffect(() => { 
        //checkIsWalletConnected();
     })
 
