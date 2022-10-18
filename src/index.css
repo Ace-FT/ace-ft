@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+.uploader button {
+    cursor: pointer;
+    overflow: hidden;
+}
+.uploader button #fileSelector {
+    z-index: 5;
+    cursor: pointer;
+    opacity: 0;
+    left: 0;
+    top: 1%;
+}
+
+.uploader button .absolute {
+    z-index: 0;
+    pointer-events: auto;
+}*/

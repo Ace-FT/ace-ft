@@ -3,10 +3,11 @@ import SendForm from "./components/SendForm";
 
 function App() {
   return (
-    <div className="app bg-black text-white">
-      <NavBar />
-      <h1 class="text-5xl">Hello World!</h1>
-      <SendForm />
+    <div className="app h-full bg-black text-white">
+      <div className="w-4/5 mx-auto">
+        <NavBar />
+        <SendForm />
+      </div>
     </div>
   );
 }
