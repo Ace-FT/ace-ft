@@ -7,7 +7,7 @@ const NavBar = () => {
 
     return (
       <div className="text-white">
-        <nav className="flex justify-between mx-8 p-8">
+        <nav className="flex justify-between p-8">
           <div>
             <h1 className="text-4xl font-bold">ACE</h1>
           </div>
