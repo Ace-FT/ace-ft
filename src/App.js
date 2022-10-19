@@ -3,7 +3,7 @@ import SendForm from "./components/SendForm";
 
 function App() {
   return (
-    <div className="app h-screen bg-black text-white">
+    <div className="app min-h-screen bg-black text-white">
       <div className="mx-auto">
         <NavBar />
         <main className="max-w-7xl mx-auto">

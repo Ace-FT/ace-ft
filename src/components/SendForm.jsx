@@ -2,24 +2,18 @@ import React, {useRef, useState, useContext} from 'react';
 import { AceContext } from '../context/context';
 
 const SendForm = () => {
-  const { connectedAccount, addressTo, setAddressTo, price, setPrice, message, setMessage } = useContext(AceContext);
+  const { connectedAccount, addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles } = useContext(AceContext);
   const inputFile = useRef(null);
-  const [selectedFiles, setSelectedFiles] = useState([]);
   const [isAFile, setIsAFile] = useState(false);
 
   const handleChange = (event) => {
     console.log("hello")
 
     setSelectedFiles([...selectedFiles, event.target.files[0]]);
-    /*
-    for (var i = 0; i < event.target.files.length; i+=1) {
-      console.log("hello", i)
-      setSelectedFiles([...selectedFiles, event.target.files[i]]);
-    }
-    console.log(selectedFiles.length)
-    
-    */
     setIsAFile(true);
+    for (var i = 0; i < selectedFiles.length; i+=1) {
+      console.log(selectedFiles[i])
+    }
   }
 
   return (
@@ -35,7 +29,7 @@ const SendForm = () => {
                   )
                 })}
                 <button
-                  className="w-full flex items-center border-b border-gray-500 px-4 py-16"
+                  className="w-full flex items-center border-b border-gray-500 px-4 py-8"
                   onClick={(e) => {
                     e.preventDefault();
                     inputFile.current.click()
@@ -48,7 +42,7 @@ const SendForm = () => {
                       fill-rule="nonzero"
                     ></path>
                   </svg>
-                  <h3 className="text-2xl mx-4">Upload files</h3>
+                  <h3 className="text-2xl font-thin mx-4">Upload files</h3>
                 </button>
                 <input type="file" className="hidden" onChange={handleChange} ref={inputFile}/>
               </div>
@@ -69,7 +63,7 @@ const SendForm = () => {
                       fill-rule="nonzero"
                     ></path>
                   </svg>
-                  <h3 className="text-2xl mx-4">Upload files</h3>
+                  <h3 className="text-2xl font-thin mx-4">Upload files</h3>
                 </button>
                 <input type="file" className="hidden" onChange={handleChange} ref={inputFile}/>
               </div>

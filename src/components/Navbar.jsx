@@ -32,7 +32,7 @@ const NavBar = () => {
               >
                 Settings
               </button>
-              <p className="mx-8">Hello! {shortenAddress(connectedAccount)} 👋</p>
+              <p className="mx-8">Hello! {shortenAddress(connectedAccount)} 👋 </p>
             </div>
           ) : (
             <button

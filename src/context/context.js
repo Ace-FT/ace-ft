@@ -9,6 +9,7 @@ export const AceProvider = ({children}) => {
     const [addressTo, setAddressTo] = useState('');
     const [price, setPrice] = useState();
     const [message, setMessage] = useState('');
+    const [selectedFiles, setSelectedFiles] = useState([]);
 
     useEffect(() => { 
        //checkIsWalletConnected();
@@ -60,7 +61,9 @@ export const AceProvider = ({children}) => {
                 price,
                 setPrice,
                 message,
-                setMessage
+                setMessage,
+                selectedFiles,
+                setSelectedFiles
             }}
         >
             {children}
