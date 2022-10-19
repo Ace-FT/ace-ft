@@ -63,7 +63,7 @@ const SendForm = () => {
                       fill-rule="nonzero"
                     ></path>
                   </svg>
-                  <h3 className="text-2xl font-thin mx-4">Upload files</h3>
+                  <h3 className="text-2xl font-extralight mx-4">Upload files</h3>
                 </button>
                 <input type="file" className="hidden" onChange={handleChange} ref={inputFile}/>
               </div>

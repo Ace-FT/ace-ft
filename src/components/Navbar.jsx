@@ -4,7 +4,7 @@ import { shortenAddress } from '../utils/shortenAddress';
 
 const NavBar = () => {
     const {connectWallet, connectedAccount } = useContext(AceContext);
-    console.log(connectedAccount);
+    //console.log(connectedAccount);
 
     return (
       <div className="text-white">
