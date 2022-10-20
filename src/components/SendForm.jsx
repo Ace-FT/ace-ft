@@ -2,7 +2,7 @@ import React, {useRef, useState, useContext} from 'react';
 import { AceContext } from '../context/context';
 
 const SendForm = () => {
-  const { connectedAccount, addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles } = useContext(AceContext);
+  const { addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, encryption } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
 
@@ -104,7 +104,16 @@ const SendForm = () => {
             </div>
           </div>
           <div className="formFooter items-center mx-auto p-4">
-              <button className="rounded-l-full rounded-r-full bg-blue-700 text-white font-bold px-8 py-2" type='submit'>Transfer</button>
+              <button
+                className="rounded-l-full rounded-r-full bg-blue-700 text-white font-bold px-8 py-2"
+                type='submit'
+                onClick={(e) => {
+                  e.preventDefault();
+                  encryption();
+                }}
+              >
+                Transfer
+              </button>
           </div>
         </div>
       </form>

@@ -6,9 +6,9 @@ import { AceProvider } from './context/context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <>
     <AceProvider>
       <App />
     </AceProvider>
-  </React.StrictMode>
+  </>
 );

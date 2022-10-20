@@ -1,10 +1,15 @@
 import { createContext, useEffect, useState } from "react";
+import { IExec } from 'iexec';
+//import { create } from 'ipfs-http-client';
 
 export const AceContext = createContext();
 
 const { ethereum } = window;
+const iexec = new IExec({ ethProvider: window.ethereum });
+
 
 export const AceProvider = ({children}) => {
+
     const [connectedAccount, setConnectedAccount] = useState('');
     const [addressTo, setAddressTo] = useState('');
     const [price, setPrice] = useState();
@@ -14,6 +19,7 @@ export const AceProvider = ({children}) => {
     const [bgCreator, setBgCreator] = useState({});
     const [bgUrls, setBgUrls] = useState({});
     const [bgCreatorSocial, setBgCreatorSocial] = useState({});
+
 
     useEffect(() => { 
        //checkIsWalletConnected();
@@ -47,22 +53,22 @@ export const AceProvider = ({children}) => {
     }
 
 
-    const checkIsWalletConnected = async () => {
-        try {
-            if (!ethereum) {
-                alert("Please install Metamask plugin");
-            }
-            const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-            if (accounts.length) {
-                setConnectedAccount(accounts[0]);
-            } else {
-                console.log("No accounts found");
-            }
+    // const checkIsWalletConnected = async () => {
+    //     try {
+    //         if (!ethereum) {
+    //             alert("Please install Metamask plugin");
+    //         }
+    //         const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+    //         if (accounts.length) {
+    //             setConnectedAccount(accounts[0]);
+    //         } else {
+    //             console.log("No accounts found");
+    //         }
             
-        } catch (e) {
-            console.log(e);
-        }
-    }
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
 
     const connectWallet = async () => {
         try {
@@ -82,6 +88,33 @@ export const AceProvider = ({children}) => {
             console.log(e);
         }
     }
+    //const client = create();
+    const encryption = async () => {
+        //// --------------------------------------  GENERATE AN ENCRYPTION KEY  
+        try {
+        const key = iexec.dataset.generateEncryptionKey();
+        console.log(key);
+        console.log(selectedFiles)
+        console.log(selectedFiles[0])
+        console.log(selectedFiles[0].name)
+        const fileBytes = await new Promise(async (resolve, reject) => {
+            const fileReader = new FileReader();
+            await fileReader.readAsArrayBuffer(selectedFiles[0]);
+            fileReader.onload = (e) => { resolve(e.target.result) }
+            fileReader.onerror = () => reject(Error(`Error`))
+            fileReader.onabort = () => reject(Error(`Error : aborded`))
+        });
+        console.log(fileBytes)
+        const encrypted = await iexec.dataset.encrypt(fileBytes, key);
+        console.log(encrypted)
+        const checksum = await iexec.dataset.computeEncryptedFileChecksum(encrypted)
+        console.log(checksum)
+        } catch (err) {
+        console.log(err);
+        }
+        
+    }
+
 
     return (
         <AceContext.Provider
@@ -102,7 +135,8 @@ export const AceProvider = ({children}) => {
                 bgUrls,
                 setBgUrls,
                 bgCreatorSocial,
-                setBgCreatorSocial
+                setBgCreatorSocial,
+                encryption
             }}
         >
             {children}
