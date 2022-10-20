@@ -1,5 +1,4 @@
 import React, {useContext} from 'react';
-
 import NavBar from "./components/Navbar";
 import SendForm from "./components/SendForm";
 import { AceContext } from './context/context';
@@ -8,17 +7,13 @@ import { AceContext } from './context/context';
 function App() {
   const { background, bgCreator, bgUrls, bgCreatorSocial } = useContext(AceContext);
 
-  const screen = document.getElementById('app');
-  //screen.style.backgroundColor='red';
-  //console.log(screen);
-
-  //fetchImages();
   return (
-    <div className="min-h-screen text-white" id="app"
+    <div className="min-h-screen bg-center bg-contain text-white" id="app"
       style={{
-        background: `url(${bgUrls.full})`,
-        //backgroundPosition: 'center',
-        //backgroundSize: 'contain'
+        backgroundImage: `url(${bgUrls.full})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat'
       }}
     >
       <div className="mx-auto">
