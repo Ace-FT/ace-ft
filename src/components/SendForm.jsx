@@ -2,7 +2,7 @@ import React, {useRef, useState, useContext} from 'react';
 import { AceContext } from '../context/context';
 
 const SendForm = () => {
-  const { addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, encryption } = useContext(AceContext);
+  const { addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, encryption, delay, checkFileAvailability, isAvailable, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
 
@@ -107,9 +107,21 @@ const SendForm = () => {
               <button
                 className="rounded-l-full rounded-r-full bg-blue-700 text-white font-bold px-8 py-2"
                 type='submit'
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.preventDefault();
                   encryption();
+                  await delay(4)
+                  console.log("lets gooo")
+                  var ok = false;
+                  while (!ok) {
+                    console.log("checking")
+                    ok = await checkFileAvailability(() => console.log("checking ended..."))
+                    console.log(ok)
+                    //await check.wait()
+                    //setInterval(checkFileAvailability(), 30 * 1000) //every 30 secs
+                  }
+                  console.log("File available")
+                  setIsAvailable(ok);
                 }}
               >
                 Transfer
