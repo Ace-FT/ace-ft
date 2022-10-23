@@ -5,6 +5,8 @@ const SendForm = () => {
   const { addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, encryption, delay, checkFileAvailability, isAvailable, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
+  
+  const DELAY_BEFORE_CHECKING_FILE_UPLOADED = 4
 
   const handleChange = (event) => {
     console.log("hello")
@@ -110,7 +112,7 @@ const SendForm = () => {
                 onClick={async (e) => {
                   e.preventDefault();
                   encryption();
-                  await delay(4)
+                  await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)
                   console.log("lets gooo")
                   var ok = false;
                   while (!ok) {
