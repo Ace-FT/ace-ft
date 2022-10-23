@@ -20,6 +20,7 @@ export const AceProvider = ({ children }) => {
   const [bgCreatorSocial, setBgCreatorSocial] = useState({});
   const [imgUrl, setImgUrl] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
+  
 
   useEffect(() => {
     //checkIsWalletConnected();
@@ -87,6 +88,46 @@ export const AceProvider = ({ children }) => {
       });
       if (accounts.length) {
         setConnectedAccount(accounts[0]);
+
+        // connect to Bellecour iExec network
+        try {
+          await ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{chainId: '0x86'}]
+          })
+        } catch (switchNetworkError) {
+          console.log(switchNetworkError.code)
+          // This error code indicates that the chain has not been added to MetaMask.
+          if(switchNetworkError.code === 4902) {
+            // add Bellecour iExec network
+            try {
+              console.log("Adding")
+              await ethereum.request({
+                method: 'wallet_addEthereumChain',
+                params: [
+                  {
+                    chainId: '0x86',
+                    chainName: 'bellecour',
+                    rpcUrls: ['https://bellecour.iex.ec'] /* ... */,
+                    nativeCurrency: {
+                      name: "xRLC",
+                      symbol: "xRLC", // 2-6 characters long
+                      decimals: 18
+                    }
+                  },
+                ],
+              });
+              console.log("Network added");
+            } catch (addError) {
+              console.log(`Error ${addError}, impossible to add the network`)
+            }
+          } else {
+            console.log(`Error ${switchNetworkError} : not due to `)
+          }
+        }
+
+
+        console.log("iExec Address", await iexec.wallet.getAddress())
         //window.location.reload();
       } else {
         console.log("No accounts found");
@@ -163,6 +204,7 @@ export const AceProvider = ({ children }) => {
       return false;
     }
   };
+
 
   return (
     <AceContext.Provider
