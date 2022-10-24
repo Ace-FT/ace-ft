@@ -7,6 +7,7 @@ export const AceContext = createContext();
 
 const { ethereum } = window;
 const iexec = new IExec({ ethProvider: window.ethereum });
+var key = "";
 
 export const AceProvider = ({ children }) => {
   const [connectedAccount, setConnectedAccount] = useState("");
@@ -154,8 +155,7 @@ export const AceProvider = ({ children }) => {
     }
   };
 
-  const encryption = async () => {
-    
+  const encryption = async () => {  
     try {
       // ENCRYPTION
       
@@ -163,9 +163,8 @@ export const AceProvider = ({ children }) => {
       //console.log(process.env)
       console.log("INFURA_ID: " + process.env.REACT_APP_INFURA_ID);
       console.log("INFURA_SECRET_KEY: " + process.env.REACT_APP_INFURA_SECRET_KEY);
-      
 
-      const key = iexec.dataset.generateEncryptionKey();
+      key = iexec.dataset.generateEncryptionKey();
       console.log("Encryption key: " + key);
       console.log(selectedFiles[0])
       const fileBytes = await new Promise(async (resolve, reject) => {
@@ -201,10 +200,7 @@ export const AceProvider = ({ children }) => {
     console.log(uploaded);
     console.log(`https://infura-ipfs.io/ipfs/${uploaded.path}`);
 
-    const url = `https://infura-ipfs.io/ipfs/${uploaded.path}`;
-
-    // DEPLOYING DATASET
-    deployDataset(message, url, checksum);
+    const url = `https://infura-ipfs.io/ipfs/${uploaded.path}`;    
     setImgUrl(url);
   }
 
@@ -224,7 +220,9 @@ export const AceProvider = ({ children }) => {
     }
   };
 
+  // DEPLOYING DATASET
   const deployDataset = async (name, multiaddr, checksum) => {
+    //const checksum = generateChecksum(encrypted)
     try {
       const owner = await iexec.wallet.getAddress();
       const { address } = await iexec.dataset.deployDataset({
@@ -238,10 +236,19 @@ export const AceProvider = ({ children }) => {
       // VERIFICATION DATASET DEPLOYMENT
       await delay(3)
       console.log(await iexec.dataset.showDataset(address))
+      return address;
       // ...............................
     } catch (err) {
       console.error(err);
     } 
+  }
+  const pushSecret = async (address) => {
+    try {
+      const pushed = await iexec.dataset.pushDatasetSecret(address, key);
+      console.log("Encryption key pushed ", pushed);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 
@@ -273,7 +280,9 @@ export const AceProvider = ({ children }) => {
         isAvailable,
         setIsAvailable,
         upload,
-        generateChecksum
+        generateChecksum,
+        deployDataset,
+        pushSecret
       }}
     >
       {children}
