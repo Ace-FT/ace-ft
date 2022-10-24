@@ -2,9 +2,15 @@ import React, {useRef, useState, useContext} from 'react';
 import { AceContext } from '../context/context';
 
 const SendForm = () => {
-  const { addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, encryption, delay, checkFileAvailability, isAvailable, setIsAvailable } = useContext(AceContext);
+  const { addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, imgUrl, encryption, delay, checkFileAvailability, isAvailable, setIsAvailable, upload, generateChecksum, deployDataset, pushSecret } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
+
+  const ENCRYPTING = 1
+  const UPLOADING = 2;
+  const AVAILABLE = 3;
+  const DATASET_DEPLOYED = 4;
+  var status = 0
   
   const DELAY_BEFORE_CHECKING_FILE_UPLOADED = 4
 
@@ -111,8 +117,12 @@ const SendForm = () => {
                 type='submit'
                 onClick={async (e) => {
                   e.preventDefault();
-                  encryption();
+                  const encryptedFile = await encryption();
+                  status = ENCRYPTING;
+                  const checksum = await generateChecksum(encryptedFile)
+                  upload(encryptedFile, checksum);
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)
+                  status = UPLOADING;
                   console.log("lets gooo")
                   var ok = false;
                   while (!ok) {
@@ -123,7 +133,14 @@ const SendForm = () => {
                     //setInterval(checkFileAvailability(), 30 * 1000) //every 30 secs
                   }
                   console.log("File available")
+
                   setIsAvailable(ok);
+                  status = AVAILABLE;
+                  var datasetMessage;
+                  message === "" ? datasetMessage = "encrypted-file" : datasetMessage = message;
+                  const datasetAddress = await deployDataset(datasetMessage, imgUrl, checksum);
+                  status = DATASET_DEPLOYED
+                  pushSecret(datasetAddress);
                 }}
               >
                 Transfer
