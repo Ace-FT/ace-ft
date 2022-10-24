@@ -20,6 +20,22 @@ export const AceProvider = ({ children }) => {
   const [bgCreatorSocial, setBgCreatorSocial] = useState({});
   const [imgUrl, setImgUrl] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
+
+  const auth = "Basic " + Buffer.from(
+    process.env.REACT_APP_INFURA_ID +
+    ":" + process.env.REACT_APP_INFURA_SECRET_KEY
+  ).toString("base64");
+
+  const client = create({
+    host: "ipfs.infura.io",
+    port: 5001,
+    protocol: "https",
+    //apiPath: "/api/v0",
+    headers: {
+      authorization: auth,
+      "Access-Control-Allow-Origin": ["*"],
+    },
+  });
   
 
   useEffect(() => {
@@ -108,7 +124,7 @@ export const AceProvider = ({ children }) => {
                   {
                     chainId: '0x86',
                     chainName: 'bellecour',
-                    rpcUrls: ['https://bellecour.iex.ec'] /* ... */,
+                    rpcUrls: ['https://bellecour.iex.ec'],
                     nativeCurrency: {
                       name: "xRLC",
                       symbol: "xRLC", // 2-6 characters long
@@ -139,25 +155,15 @@ export const AceProvider = ({ children }) => {
   };
 
   const encryption = async () => {
+    
     try {
-      const auth = "Basic " + Buffer.from(
-        process.env.REACT_APP_INFURA_ID +
-        ":" + process.env.REACT_APP_INFURA_SECRET_KEY
-      ).toString("base64");
+      // ENCRYPTION
+      
       console.log(auth);
       //console.log(process.env)
       console.log("INFURA_ID: " + process.env.REACT_APP_INFURA_ID);
       console.log("INFURA_SECRET_KEY: " + process.env.REACT_APP_INFURA_SECRET_KEY);
-      const client = create({
-        host: "ipfs.infura.io",
-        port: 5001,
-        protocol: "https",
-        //apiPath: "/api/v0",
-        headers: {
-          authorization: auth,
-          "Access-Control-Allow-Origin": ["*"],
-        },
-      });
+      
 
       const key = iexec.dataset.generateEncryptionKey();
       console.log("Encryption key: " + key);
@@ -173,21 +179,34 @@ export const AceProvider = ({ children }) => {
       const encrypted = await iexec.dataset.encrypt(fileBytes, key);
       console.log(encrypted)
 
-      const checksum = await iexec.dataset.computeEncryptedFileChecksum(encrypted)
-      console.log(checksum)
-      const uploaded  = await client.add(encrypted, { progress: (prog) => console.log(`received: ${prog}`)})
-      // const uploaded = await client.add(selectedFiles[0], {
-      //   progress: (prog) => console.log(`received: ${prog}`),
-      // });
-      console.log(uploaded);
-      console.log(`https://infura-ipfs.io/ipfs/${uploaded.path}`);
-
-      const url = `https://infura-ipfs.io/ipfs/${uploaded.path}`;
-      setImgUrl(url);
+      return encrypted;
     } catch (err) {
       console.log(err);
     }
   };
+
+  const generateChecksum = async (encrypted) => {
+    const checksum = await iexec.dataset.computeEncryptedFileChecksum(encrypted)
+    console.log(checksum)
+    return checksum;
+  }
+
+  const upload = async (encrypted, checksum) => {
+    //UPLOADING
+    const uploaded  = await client.add(encrypted, { progress: (prog) => console.log(`received: ${prog}`)})
+
+    // const uploaded = await client.add(selectedFiles[0], {
+    //   progress: (prog) => console.log(`received: ${prog}`),
+    // });
+    console.log(uploaded);
+    console.log(`https://infura-ipfs.io/ipfs/${uploaded.path}`);
+
+    const url = `https://infura-ipfs.io/ipfs/${uploaded.path}`;
+
+    // DEPLOYING DATASET
+    deployDataset(message, url, checksum);
+    setImgUrl(url);
+  }
 
   const checkFileAvailability = async (_callback) => {
     try {
@@ -204,6 +223,26 @@ export const AceProvider = ({ children }) => {
       return false;
     }
   };
+
+  const deployDataset = async (name, multiaddr, checksum) => {
+    try {
+      const owner = await iexec.wallet.getAddress();
+      const { address } = await iexec.dataset.deployDataset({
+        owner,
+        name,
+        multiaddr,
+        checksum
+      });
+      console.log("Dataset deployed at ", address);
+
+      // VERIFICATION DATASET DEPLOYMENT
+      await delay(3)
+      console.log(await iexec.dataset.showDataset(address))
+      // ...............................
+    } catch (err) {
+      console.error(err);
+    } 
+  }
 
 
   return (
@@ -232,7 +271,9 @@ export const AceProvider = ({ children }) => {
         checkFileAvailability,
         delay,
         isAvailable,
-        setIsAvailable
+        setIsAvailable,
+        upload,
+        generateChecksum
       }}
     >
       {children}
