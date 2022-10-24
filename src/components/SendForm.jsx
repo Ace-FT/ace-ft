@@ -1,8 +1,9 @@
 import React, {useRef, useState, useContext} from 'react';
 import { AceContext } from '../context/context';
+import { delay } from '../utils/delay';
 
 const SendForm = () => {
-  const { addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, imgUrl, encryption, delay, checkFileAvailability, isAvailable, setIsAvailable, upload, generateChecksum, deployDataset, pushSecret } = useContext(AceContext);
+  const { addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, imgUrl, encryption, checkFileAvailability, isAvailable, setIsAvailable, upload, generateChecksum, deployDataset, pushSecret } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
 

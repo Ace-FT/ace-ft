@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { IExec } from "iexec";
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
+import { delay } from "../utils/delay";
 
 export const AceContext = createContext();
 
@@ -43,12 +44,6 @@ export const AceProvider = ({ children }) => {
     //checkIsWalletConnected();
     fetchImages();
   }, []);
-
-  function delay(n) {
-    return new Promise(function (resolve) {
-      setTimeout(resolve, n * 1000);
-    });
-  }
 
   const fetchImages = async () => {
     try {
@@ -276,7 +271,6 @@ export const AceProvider = ({ children }) => {
         imgUrl,
         setImgUrl,
         checkFileAvailability,
-        delay,
         isAvailable,
         setIsAvailable,
         upload,
