@@ -10,7 +10,7 @@ import { AceContext } from './context/context';
 
 
 function App() {
-  const { background, bgCreator, bgUrls, bgCreatorSocial, imgUrl, checkFileAvailability } = useContext(AceContext);
+  const { background, bgCreator, bgUrls } = useContext(AceContext);
 
   return (
     <div className="min-h-screen bg-center bg-contain text-white" id="app"

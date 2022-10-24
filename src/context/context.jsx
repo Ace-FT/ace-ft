@@ -2,11 +2,13 @@ import { createContext, useEffect, useState } from "react";
 import { IExec } from "iexec";
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
+import { delay } from "../utils/delay";
 
 export const AceContext = createContext();
 
 const { ethereum } = window;
 const iexec = new IExec({ ethProvider: window.ethereum });
+var key = "";
 
 export const AceProvider = ({ children }) => {
   const [connectedAccount, setConnectedAccount] = useState("");
@@ -21,16 +23,27 @@ export const AceProvider = ({ children }) => {
   const [imgUrl, setImgUrl] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
 
+  const auth = "Basic " + Buffer.from(
+    process.env.REACT_APP_INFURA_ID +
+    ":" + process.env.REACT_APP_INFURA_SECRET_KEY
+  ).toString("base64");
+
+  const client = create({
+    host: "ipfs.infura.io",
+    port: 5001,
+    protocol: "https",
+    //apiPath: "/api/v0",
+    headers: {
+      authorization: auth,
+      "Access-Control-Allow-Origin": ["*"],
+    },
+  });
+  
+
   useEffect(() => {
     //checkIsWalletConnected();
     fetchImages();
   }, []);
-
-  function delay(n) {
-    return new Promise(function (resolve) {
-      setTimeout(resolve, n * 1000);
-    });
-  }
 
   const fetchImages = async () => {
     try {
@@ -87,6 +100,46 @@ export const AceProvider = ({ children }) => {
       });
       if (accounts.length) {
         setConnectedAccount(accounts[0]);
+
+        // connect to Bellecour iExec network
+        try {
+          await ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{chainId: '0x86'}]
+          })
+        } catch (switchNetworkError) {
+          console.log(switchNetworkError.code)
+          // This error code indicates that the chain has not been added to MetaMask.
+          if(switchNetworkError.code === 4902) {
+            // add Bellecour iExec network
+            try {
+              console.log("Adding")
+              await ethereum.request({
+                method: 'wallet_addEthereumChain',
+                params: [
+                  {
+                    chainId: '0x86',
+                    chainName: 'bellecour',
+                    rpcUrls: ['https://bellecour.iex.ec'],
+                    nativeCurrency: {
+                      name: "xRLC",
+                      symbol: "xRLC", // 2-6 characters long
+                      decimals: 18
+                    }
+                  },
+                ],
+              });
+              console.log("Network added");
+            } catch (addError) {
+              console.log(`Error ${addError}, impossible to add the network`)
+            }
+          } else {
+            console.log(`Error ${switchNetworkError} : not due to `)
+          }
+        }
+
+
+        console.log("iExec Address", await iexec.wallet.getAddress())
         //window.location.reload();
       } else {
         console.log("No accounts found");
@@ -97,28 +150,16 @@ export const AceProvider = ({ children }) => {
     }
   };
 
-  const encryption = async () => {
+  const encryption = async () => {  
     try {
-      const auth = "Basic " + Buffer.from(
-        process.env.REACT_APP_INFURA_ID +
-        ":" + process.env.REACT_APP_INFURA_SECRET_KEY
-      ).toString("base64");
+      // ENCRYPTION
+      
       console.log(auth);
       //console.log(process.env)
       console.log("INFURA_ID: " + process.env.REACT_APP_INFURA_ID);
       console.log("INFURA_SECRET_KEY: " + process.env.REACT_APP_INFURA_SECRET_KEY);
-      const client = create({
-        host: "ipfs.infura.io",
-        port: 5001,
-        protocol: "https",
-        //apiPath: "/api/v0",
-        headers: {
-          authorization: auth,
-          "Access-Control-Allow-Origin": ["*"],
-        },
-      });
 
-      const key = iexec.dataset.generateEncryptionKey();
+      key = iexec.dataset.generateEncryptionKey();
       console.log("Encryption key: " + key);
       console.log(selectedFiles[0])
       const fileBytes = await new Promise(async (resolve, reject) => {
@@ -132,21 +173,31 @@ export const AceProvider = ({ children }) => {
       const encrypted = await iexec.dataset.encrypt(fileBytes, key);
       console.log(encrypted)
 
-      const checksum = await iexec.dataset.computeEncryptedFileChecksum(encrypted)
-      console.log(checksum)
-      const uploaded  = await client.add(encrypted, { progress: (prog) => console.log(`received: ${prog}`)})
-      // const uploaded = await client.add(selectedFiles[0], {
-      //   progress: (prog) => console.log(`received: ${prog}`),
-      // });
-      console.log(uploaded);
-      console.log(`https://infura-ipfs.io/ipfs/${uploaded.path}`);
-
-      const url = `https://infura-ipfs.io/ipfs/${uploaded.path}`;
-      setImgUrl(url);
+      return encrypted;
     } catch (err) {
       console.log(err);
     }
   };
+
+  const generateChecksum = async (encrypted) => {
+    const checksum = await iexec.dataset.computeEncryptedFileChecksum(encrypted)
+    console.log(checksum)
+    return checksum;
+  }
+
+  const upload = async (encrypted, checksum) => {
+    //UPLOADING
+    const uploaded  = await client.add(encrypted, { progress: (prog) => console.log(`received: ${prog}`)})
+
+    // const uploaded = await client.add(selectedFiles[0], {
+    //   progress: (prog) => console.log(`received: ${prog}`),
+    // });
+    console.log(uploaded);
+    console.log(`https://infura-ipfs.io/ipfs/${uploaded.path}`);
+
+    const url = `https://infura-ipfs.io/ipfs/${uploaded.path}`;    
+    setImgUrl(url);
+  }
 
   const checkFileAvailability = async (_callback) => {
     try {
@@ -163,6 +214,38 @@ export const AceProvider = ({ children }) => {
       return false;
     }
   };
+
+  // DEPLOYING DATASET
+  const deployDataset = async (name, multiaddr, checksum) => {
+    //const checksum = generateChecksum(encrypted)
+    try {
+      const owner = await iexec.wallet.getAddress();
+      const { address } = await iexec.dataset.deployDataset({
+        owner,
+        name,
+        multiaddr,
+        checksum
+      });
+      console.log("Dataset deployed at ", address);
+
+      // VERIFICATION DATASET DEPLOYMENT
+      await delay(3)
+      console.log(await iexec.dataset.showDataset(address))
+      return address;
+      // ...............................
+    } catch (err) {
+      console.error(err);
+    } 
+  }
+  const pushSecret = async (address) => {
+    try {
+      const pushed = await iexec.dataset.pushDatasetSecret(address, key);
+      console.log("Encryption key pushed ", pushed);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   return (
     <AceContext.Provider
@@ -188,9 +271,12 @@ export const AceProvider = ({ children }) => {
         imgUrl,
         setImgUrl,
         checkFileAvailability,
-        delay,
         isAvailable,
-        setIsAvailable
+        setIsAvailable,
+        upload,
+        generateChecksum,
+        deployDataset,
+        pushSecret
       }}
     >
       {children}
