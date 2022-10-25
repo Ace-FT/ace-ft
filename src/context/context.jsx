@@ -177,7 +177,6 @@ export const AceProvider = ({ children }) => {
       console.log(fileBytes)
       const encrypted = await iexec.dataset.encrypt(fileBytes, key);
       console.log(encrypted)
-
       return encrypted;
     } catch (err) {
       console.log(err);

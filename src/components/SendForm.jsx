@@ -27,7 +27,7 @@ const SendForm = () => {
   return (
     <div>
       <form>
-        <div className="w-full flex flex-col max-w-xs rounded-3xl shadow-xl bg-white text-black px-4 py-4">
+        <div className="w-full flex flex-col max-w-xs rounded-2xl shadow-xl bg-white text-black px-4 py-4">
           <div className="uploader">
             { isAFile ? (
               <div>
@@ -136,8 +136,7 @@ const SendForm = () => {
 
                   setIsAvailable(ok);
                   status = AVAILABLE;
-                  var datasetMessage;
-                  message === "" ? datasetMessage = "encrypted-file" : datasetMessage = message;
+                  var datasetMessage = "" //file name
                   const datasetAddress = await deployDataset(datasetMessage, imgUrl, checksum);
                   status = DATASET_DEPLOYED
                   pushSecret(datasetAddress);
