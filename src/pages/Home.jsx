@@ -52,7 +52,7 @@ const Home = () => {
           <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
             onClick={async (e) => {
               e.preventDefault();
-              const available = await checkFileAvailability()
+              const available = await checkFileAvailability(imgUrl, () => {console.log("checking ended...")})
               console.log(available);
             }}
           >
