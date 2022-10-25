@@ -22,16 +22,17 @@ function App() {
       }}
     >
       <div className="mx-auto">
-        <Router>
-          <NavBar />
-          <Routes>
-            <Route path="/" element={ <Home /> } />
-            <Route path="/inbox" element={ <Inbox /> } />
-            <Route path="/sent" element={ <SentItems />} />
-            <Route path="/settings" element={ <Settings /> } />
-          </Routes>
-        </Router>
-
+        <main className="max-w-7xl mx-auto">
+          <Router>
+            <NavBar />
+            <Routes>
+              <Route path="/" element={ <Home /> } />
+              <Route path="/inbox" element={ <Inbox /> } />
+              <Route path="/sent" element={ <SentItems />} />
+              <Route path="/settings" element={ <Settings /> } />
+            </Routes>
+          </Router>
+        </main>
       </div>
     </div>
   );
