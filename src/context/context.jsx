@@ -12,6 +12,7 @@ const { ethereum } = window;
 const iexec = new IExec({ ethProvider: window.ethereum });
 var fileEncryptionKey = "";
 var datasetEncryptionKey = "";
+var datasetAddress = "";
 
 export const AceProvider = ({ children }) => {
   const [connectedAccount, setConnectedAccount] = useState("");
@@ -230,9 +231,10 @@ export const AceProvider = ({ children }) => {
     console.log("Dataset content :", datasetContent)
     const datasetBuffer = jsonToBuffer(datasetContent);
     console.log(datasetBuffer)
-    const encryptedDataset = await iexec.dataset.encrypt(datasetBuffer, datasetEncryptionKey);
-    console.log(encryptedDataset)
-    return encryptedDataset;
+    //const encryptedDataset = await iexec.dataset.encrypt(datasetBuffer, datasetEncryptionKey);
+   // console.log(encryptedDataset)
+    return datasetBuffer;
+    // return encryptedDataset;
   }
 
 
@@ -271,9 +273,24 @@ export const AceProvider = ({ children }) => {
   const pushSecret = async (address) => {
     try {
       const pushed = await iexec.dataset.pushDatasetSecret(address, datasetEncryptionKey);
-      console.log("Encryption key pushed ", pushed);
+      console.log("Encryption key pushed ", datasetEncryptionKey);
+      console.log("Secret pushed ", pushed);
+
+      
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  const pushOrder = async(address, apprestrict, requesterrestrict) => {
+    try {
+      const order = await iexec.order.createDatasetorder({ dataset: address, volume: 500, apprestrict: apprestrict, requesterrestrict: requesterrestrict})
+      const signedOrder = await iexec.order.signDatasetorder(order)
+      console.log(signedOrder)
+      const pushedOrder = await iexec.order.publishDatasetorder(signedOrder)
+      console.log(pushedOrder);
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -309,7 +326,8 @@ export const AceProvider = ({ children }) => {
         generateChecksum,
         datasetEncryption,
         deployDataset,
-        pushSecret
+        pushSecret,
+        pushOrder
       }}
     >
       {children}

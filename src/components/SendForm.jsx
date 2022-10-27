@@ -1,11 +1,14 @@
+import {IExec} from 'iexec';
 import React, {useRef, useState, useContext} from 'react';
 import { AceContext } from '../context/context';
 import { delay } from '../utils/delay';
 
 const SendForm = () => {
-  const { addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, imgUrl, encryption, checkFileAvailability, isAvailable, setIsAvailable, upload, generateChecksum, datasetEncryption, deployDataset, pushSecret } = useContext(AceContext);
+  const { addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, imgUrl, encryption, checkFileAvailability, isAvailable, setIsAvailable, upload, generateChecksum, datasetEncryption, deployDataset, pushSecret, pushOrder } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
+  const IS_TEE = false;
+
 
 
   const BEGINNING_PROCESS = 0;
@@ -153,8 +156,10 @@ const SendForm = () => {
                   console.log(`Step ${status}: ${steps[status]}`); // Write the different steps in order to have the workflow
                   setIsAvailable(ok);
 
-                  nextStep(status);
-                  console.log(`Step ${status}: ${steps[status]}`);
+                  if (IS_TEE) {
+                    nextStep(status);
+                    console.log(`Step ${status}: ${steps[status]}`);
+                  }
                   const encryptedDataset = await datasetEncryption()
 
                   nextStep(status);
@@ -165,7 +170,7 @@ const SendForm = () => {
                   ok = false;
                   while (!ok) {
                     console.log("Checking dataset availability")
-                    ok = await checkFileAvailability(imgUrl, () => console.log("checking ended..."))
+                    ok = await checkFileAvailability(datasetUrl, () => console.log("checking ended..."))
                     console.log(ok)
                   }
 
@@ -174,17 +179,22 @@ const SendForm = () => {
 
                   nextStep(status);
                   console.log(`Step ${status}: ${steps[status]}`); // 7
-                  var datasetName = "file-name-xxx" //file name
+                  var datasetName = "file-name-test" //file name
                   console.log("Dataset Url : ", datasetUrl);
                   const checksum = await generateChecksum(encryptedDataset);
                   const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
 
-                  nextStep(status);
-                  console.log(`Step ${status}: ${steps[status]}`);
-                  await pushSecret(datasetAddress);
+                  if(IS_TEE) {
+                    nextStep(status);
+                    console.log(`Step ${status}: ${steps[status]}`);
+                    await pushSecret(datasetAddress);
+                  }
+                  await pushOrder(datasetAddress, "0x2bd8FDFA9A2Fc441939402441EcFfc9F2De22eBd", "0xdD2FD4581271e230360230F9337D5c0430Bf44C0")
+                  
 
                   nextStep(status);
                   console.log(`Step ${status}: ${steps[status]}`);
+                  
                 }}
               >
                 Transfer
