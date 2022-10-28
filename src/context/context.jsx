@@ -5,6 +5,7 @@ import { Buffer } from "buffer";
 import { delay } from "../utils/delay";
 import { datasetStruct } from "../utils/datasetStruct.ts";
 import { jsonToBuffer } from "../utils/jsonToBuffer";
+import * as ace from "../shared/constants";
 
 export const AceContext = createContext();
 
@@ -52,9 +53,8 @@ export const AceProvider = ({ children }) => {
 
   const fetchImages = async () => {
     try {
-      //const response = await fetch(`http://api.unsplash.com/photos?client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}`)
       const response = await fetch(
-        `http://api.unsplash.com/photos/random?query=sustainability&count=5&orientation=landscape&client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}`
+        `http://api.unsplash.com/photos/random?query=nfts&query=sustainability&query=human-rights&orientation=landscape&count=4&client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}`
       );
       const data = await response.json();
       //console.log('success');
@@ -222,7 +222,7 @@ export const AceProvider = ({ children }) => {
 
   /**
    * Encrypt the dataset containing the file encryption Key, the file Url download location and the message. 
-   * @returns 
+   * @returns The encrypted dataset Buffer
    */
   const datasetEncryption = async () => {
     datasetEncryptionKey = iexec.dataset.generateEncryptionKey();
@@ -231,6 +231,8 @@ export const AceProvider = ({ children }) => {
     console.log("Dataset content :", datasetContent)
     const datasetBuffer = jsonToBuffer(datasetContent);
     console.log(datasetBuffer)
+
+    // THE BENCRYPTION HAS BEEN REMOVED FOR NOW
     //const encryptedDataset = await iexec.dataset.encrypt(datasetBuffer, datasetEncryptionKey);
    // console.log(encryptedDataset)
     return datasetBuffer;
@@ -282,9 +284,9 @@ export const AceProvider = ({ children }) => {
     }
   }
 
-  const pushOrder = async(address, apprestrict, requesterrestrict) => {
+  const pushOrder = async(address, requesterrestrict) => {
     try {
-      const order = await iexec.order.createDatasetorder({ dataset: address, volume: 500, apprestrict: apprestrict, requesterrestrict: requesterrestrict})
+      const order = await iexec.order.createDatasetorder({ dataset: address, volume: 100, apprestrict: ace.APP_ADDRESS, requesterrestrict: requesterrestrict})
       const signedOrder = await iexec.order.signDatasetorder(order)
       console.log(signedOrder)
       const pushedOrder = await iexec.order.publishDatasetorder(signedOrder)

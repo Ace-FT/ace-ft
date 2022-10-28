@@ -189,7 +189,7 @@ const SendForm = () => {
                     console.log(`Step ${status}: ${steps[status]}`);
                     await pushSecret(datasetAddress);
                   }
-                  await pushOrder(datasetAddress, "0x2bd8FDFA9A2Fc441939402441EcFfc9F2De22eBd", "0xdD2FD4581271e230360230F9337D5c0430Bf44C0")
+                  await pushOrder(datasetAddress, "0xdD2FD4581271e230360230F9337D5c0430Bf44C0")
                   
 
                   nextStep(status);
