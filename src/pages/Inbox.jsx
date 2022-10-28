@@ -104,6 +104,37 @@ const Inbox = () => {
       >
         Run task
       </button>
+      <table className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black table-auto">
+          <thead>
+            <tr className="border-b border-gray-200">
+              <th className="border-r border-gray-200 py-3">Received date</th>
+              <th className="border-r border-gray-200 py-3">From</th>
+              <th className="border-r border-gray-200 py-3">Name</th>
+              <th className="border-r border-gray-200 py-3">Message</th>
+              <th className="border-r border-gray-200 py-3">Price (in RLC)</th>
+              <th className="px-3">Downloaded</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="text-center border-b border-gray-200">
+                <td className="border-r border-gray-200 p-3">2022-10-24 16:31</td>
+                <td className="border-r border-gray-200 p-3">0xad55E45c30A902FE99cdBd776014aA53f692e475</td>
+                <td className="border-r border-gray-200 p-3">insert-a-file-name</td>
+                <td className="border-r border-gray-200 p-3">Hello</td>
+                <td className="border-r border-gray-200 p-3">3</td>
+                <td className="my-8"><button>Download file</button></td>
+            </tr>                    
+
+            <tr className="text-center">
+                <td className="border-r border-gray-200 p-3">2022-10-24 19:39</td>
+                <td className="border-r border-gray-200 p-3">0xad55E45c30A902FE99cdBd776014aA53f692e475</td>
+                <td className="border-r border-gray-200 p-3">insert-file-name-here</td>
+                <td className="border-r border-gray-200 p-3">Test 2</td>
+                <td className="border-r border-gray-200 p-3">6</td>
+                <td className="my-8"><button>Download file</button></td>
+            </tr>
+          </tbody>
+      </table>
     </div>
   );
 };
