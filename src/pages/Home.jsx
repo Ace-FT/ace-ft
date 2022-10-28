@@ -10,14 +10,6 @@ const Home = () => {
       <div className="mt-16 mx-8">
         <SendForm />
         <div className="text-white">
-          <button className="rounded-l-full rounded-r-full border border-white mr-8 px-4 py-2"
-            onClick={(e) => {
-              e.preventDefault();
-              console.log(background)
-            }}
-          >
-            Test bg
-          </button>
           <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
             onClick={(e) => {
               e.preventDefault();
