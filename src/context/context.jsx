@@ -3,12 +3,16 @@ import { IExec } from "iexec";
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import { delay } from "../utils/delay";
+import { jsonToBuffer } from "../utils/jsonToBuffer";
+import * as ace from "../shared/constants";
 
 export const AceContext = createContext();
 
 const { ethereum } = window;
 const iexec = new IExec({ ethProvider: window.ethereum });
-var key = "";
+var fileEncryptionKey = "";
+var datasetEncryptionKey = "";
+var datasetAddress = "";
 
 export const AceProvider = ({ children }) => {
   const [connectedAccount, setConnectedAccount] = useState("");
@@ -22,6 +26,7 @@ export const AceProvider = ({ children }) => {
   const [bgCreatorSocial, setBgCreatorSocial] = useState({});
   const [imgUrl, setImgUrl] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
+  const [datasetUrl, setDatasetUrl] = useState("");
 
   const auth = "Basic " + Buffer.from(
     process.env.REACT_APP_INFURA_ID +
@@ -47,9 +52,8 @@ export const AceProvider = ({ children }) => {
 
   const fetchImages = async () => {
     try {
-      //const response = await fetch(`http://api.unsplash.com/photos?client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}`)
       const response = await fetch(
-        `http://api.unsplash.com/photos/random?query=sustainability&count=5&orientation=landscape&client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}`
+        `http://api.unsplash.com/photos/random?query=nfts&query=sustainability&query=human-rights&orientation=landscape&count=4&client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}`
       );
       const data = await response.json();
       //console.log('success');
@@ -150,62 +154,43 @@ export const AceProvider = ({ children }) => {
     }
   };
 
-  const encryption = async () => {  
+
+  // const encryption = async () => {  
+  //   try {
+  //     // ENCRYPTION
+  //     console.log("auth", auth);
+  //     //console.log(process.env)
+  //     //console.log("INFURA_ID: " + process.env.REACT_APP_INFURA_ID);
+  //     //console.log("INFURA_SECRET_KEY: " + process.env.REACT_APP_INFURA_SECRET_KEY);
+
+  //     fileEncryptionKey = iexec.dataset.generateEncryptionKey();
+  //     console.log("Encryption key: " + fileEncryptionKey);
+  //     console.log(selectedFiles[0])
+  //     const fileBytes = await new Promise(async (resolve, reject) => {
+  //         const fileReader = new FileReader();
+  //         await fileReader.readAsArrayBuffer(selectedFiles[0]);
+  //         fileReader.onload = (e) => { resolve(e.target.result) }
+  //         fileReader.onerror = () => reject(Error(`Error`))
+  //         fileReader.onabort = () => reject(Error(`Error : aborded`))
+  //     });
+  //     console.log(fileBytes)
+  //     const encrypted = await iexec.dataset.encrypt(fileBytes, fileEncryptionKey);
+  //     console.log(encrypted)
+  //     return encrypted;
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+
+  const checkFileAvailability = async (url, _callback) => {
     try {
-      // ENCRYPTION
-      
-      console.log(auth);
-      //console.log(process.env)
-      console.log("INFURA_ID: " + process.env.REACT_APP_INFURA_ID);
-      console.log("INFURA_SECRET_KEY: " + process.env.REACT_APP_INFURA_SECRET_KEY);
-
-      key = iexec.dataset.generateEncryptionKey();
-      console.log("Encryption key: " + key);
-      console.log(selectedFiles[0])
-      const fileBytes = await new Promise(async (resolve, reject) => {
-          const fileReader = new FileReader();
-          await fileReader.readAsArrayBuffer(selectedFiles[0]);
-          fileReader.onload = (e) => { resolve(e.target.result) }
-          fileReader.onerror = () => reject(Error(`Error`))
-          fileReader.onabort = () => reject(Error(`Error : aborded`))
-      });
-      console.log(fileBytes)
-      const encrypted = await iexec.dataset.encrypt(fileBytes, key);
-      console.log(encrypted)
-      return encrypted;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const generateChecksum = async (encrypted) => {
-    const checksum = await iexec.dataset.computeEncryptedFileChecksum(encrypted)
-    console.log(checksum)
-    return checksum;
-  }
-
-  const upload = async (encrypted, checksum) => {
-    //UPLOADING
-    const uploaded  = await client.add(encrypted, { progress: (prog) => console.log(`received: ${prog}`)})
-
-    // const uploaded = await client.add(selectedFiles[0], {
-    //   progress: (prog) => console.log(`received: ${prog}`),
-    // });
-    console.log(uploaded);
-    console.log(`https://infura-ipfs.io/ipfs/${uploaded.path}`);
-
-    const url = `https://infura-ipfs.io/ipfs/${uploaded.path}`;    
-    setImgUrl(url);
-  }
-
-  const checkFileAvailability = async (_callback) => {
-    try {
-      const response = await fetch(imgUrl, {
+      const response = await fetch(url, {
         method: "HEAD",
         cache: "no-cache",
       });
       const ok = response.status === 200;
-      await delay(3)
+      await delay(2)
       _callback()
       return ok ; // If status is 200, then it's OK
     } catch (error) {
@@ -214,34 +199,17 @@ export const AceProvider = ({ children }) => {
     }
   };
 
-  // DEPLOYING DATASET
-  const deployDataset = async (name, multiaddr, checksum) => {
-    //const checksum = generateChecksum(encrypted)
-    try {
-      const owner = await iexec.wallet.getAddress();
-      const { address } = await iexec.dataset.deployDataset({
-        owner,
-        name,
-        multiaddr,
-        checksum
-      });
-      console.log("Dataset deployed at ", address);
 
-      // VERIFICATION DATASET DEPLOYMENT
-      await delay(3)
-      console.log(await iexec.dataset.showDataset(address))
-      return address;
-      // ...............................
-    } catch (err) {
-      console.error(err);
-    } 
-  }
-  const pushSecret = async (address) => {
+  const pushOrder = async(address, requesterrestrict) => {
     try {
-      const pushed = await iexec.dataset.pushDatasetSecret(address, key);
-      console.log("Encryption key pushed ", pushed);
-    } catch (error) {
-      console.log(error);
+      const order = await iexec.order.createDatasetorder({ dataset: address, volume: 100, apprestrict: ace.APP_ADDRESS, requesterrestrict: requesterrestrict})
+      console.log("Unsigned order",order)
+      const signedOrder = await iexec.order.signDatasetorder(order)
+      console.log("Signed order", signedOrder)
+      const pushedOrder = await iexec.order.publishDatasetorder(signedOrder)
+      console.log(pushedOrder);
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -266,16 +234,12 @@ export const AceProvider = ({ children }) => {
         setBgUrls,
         bgCreatorSocial,
         setBgCreatorSocial,
-        encryption,
         imgUrl,
         setImgUrl,
         checkFileAvailability,
         isAvailable,
         setIsAvailable,
-        upload,
-        generateChecksum,
-        deployDataset,
-        pushSecret
+        pushOrder
       }}
     >
       {children}

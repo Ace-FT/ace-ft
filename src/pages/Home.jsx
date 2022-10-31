@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import SendForm from "../components/SendForm";
+import SendForm from "../components/SendForm/SendForm";
 import Inbox from "./Inbox";
 import { AceContext } from '../context/context';
 
@@ -10,14 +10,6 @@ const Home = () => {
       <div className="mt-16 mx-8">
         <SendForm />
         <div className="text-white">
-          <button className="rounded-l-full rounded-r-full border border-white mr-8 px-4 py-2"
-            onClick={(e) => {
-              e.preventDefault();
-              console.log(background)
-            }}
-          >
-            Test bg
-          </button>
           <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
             onClick={(e) => {
               e.preventDefault();
@@ -52,13 +44,13 @@ const Home = () => {
           <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
             onClick={async (e) => {
               e.preventDefault();
-              const available = await checkFileAvailability()
+              const available = await checkFileAvailability(imgUrl, () => {console.log("checking ended...")})
               console.log(available);
             }}
           >
             Test availability file
           </button>
-          <div> <img src='' alt="IPFS Image" id='imgipfs'/></div>
+          <div> <img src='' alt="IPFS" id='imgipfs'/></div>
         </div>
         <div className="fixed right-0 bottom-0 flex flex-col text-sm font-extralight p-16">
             <h4>Credits</h4>
