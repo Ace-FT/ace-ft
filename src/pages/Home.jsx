@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import SendForm from "../components/SendForm";
+import SendForm from "../components/SendForm/SendForm";
 import Inbox from "./Inbox";
 import { AceContext } from '../context/context';
 
@@ -50,7 +50,7 @@ const Home = () => {
           >
             Test availability file
           </button>
-          <div> <img src='' alt="IPFS Image" id='imgipfs'/></div>
+          <div> <img src='' alt="IPFS" id='imgipfs'/></div>
         </div>
         <div className="fixed right-0 bottom-0 flex flex-col text-sm font-extralight p-16">
             <h4>Credits</h4>

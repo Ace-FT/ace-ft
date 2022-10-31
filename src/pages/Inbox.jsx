@@ -28,7 +28,7 @@ const Inbox = () => {
    */
   const getDatasetOrder = async (appAddress) => {
     const { orders } = await iexec.orderbook.fetchDatasetOrderbook(
-      "0x8FF11e9d47D2BcCDd10135639a7a64437E961899",
+      "0x8288d4F6C21Ad3aEB8fD7C87394aBFE84d197db8",
       {
         app: appAddress,
         requester: "0xdD2FD4581271e230360230F9337D5c0430Bf44C0",
@@ -64,7 +64,7 @@ const Inbox = () => {
     const myRequestOrder = await iexec.order.createRequestorder({
       app: ace.APP_ADDRESS,
       category: 0,
-      dataset: "0x8ff11e9d47d2bccdd10135639a7a64437e961899",
+      dataset: "0x8288d4F6C21Ad3aEB8fD7C87394aBFE84d197db8",
       //params: { iexec_developer_logger: true },
     });
 
