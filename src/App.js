@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import NavBar from "./components/Navbar";
 import SendForm from "./components/SendForm/SendForm";
@@ -8,9 +8,6 @@ import SentItems from "./pages/SentItems";
 import Settings from "./pages/Settings";
 import { AceContext } from './context/context';
 
-
-function App() {
-  const { background, bgCreator, bgUrls, bgCreatorSocial, imgUrl, checkFileAvailability } = useContext(AceContext);
 
   return (
     <div className="min-h-screen bg-center bg-contain text-white" id="app"
