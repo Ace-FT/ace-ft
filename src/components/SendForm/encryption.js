@@ -1,6 +1,5 @@
 import { IExec } from "iexec";
 import { Buffer } from "buffer";
-import { delay } from "../../utils/delay";
 import { datasetStruct } from "../../utils/datasetStruct.ts";
 import { jsonToBuffer } from "../../utils/jsonToBuffer";
 import * as ace from "../../shared/constants";
@@ -12,10 +11,10 @@ var datasetEncryptionKey = "";
 
 /**
  * Encrypt a selected file using iExec encryption module
- * @param {File} selectedFiles The file to encrypt
+ * @param {File} selectedFile The file to encrypt
  * @returns The encrypted file buffer
  */
-const encryptFile = async (selectedFiles) => {  
+const encryptFile = async (selectedFile) => {  
     try {
       // ENCRYPTION
       //console.log("auth", auth);
@@ -25,10 +24,10 @@ const encryptFile = async (selectedFiles) => {
 
       fileEncryptionKey = iexec.dataset.generateEncryptionKey();
       console.log("Encryption key: " + fileEncryptionKey);
-      console.log(selectedFiles[0])
+      console.log(selectedFile)
       const fileBytes = await new Promise(async (resolve, reject) => {
           const fileReader = new FileReader();
-          await fileReader.readAsArrayBuffer(selectedFiles[0]);
+          await fileReader.readAsArrayBuffer(selectedFile);
           fileReader.onload = (e) => { resolve(e.target.result) }
           fileReader.onerror = () => reject(Error(`Error`))
           fileReader.onabort = () => reject(Error(`Error : aborded`))

@@ -7,10 +7,18 @@ import Inbox from "./pages/Inbox";
 import SentItems from "./pages/SentItems";
 import Settings from "./pages/Settings";
 import { AceContext } from './context/context';
+import useRequest from './hooks/useRequest';
+import {queryForMyInbox} from './shared/queries';
 
 
 function App() {
   const { background, bgCreator, bgUrls } = useContext(AceContext);
+  const { data, loading, error } = useRequest(queryForMyInbox);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
 
   return (
     <div className="min-h-screen bg-center bg-contain text-white" id="app"

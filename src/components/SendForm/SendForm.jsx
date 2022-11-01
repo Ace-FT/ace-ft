@@ -13,7 +13,6 @@ const SendForm = () => {
   const IS_TEE = false;
 
 
-
   const BEGINNING_PROCESS = 0;
   const steps = [
     "BEGINNING PROCESS", // 0
@@ -140,8 +139,9 @@ const SendForm = () => {
                   console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
                   status = nextStep(status);
                   console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
-                  const encryptedFile = await encryptFile(selectedFiles);
-
+                  const encryptedFile = await encryptFile(selectedFiles[0]);
+                  const fileName = selectedFiles[0].name;
+                  console.log(fileName);
                   status = nextStep(status);
                   console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
                   var fileUrl = await uploadData(encryptedFile)
@@ -182,7 +182,7 @@ const SendForm = () => {
 
                   nextStep(status);
                   console.log(`Step ${status}: ${steps[status]}`); // 7
-                  const datasetName = "file-name-test" //file name
+                  const datasetName = fileName;
                   console.log("Dataset Url : ", datasetUrl);
                   const checksum = await generateEncryptedFileChecksum(encryptedDataset);
                   const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
@@ -198,12 +198,11 @@ const SendForm = () => {
 
                   nextStep(status);
                   console.log(`Step ${status}: ${steps[status]}`);
-                  await pushOrder(datasetAddress, "0xdD2FD4581271e230360230F9337D5c0430Bf44C0")
+                  await pushOrder(datasetAddress, addressTo)
                   
 
                   nextStep(status);
                   console.log(`Step ${status}: ${steps[status]}`);
-                  
                 }}
               >
                 Transfer
