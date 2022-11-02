@@ -141,7 +141,9 @@ const SendForm = () => {
                   console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
                   const encryptedFile = await encryptFile(selectedFiles[0]);
                   const fileName = selectedFiles[0].name;
+                  const fileSize = selectedFiles[0].size;
                   console.log(fileName);
+                  console.log("Size:", fileSize);
                   status = nextStep(status);
                   console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
                   var fileUrl = await uploadData(encryptedFile)
@@ -163,7 +165,7 @@ const SendForm = () => {
                   nextStep(status);
                   console.log(`Step ${status}: ${steps[status]}`, "NOT OPERATING HERE");
                   //const encryptedDataset = await datasetEncryption()
-                  const encryptedDataset = await encryptDataset(fileUrl, message)
+                  const encryptedDataset = await encryptDataset(fileUrl, message, fileSize)
 
                   nextStep(status);
                   console.log(`Step ${status}: ${steps[status]}`); // 5

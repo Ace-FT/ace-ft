@@ -1,7 +1,6 @@
 import React, {useContext, useEffect} from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import NavBar from "./components/Navbar";
-import SendForm from "./components/SendForm/SendForm";
 import Home from "./pages/Home"
 import Inbox from "./pages/Inbox";
 import SentItems from "./pages/SentItems";
