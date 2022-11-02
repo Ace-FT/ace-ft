@@ -13,14 +13,13 @@ const Inbox = () => {
   const { connectedAccount } = useContext(AceContext)
   console.log(connectedAccount)
   const queryType = "INBOX";
-
   const query = requestQueryOnApp(queryType, connectedAccount)
-  //console.log(query)
+
+
   const { data, loading, error } = useRequest(query);
   const [renders, setRendered] = useState(false);
   const [allData, setAllData] = useState()
   var structuredResponse = null;
-
 
 
   useEffect(() => {
@@ -152,13 +151,13 @@ const Inbox = () => {
               
               const isCompleted = datasetOrder.deals && datasetOrder.deals[0] && datasetOrder.deals[0].tasks && datasetOrder.deals[0].tasks[0] && datasetOrder.deals[0].tasks[0].status === "COMPLETED"
               return (
-                <tr className="text-center border-b border-gray-200">
+                <tr className="text-center border-b border-gray-200" key={i}>
                   <td className="border-r border-gray-200 p-3">{datasetOrder.dataset.timestamp}</td>
                   <td className="border-r border-gray-200 p-3">{datasetOrder.dataset.owner.id}</td>
                   <td className="border-r border-gray-200 p-3">{datasetOrder.dataset.name}</td>
                   <td className="border-r border-gray-200 p-3">{datasetOrder.datasetprice}</td>
                   <td className="border-r border-gray-200 p-3">{isCompleted ? <p>Download</p> : <p>Transfer pending</p>}</td>
-              </tr>
+                </tr>
               )
             })}
           </tbody>

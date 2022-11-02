@@ -15,42 +15,49 @@ export const requestQueryOnApp = (query, requestingAccount) => {
                   where: {apprestrict: "${ace.APP_ADDRESS}", requesterrestrict: "${requestingAccount}"}
             ) {
                 dataset {
-                id
-                owner {
+                  id
+                  owner {
                     id
-                }
-                name
-                timestamp
+                  }
+                  name
+                  timestamp
                 }
                 datasetprice
-            deals {
-              id
-              tasks {
-                id,
-                status
-              }
-            }
+                deals {
+                  id
+                  tasks {
+                    id,
+                    status
+                  }
+                }
           }
         }
             `
     } else if (query === "SENT_ITEMS") {
         query = `
-                {
-                    datasetOrders(
-                    where: {apprestrict: ${ace.APP_ADDRESS}}
-                    ) {
-                    dataset {
-                        id
-                        name
-                        timestamp
-                        owner {
-                        id
-                        }
-                    }
-                    datasetprice
-                    requesterrestrict
+        {
+            datasetOrders(
+                  where: {apprestrict: ${ace.APP_ADDRESS}}
+            ) {
+                dataset {
+                    id
+                    name
+                    timestamp
+                    owner {
+                      id
                     }
                 }
+                datasetprice
+                requesterrestrict
+                deals {
+                  id
+                  tasks {
+                    id,
+                    status
+                  }
+                }
+              }
+        }
             `
     }
     return query;
