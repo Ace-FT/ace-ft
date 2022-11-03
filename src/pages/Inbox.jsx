@@ -147,7 +147,7 @@ const Inbox = () => {
           </thead>
           <tbody>
             {allData.map((datasetOrder, i) => {
-              console.log(structuredResponse);
+              console.log(datasetOrder);
               
               const isCompleted = datasetOrder.deals && datasetOrder.deals[0] && datasetOrder.deals[0].tasks && datasetOrder.deals[0].tasks[0] && datasetOrder.deals[0].tasks[0].status === "COMPLETED"
               return (

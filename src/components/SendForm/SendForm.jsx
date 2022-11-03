@@ -7,7 +7,7 @@ import uploadData from './upload';
 import { deployDataset, pushSecret, pushOrder } from './deploy';
 
 const SendForm = () => {
-  const { addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, imgUrl, checkFileAvailability, isAvailable, setIsAvailable } = useContext(AceContext);
+  const { isLoading, setIsLoading, addressTo, setAddressTo, state, setState, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
   const IS_TEE = false;
@@ -17,7 +17,7 @@ const SendForm = () => {
   const steps = [
     "BEGINNING PROCESS", // 0
     "ENCRYPTING FILE", // 1
-    "UPLOADING FILE", 
+    "UPLOADING FILE", // 2
     "FILE AVAILABLE", //3
     "ENCRYPTING DATASET", // 4 
     "UPLOADING DATASET", 
@@ -47,7 +47,7 @@ const SendForm = () => {
   return (
     <div>
       <form>
-        <div className="w-full flex flex-col max-w-xs rounded-2xl shadow-xl bg-white text-black px-4 py-4">
+        <div className="flex flex-col w-80 rounded-2xl shadow-xl bg-white text-black mr-8 px-4 py-4">
           <div className="uploader">
             { isAFile ? (
               <div>
@@ -138,6 +138,8 @@ const SendForm = () => {
                   e.preventDefault();
                   console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
                   status = nextStep(status);
+                  setIsLoading(true);
+                  setState("... encrypting your file");
                   console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
                   const encryptedFile = await encryptFile(selectedFiles[0]);
                   const fileName = selectedFiles[0].name;
@@ -145,15 +147,16 @@ const SendForm = () => {
                   console.log(fileName);
                   console.log("Size:", fileSize);
                   status = nextStep(status);
-                  console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
+                  setState("... uploading your file");
+                  console.log("Step", status, ": ", steps[status]); // 2
                   var fileUrl = await uploadData(encryptedFile)
                   console.log("File uploaded at", fileUrl)
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)
+                  setState("... checking your file availability on IPFS");
 
                   var ok = false;
                   while (!ok) {
-                    console.log("Checking file availability")
-                    console.log("") //fileUrl
+                    console.log("Checking file availability at", fileUrl)
                     ok = await checkFileAvailability("", () => console.log("checking ended...")) //fileUrl
                     console.log(ok)
                   }
@@ -163,14 +166,17 @@ const SendForm = () => {
 
 
                   nextStep(status);
+                  setState("... encrypting the dataset containing your file");
                   console.log(`Step ${status}: ${steps[status]}`, "NOT OPERATING HERE");
                   //const encryptedDataset = await datasetEncryption()
                   const encryptedDataset = await encryptDataset(fileUrl, message, fileSize)
 
                   nextStep(status);
+                  setState("... uploading dataset");
                   console.log(`Step ${status}: ${steps[status]}`); // 5
                   var datasetUrl = await uploadData(encryptedDataset)
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)
+                  setState("... checking your dataset availability on IPFS");
 
                   ok = false;
                   while (!ok) {
@@ -183,6 +189,7 @@ const SendForm = () => {
                   console.log(`Step ${status}: ${steps[status]}`); // 6
 
                   nextStep(status);
+                  setState("... deploying dataset");
                   console.log(`Step ${status}: ${steps[status]}`); // 7
                   const datasetName = fileName;
                   console.log("Dataset Url : ", datasetUrl);
@@ -199,11 +206,13 @@ const SendForm = () => {
                   }
 
                   nextStep(status);
+                  setState("... making order");
                   console.log(`Step ${status}: ${steps[status]}`);
                   await pushOrder(datasetAddress, addressTo)
                   
 
                   nextStep(status);
+                  setState("Your file is uploaded");
                   console.log(`Step ${status}: ${steps[status]}`);
                 }}
               >

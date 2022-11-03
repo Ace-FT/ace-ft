@@ -3,20 +3,20 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import NavBar from "./components/Navbar";
 import Home from "./pages/Home"
 import Inbox from "./pages/Inbox";
-import SentItems from "./pages/SentItems";
+import SentItems from "./pages/SentItems/SentItems";
 import Settings from "./pages/Settings";
 import { AceContext } from './context/context';
 import useRequest from './hooks/useRequest';
-import {queryForMyInbox} from './shared/queries';
+//import {queryForMyInbox} from './shared/queries';
 
 
 function App() {
   const { background, bgCreator, bgUrls } = useContext(AceContext);
-  const { data, loading, error } = useRequest(queryForMyInbox);
+  //const { data, loading, error } = useRequest(queryForMyInbox);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
 
 
   return (

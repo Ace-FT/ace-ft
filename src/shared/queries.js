@@ -36,69 +36,28 @@ export const requestQueryOnApp = (query, requestingAccount) => {
     } else if (query === "SENT_ITEMS") {
         query = `
         {
-            datasetOrders(
-                  where: {apprestrict: ${ace.APP_ADDRESS}}
-            ) {
-                dataset {
-                    id
-                    name
-                    timestamp
-                    owner {
-                      id
-                    }
-                }
-                datasetprice
-                requesterrestrict
-                deals {
-                  id
-                  tasks {
-                    id,
-                    status
-                  }
-                }
+          datasetOrders(
+            where: {apprestrict: "${ace.APP_ADDRESS}"}
+          ) {
+            requesterrestrict
+            datasetprice
+            dataset(where: {owner: {id: "${requestingAccount}"}}) {
+              name
+              timestamp
+              multiaddr
+              owner {
+                id
               }
+            }
+            deals {
+              id
+              tasks {
+                status
+              }
+            }
+          }
         }
             `
     }
     return query;
 }
-
-
-
-
-export const queryForMyInbox = `
-query {
-  datasetOrders(
-    where: {apprestrict: "0x2bd8fdfa9a2fc441939402441ecffc9f2de22ebd", requesterrestrict: "0xdD2FD4581271e230360230F9337D5c0430Bf44C0"}
-  ) {
-    dataset {
-      id
-      owner {
-        id
-      }
-      name
-      timestamp
-    }
-    datasetprice
-  }
-}
-`;
-
-export const queryForSentItems = `
-{
-    datasetOrders(
-      where: {apprestrict: "0x2bd8FDFA9A2Fc441939402441EcFfc9F2De22eBd"}
-    ) {
-      dataset {
-        id
-        name
-        timestamp
-        owner {
-          id
-        }
-      }
-      datasetprice
-      requesterrestrict
-    }
-  }
-`;

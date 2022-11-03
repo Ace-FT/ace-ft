@@ -1,14 +1,37 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import SendForm from "../components/SendForm/SendForm";
 import Inbox from "./Inbox";
 import { AceContext } from '../context/context';
 
 const Home = () => {
-    const { background, bgCreator, bgUrls, bgCreatorSocial, imgUrl, checkFileAvailability } = useContext(AceContext);
+    const { isLoading, setIsLoading, state, setState, background, bgCreator, bgUrls, bgCreatorSocial, imgUrl, checkFileAvailability } = useContext(AceContext);
+
+
+    const writeStatus = (status) => {
+      return (
+        <span>{status}</span>
+      )
+    }
+
+    useEffect(() => {
+      writeStatus(state)
+    }, [state])
+
 
     return (
-      <div className="mt-16 mx-8">
-        <SendForm />
+      <div className="flex flex-col mt-16 mx-8">
+        <div className="flex">
+          <SendForm />
+          { isLoading ? (
+            <div className="flex">
+              <div className="w-8 h-8 border-4 border-gray-400 rounded-full border-t-blue-700 animate-spin pr-4"></div>
+              {writeStatus(state)}
+            </div>
+          ) : (
+            <p></p>
+          )}
+        </div>
+
         <div className="text-white">
           <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
             onClick={(e) => {

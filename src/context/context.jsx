@@ -16,6 +16,7 @@ var datasetAddress = "";
 
 export const AceProvider = ({ children }) => {
   const [connectedAccount, setConnectedAccount] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [addressTo, setAddressTo] = useState("");
   const [price, setPrice] = useState();
   const [message, setMessage] = useState("");
@@ -25,6 +26,7 @@ export const AceProvider = ({ children }) => {
   const [bgUrls, setBgUrls] = useState({});
   const [bgCreatorSocial, setBgCreatorSocial] = useState({});
   const [imgUrl, setImgUrl] = useState("");
+  const [state, setState] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
   const [datasetUrl, setDatasetUrl] = useState("");
 
@@ -155,34 +157,6 @@ export const AceProvider = ({ children }) => {
   };
 
 
-  // const encryption = async () => {  
-  //   try {
-  //     // ENCRYPTION
-  //     console.log("auth", auth);
-  //     //console.log(process.env)
-  //     //console.log("INFURA_ID: " + process.env.REACT_APP_INFURA_ID);
-  //     //console.log("INFURA_SECRET_KEY: " + process.env.REACT_APP_INFURA_SECRET_KEY);
-
-  //     fileEncryptionKey = iexec.dataset.generateEncryptionKey();
-  //     console.log("Encryption key: " + fileEncryptionKey);
-  //     console.log(selectedFiles[0])
-  //     const fileBytes = await new Promise(async (resolve, reject) => {
-  //         const fileReader = new FileReader();
-  //         await fileReader.readAsArrayBuffer(selectedFiles[0]);
-  //         fileReader.onload = (e) => { resolve(e.target.result) }
-  //         fileReader.onerror = () => reject(Error(`Error`))
-  //         fileReader.onabort = () => reject(Error(`Error : aborded`))
-  //     });
-  //     console.log(fileBytes)
-  //     const encrypted = await iexec.dataset.encrypt(fileBytes, fileEncryptionKey);
-  //     console.log(encrypted)
-  //     return encrypted;
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-
   const checkFileAvailability = async (url, _callback) => {
     try {
       const response = await fetch(url, {
@@ -219,6 +193,9 @@ export const AceProvider = ({ children }) => {
       value={{
         connectWallet,
         connectedAccount,
+        setConnectedAccount,
+        isLoading,
+        setIsLoading,
         addressTo,
         setAddressTo,
         price,
@@ -236,6 +213,8 @@ export const AceProvider = ({ children }) => {
         setBgCreatorSocial,
         imgUrl,
         setImgUrl,
+        state,
+        setState,
         checkFileAvailability,
         isAvailable,
         setIsAvailable,
