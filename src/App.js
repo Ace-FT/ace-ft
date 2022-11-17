@@ -40,7 +40,12 @@ function App() {
               <Route path="/sent" element={<SentItems />} />
               <Route path="/settings" element={<Settings />}>
                 <Route index element={<PersonnalData />} />
-                <Route path="personnal-data" element={<PersonnalData />} />
+                <Route path="personnal-data" element={<PersonnalData />}/>
+                  {/* <Route path="telegram" element = {() =>{
+                    window.location.replace("t.me/ace_ft_bot");
+                    return null;
+                  }}/>
+                </Route> */}
                 <Route path="params" element={<Params />} />
               </Route>
             </Routes>

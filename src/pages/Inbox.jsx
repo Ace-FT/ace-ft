@@ -8,7 +8,9 @@ import structureResponse from "../utils/structureResponse";
 
 const Inbox = () => {
   const { ethereum } = window;
-  const iexec = new IExec({ ethProvider: window.ethereum });
+  const configArgs = { ethProvider: window.ethereum,  chainId : 134};
+  const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
+  const iexec = new IExec(configArgs, configOptions);
   const { connectedAccount } = useContext(AceContext);
   console.log(connectedAccount);
   const queryType = "INBOX";

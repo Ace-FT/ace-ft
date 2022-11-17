@@ -5,8 +5,9 @@ import { jsonToBuffer } from "../../utils/jsonToBuffer";
 import * as ace from "../../shared/constants";
 
 const { ethereum } = window;
-const iexec = new IExec({ ethProvider: window.ethereum });
-var fileEncryptionKey = "";
+const configArgs = { ethProvider: window.ethereum,  chainId : 134};
+const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
+const iexec = new IExec(configArgs, configOptions);var fileEncryptionKey = "";
 var datasetEncryptionKey = "";
 
 /**

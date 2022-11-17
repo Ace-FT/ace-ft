@@ -11,7 +11,9 @@ const SendForm = () => {
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
   const IS_TEE = true;
-
+  const configArgs = { ethProvider: window.ethereum,  chainId : 134};
+  const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
+  const iexec = new IExec(configArgs, configOptions);
 
   const BEGINNING_PROCESS = 0;
   const steps = [
@@ -204,6 +206,8 @@ const SendForm = () => {
                   } else {
                     nextStep(status);
                   }
+                  const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
+                  console.log("secret is pushed?", isSecretPushed)
 
                   nextStep(status);
                   setState("... making order");
