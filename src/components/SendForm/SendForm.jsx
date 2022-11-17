@@ -10,7 +10,7 @@ const SendForm = () => {
   const { isLoading, setIsLoading, addressTo, setAddressTo, state, setState, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
-  const IS_TEE = false;
+  const IS_TEE = true;
 
 
   const BEGINNING_PROCESS = 0;
@@ -22,7 +22,7 @@ const SendForm = () => {
     "ENCRYPTING DATASET", // 4 
     "UPLOADING DATASET", 
     "DATASET AVAILABLE", //6
-    "DEPLOYING DATASET", 
+    "DEPLOYING DATASET", // 7
     "PUSHING SECRET", // 8
     "PUSHING DATASET ORDER", //9
     "END OF PROCESS" // 10
@@ -45,7 +45,7 @@ const SendForm = () => {
   }
 
   return (
-    <div>
+    <>
       <form>
         <div className="flex flex-col w-80 rounded-2xl shadow-xl bg-white text-black mr-8 px-4 py-4">
           <div className="uploader">
@@ -167,8 +167,7 @@ const SendForm = () => {
 
                   nextStep(status);
                   setState("... encrypting the dataset containing your file");
-                  console.log(`Step ${status}: ${steps[status]}`, "NOT OPERATING HERE");
-                  //const encryptedDataset = await datasetEncryption()
+                  console.log(`Step ${status}: ${steps[status]}`);
                   const encryptedDataset = await encryptDataset(fileUrl, message, fileSize)
 
                   nextStep(status);
@@ -198,7 +197,8 @@ const SendForm = () => {
 
                   if(IS_TEE) {
                     nextStep(status);
-                    console.log(`Step ${status}: ${steps[status]}`);
+                    setState("... pushing secret (encryption key)");
+                    console.log(`Step ${status}: ${steps[status]}`); //8
                     console.log("Before secret : dataset encryption key", datasetEncryptionKey);
                     await pushSecret(datasetAddress, datasetEncryptionKey);
                   } else {
@@ -207,12 +207,12 @@ const SendForm = () => {
 
                   nextStep(status);
                   setState("... making order");
-                  console.log(`Step ${status}: ${steps[status]}`);
+                  console.log(`Step ${status}: ${steps[status]}`); //9
                   await pushOrder(datasetAddress, addressTo)
                   
 
                   nextStep(status);
-                  setState("Your file is uploaded");
+                  setState("Your file is uploaded ✅");
                   console.log(`Step ${status}: ${steps[status]}`);
                 }}
               >
@@ -221,7 +221,7 @@ const SendForm = () => {
           </div>
         </div>
       </form>
-    </div>
+    </>
   )
 }
 

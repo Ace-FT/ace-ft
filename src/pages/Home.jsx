@@ -2,10 +2,12 @@ import React, {useContext, useEffect} from 'react';
 import SendForm from "../components/SendForm/SendForm";
 import Inbox from "./Inbox";
 import { AceContext } from '../context/context';
+import {useState} from 'react';
 
 const Home = () => {
     const { isLoading, setIsLoading, state, setState, background, bgCreator, bgUrls, bgCreatorSocial, imgUrl, checkFileAvailability } = useContext(AceContext);
 
+    const [message, setMessage] = useState("")
 
     const writeStatus = (status) => {
       return (
@@ -16,6 +18,12 @@ const Home = () => {
     useEffect(() => {
       writeStatus(state)
     }, [state])
+
+    // useEffect(() => {
+    //   fetch("http://localhost:5001/")
+    //     .then((res) => res.json())
+    //     .then((data) => setMessage(data.message));
+    // }, []);
 
 
     return (
@@ -64,16 +72,6 @@ const Home = () => {
           >
             Test IMAGE IPFS
           </button>
-          <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
-            onClick={async (e) => {
-              e.preventDefault();
-              const available = await checkFileAvailability(imgUrl, () => {console.log("checking ended...")})
-              console.log(available);
-            }}
-          >
-            Test availability file
-          </button>
-          <div> <img src='' alt="IPFS" id='imgipfs'/></div>
         </div>
         <div className="fixed right-0 bottom-0 flex flex-col text-sm font-extralight p-16">
             <h4>Credits</h4>

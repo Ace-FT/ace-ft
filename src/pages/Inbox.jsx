@@ -1,38 +1,37 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AceContext } from "../context/context";
 import { IExec } from "iexec";
-import useRequest from '../hooks/useRequest';
+import useRequest from "../hooks/useRequest";
 import * as ace from "../shared/constants";
-import {requestQueryOnApp} from '../shared/queries';
+import { requestQueryOnApp } from "../shared/queries";
 import structureResponse from "../utils/structureResponse";
-
 
 const Inbox = () => {
   const { ethereum } = window;
   const iexec = new IExec({ ethProvider: window.ethereum });
-  const { connectedAccount } = useContext(AceContext)
-  console.log(connectedAccount)
+  const { connectedAccount } = useContext(AceContext);
+  console.log(connectedAccount);
   const queryType = "INBOX";
-  const query = requestQueryOnApp(queryType, connectedAccount)
-
+  const query = requestQueryOnApp(queryType, connectedAccount);
 
   const { data, loading, error } = useRequest(query);
   const [renders, setRendered] = useState(false);
-  const [allData, setAllData] = useState()
+  const [allData, setAllData] = useState();
   var structuredResponse = null;
-
 
   useEffect(() => {
     if (data) {
-      console.log(data)
-      structuredResponse = structureResponse(data);;
+      console.log(data);
+      structuredResponse = structureResponse(data);
       //structuredResponse = structureResponse(data);
-      console.log("structuredResponse", structuredResponse)
-      if(structuredResponse) { console.log("dataset details", structuredResponse[0]) }
+      console.log("structuredResponse", structuredResponse);
+      if (structuredResponse) {
+        console.log("dataset details", structuredResponse[0]);
+      }
       //console.log("One dataset", structuredResponse[0].dataset.name)
-      setAllData(structuredResponse)
+      setAllData(structuredResponse);
       setRendered(true);
-    } 
+    }
   }, [data]);
 
   const getAppOrder = async (appAddress) => {
@@ -43,7 +42,9 @@ const Inbox = () => {
   };
 
   const getWorkerpoolOrder = async () => {
-    const { orders } = await iexec.orderbook.fetchWorkerpoolOrderbook({category: 0});
+    const { orders } = await iexec.orderbook.fetchWorkerpoolOrderbook({
+      category: 0,
+    });
     console.log("Workerpool orders", orders);
     console.log("One workerpool order", orders[0]);
     return orders[0];
@@ -82,7 +83,9 @@ const Inbox = () => {
   };
 
   const runDowloadTask = async () => {
-    const isPushed = await iexec.storage.pushStorageToken("ipfs", {forceUpdate: true});
+    const isPushed = await iexec.storage.pushStorageToken("ipfs", {
+      forceUpdate: true,
+    });
     console.log(isPushed);
 
     const appOrder = getAppOrder(ace.APP_ADDRESS); // order on my app
@@ -114,9 +117,8 @@ const Inbox = () => {
     console.log("Tx hash", txHash);
   };
 
-
   return (
-    <div>
+    <div className="mt-16 mx-8">
       <h1>This is the Inbox page</h1>
       <button
         className="rounded-md bg-white text-black px-6 py-2"
@@ -147,19 +149,34 @@ const Inbox = () => {
           </thead>
           <tbody>
             {allData.map((datasetOrder, i) => {
-              console.log(allData)
+              console.log(allData);
               console.log(datasetOrder);
-              
-              const isCompleted = datasetOrder.deals && datasetOrder.deals[0] && datasetOrder.deals[0].tasks && datasetOrder.deals[0].tasks[0] && datasetOrder.deals[0].tasks[0].status === "COMPLETED"
+
+              const isCompleted =
+                datasetOrder.deals &&
+                datasetOrder.deals[0] &&
+                datasetOrder.deals[0].tasks &&
+                datasetOrder.deals[0].tasks[0] &&
+                datasetOrder.deals[0].tasks[0].status === "COMPLETED";
               return (
                 <tr className="text-center border-b border-gray-200" key={i}>
-                  <td className="border-r border-gray-200 p-3">{datasetOrder.dataset.timestamp}</td>
-                  <td className="border-r border-gray-200 p-3">{datasetOrder.dataset.owner.id}</td>
-                  <td className="border-r border-gray-200 p-3">{datasetOrder.dataset.name}</td>
-                  <td className="border-r border-gray-200 p-3">{datasetOrder.datasetprice}</td>
-                  <td className="border-r border-gray-200 p-3">{isCompleted ? <p>Download</p> : <p>Transfer pending</p>}</td>
+                  <td className="border-r border-gray-200 p-3">
+                    {datasetOrder.dataset.timestamp}
+                  </td>
+                  <td className="border-r border-gray-200 p-3">
+                    {datasetOrder.dataset.owner.id}
+                  </td>
+                  <td className="border-r border-gray-200 p-3">
+                    {datasetOrder.dataset.name}
+                  </td>
+                  <td className="border-r border-gray-200 p-3">
+                    {datasetOrder.datasetprice}
+                  </td>
+                  <td className="border-r border-gray-200 p-3">
+                    {isCompleted ? <p>Download</p> : <p>Transfer pending</p>}
+                  </td>
                 </tr>
-              )
+              );
             })}
           </tbody>
         </table>

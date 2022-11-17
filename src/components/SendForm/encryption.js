@@ -56,11 +56,10 @@ const encryptDataset = async (fileUrl, message, size) => {
     const datasetBuffer = jsonToBuffer(datasetContent);
     console.log(datasetBuffer)
 
-    // THE BENCRYPTION HAS BEEN REMOVED FOR NOW
-    //const encryptedDataset = await iexec.dataset.encrypt(datasetBuffer, datasetEncryptionKey);
-   // console.log("encrypted dataset", encryptedDataset)
-    return datasetBuffer;
-    // return encryptedDataset;
+    const encryptedDataset = await iexec.dataset.encrypt(datasetBuffer, datasetEncryptionKey);
+    console.log("encrypted dataset", encryptedDataset)
+    //return datasetBuffer;
+    return encryptedDataset;
 }
 
 /**
