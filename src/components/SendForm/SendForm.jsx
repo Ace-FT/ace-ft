@@ -41,7 +41,7 @@ const SendForm = () => {
   const handleChange = (event) => {
     setSelectedFiles([...selectedFiles, event.target.files[0]]);
     setIsAFile(true);
-    for (var i = 0; i < selectedFiles.length; i+=1) {
+    for (var i = 0; i < selectedFiles.length; i += 1) {
       console.log(selectedFiles[i])
     }
   }
@@ -68,8 +68,7 @@ const SendForm = () => {
                   <svg viewBox="0 0 72 72" className="w-9">
                     <path
                       d="M36.493 72C16.118 72 0 55.883 0 36.493 0 16.118 16.118 0 36.493 0 55.882 0 72 16.118 72 36.493 72 55.882 55.883 72 36.493 72zM34 34h-9c-.553 0-1 .452-1 1.01v1.98A1 1 0 0 0 25 38h9v9c0 .553.452 1 1.01 1h1.98A1 1 0 0 0 38 47v-9h9c.553 0 1-.452 1-1.01v-1.98A1 1 0 0 0 47 34h-9v-9c0-.553-.452-1-1.01-1h-1.98A1 1 0 0 0 34 25v9z"
-                      fill="#5268ff"
-                      fill-rule="nonzero"
+                      fill="#5268ff" fillRule="nonzero"
                     ></path>
                   </svg>
                   <h3 className="text-2xl font-thin mx-4">Upload files</h3>
@@ -88,8 +87,7 @@ const SendForm = () => {
                   <svg viewBox="0 0 72 72" className="w-9">
                     <path
                       d="M36.493 72C16.118 72 0 55.883 0 36.493 0 16.118 16.118 0 36.493 0 55.882 0 72 16.118 72 36.493 72 55.882 55.883 72 36.493 72zM34 34h-9c-.553 0-1 .452-1 1.01v1.98A1 1 0 0 0 25 38h9v9c0 .553.452 1 1.01 1h1.98A1 1 0 0 0 38 47v-9h9c.553 0 1-.452 1-1.01v-1.98A1 1 0 0 0 47 34h-9v-9c0-.553-.452-1-1.01-1h-1.98A1 1 0 0 0 34 25v9z"
-                      fill="rgb(29 78 216)"
-                      fill-rule="nonzero"
+                      fill="rgb(29 78 216)" fillRule="nonzero"
                     ></path>
                   </svg>
                   <h3 className="text-2xl font-extralight mx-4">Upload files</h3>
