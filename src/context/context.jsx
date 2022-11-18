@@ -3,16 +3,13 @@ import { IExec } from "iexec";
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import { delay } from "../utils/delay";
-import { jsonToBuffer } from "../utils/jsonToBuffer";
 import * as ace from "../shared/constants";
 
 export const AceContext = createContext();
 
 const { ethereum } = window;
 const iexec = new IExec({ ethProvider: window.ethereum });
-var fileEncryptionKey = "";
-var datasetEncryptionKey = "";
-var datasetAddress = "";
+
 
 export const AceProvider = ({ children }) => {
   const [connectedAccount, setConnectedAccount] = useState("");
@@ -106,7 +103,6 @@ export const AceProvider = ({ children }) => {
       });
       if (accounts.length) {
         setConnectedAccount(accounts[0]);
-
         // connect to Bellecour iExec network
         try {
           await ethereum.request({
@@ -144,7 +140,7 @@ export const AceProvider = ({ children }) => {
           }
         }
 
-
+        localStorage.setItem('isWalletConnected', true)
         console.log("iExec Address", await iexec.wallet.getAddress())
         //window.location.reload();
       } else {

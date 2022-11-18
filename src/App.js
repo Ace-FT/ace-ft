@@ -13,12 +13,22 @@ import Protected from "./pages/Protected";
 //import {queryForMyInbox} from './shared/queries';
 
 function App() {
-  const { connectedAccount, background, bgCreator, bgUrls } =
+  const { connectedAccount, connectWallet, bgUrls } =
     useContext(AceContext);
 
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [data]);
+    useEffect(() => {
+      const connectWalletOnPageLoad = async () => {
+        if (localStorage?.getItem('isWalletConnected') === 'true') {
+          try {
+            await connectWallet()
+          } catch (ex) {
+            console.log(ex)
+          }
+        }
+      }
+      connectWalletOnPageLoad()
+    }, [])
+
   const isConnected = connectedAccount !== "";
 
   return (

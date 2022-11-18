@@ -4,7 +4,7 @@ import { AceContext } from '../context/context';
 import {useState} from 'react';
 
 function Home() {
-  const { isLoading, setIsLoading, state, setState, background, bgCreator, bgUrls, bgCreatorSocial, imgUrl, checkFileAvailability } = useContext(AceContext);
+  const { isLoading, setIsLoading, state, background, bgCreator, bgUrls, bgCreatorSocial, imgUrl, checkFileAvailability } = useContext(AceContext);
 
   const [message, setMessage] = useState("")
 
@@ -58,18 +58,6 @@ function Home() {
           }}
         >
           Test bg Urls
-        </button>
-        <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
-          onClick={(e) => {
-            e.preventDefault();
-            console.log(imgUrl)
-            const imggg = document.getElementById('imgipfs')
-            console.log(imggg)
-            imggg.src=imgUrl
-            console.log(imggg)
-          }}
-        >
-          Test IMAGE IPFS
         </button>
       </div>
       <div className="fixed right-0 bottom-0 flex flex-col text-sm font-extralight p-16">
