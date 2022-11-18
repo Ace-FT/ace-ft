@@ -9,15 +9,17 @@ import { AceContext } from "./context/context";
 import useRequest from "./hooks/useRequest";
 import PersonnalData from "./pages/Settings/PersonnalData";
 import Params from "./pages/Settings/Params";
+import Protected from "./pages/Protected";
 //import {queryForMyInbox} from './shared/queries';
 
 function App() {
-  const { background, bgCreator, bgUrls } = useContext(AceContext);
-  //const { data, loading, error } = useRequest(queryForMyInbox);
+  const { connectedAccount, background, bgCreator, bgUrls } =
+    useContext(AceContext);
 
   // useEffect(() => {
   //   console.log(data);
   // }, [data]);
+  const isConnected = connectedAccount !== "";
 
   return (
     <div
@@ -36,16 +38,26 @@ function App() {
             <NavBar />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/inbox" element={<Inbox />} />
-              <Route path="/sent" element={<SentItems />} />
-              <Route path="/settings" element={<Settings />}>
+              <Route path="/inbox" element={
+                  <Protected isLoggedIn={isConnected}>
+                    <Inbox />
+                  </Protected>
+                }
+              />
+              <Route path="/sent" element={
+                  <Protected isLoggedIn={isConnected}>
+                    <SentItems />
+                  </Protected>
+                }
+              />
+              <Route path="/settings" element={
+                  <Protected isLoggedIn={isConnected}>
+                    <Settings />
+                  </Protected>
+                }
+              >
                 <Route index element={<PersonnalData />} />
-                <Route path="personnal-data" element={<PersonnalData />}/>
-                  {/* <Route path="telegram" element = {() =>{
-                    window.location.replace("t.me/ace_ft_bot");
-                    return null;
-                  }}/>
-                </Route> */}
+                <Route path="personnal-data" element={<PersonnalData />} />
                 <Route path="params" element={<Params />} />
               </Route>
             </Routes>
