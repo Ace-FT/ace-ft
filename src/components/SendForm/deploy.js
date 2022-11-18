@@ -42,6 +42,7 @@ const deployDataset = async (name, multiaddr, checksum) => {
 /**
  * Push the dataset's encryption key to SMS
  * @param {string} datasetAddress encrypted dataset address
+ * @param {string} datasetEncryptionKey
  */
 const pushSecret = async (datasetAddress, datasetEncryptionKey) => {
   try {
