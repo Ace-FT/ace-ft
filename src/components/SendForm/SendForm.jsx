@@ -1,28 +1,33 @@
-import {IExec} from 'iexec';
+import { IExec } from 'iexec';
 import React, {useRef, useState, useContext} from 'react';
-import { AceContext } from '../context/context';
-import { delay } from '../utils/delay';
+import { AceContext } from '../../context/context';
+import { delay } from '../../utils/delay';
+import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from './encryption';
+import uploadData from './upload';
+import { deployDataset, pushSecret, pushOrder } from './deploy';
 
 const SendForm = () => {
-  const { addressTo, setAddressTo, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, imgUrl, encryption, checkFileAvailability, isAvailable, setIsAvailable, upload, generateChecksum, datasetEncryption, deployDataset, pushSecret, pushOrder } = useContext(AceContext);
+  const { isLoading, setIsLoading, addressTo, setAddressTo, state, setState, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
-  const IS_TEE = false;
-
-
+  const IS_TEE = true;
+  const configArgs = { ethProvider: window.ethereum,  chainId : 134};
+  const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
+  const iexec = new IExec(configArgs, configOptions);
 
   const BEGINNING_PROCESS = 0;
   const steps = [
     "BEGINNING PROCESS", // 0
     "ENCRYPTING FILE", // 1
-    "UPLOADING FILE", 
+    "UPLOADING FILE", // 2
     "FILE AVAILABLE", //3
     "ENCRYPTING DATASET", // 4 
     "UPLOADING DATASET", 
     "DATASET AVAILABLE", //6
-    "DEPLOYING DATASET", 
+    "DEPLOYING DATASET", // 7
     "PUSHING SECRET", // 8
-    "END OF PROCESS" // 9
+    "PUSHING DATASET ORDER", //9
+    "END OF PROCESS" // 10
   ];
 
   var status = BEGINNING_PROCESS;
@@ -31,20 +36,20 @@ const SendForm = () => {
   }
 
 
-  const DELAY_BEFORE_CHECKING_FILE_UPLOADED = 4
+  const DELAY_BEFORE_CHECKING_FILE_UPLOADED = 3
 
   const handleChange = (event) => {
     setSelectedFiles([...selectedFiles, event.target.files[0]]);
     setIsAFile(true);
-    for (var i = 0; i < selectedFiles.length; i+=1) {
+    for (var i = 0; i < selectedFiles.length; i += 1) {
       console.log(selectedFiles[i])
     }
   }
 
   return (
-    <div>
+    <>
       <form>
-        <div className="w-full flex flex-col max-w-xs rounded-2xl shadow-xl bg-white text-black px-4 py-4">
+        <div className="flex flex-col w-80 rounded-2xl shadow-xl bg-white text-black mr-8 px-4 py-4">
           <div className="uploader">
             { isAFile ? (
               <div>
@@ -63,15 +68,13 @@ const SendForm = () => {
                   <svg viewBox="0 0 72 72" className="w-9">
                     <path
                       d="M36.493 72C16.118 72 0 55.883 0 36.493 0 16.118 16.118 0 36.493 0 55.882 0 72 16.118 72 36.493 72 55.882 55.883 72 36.493 72zM34 34h-9c-.553 0-1 .452-1 1.01v1.98A1 1 0 0 0 25 38h9v9c0 .553.452 1 1.01 1h1.98A1 1 0 0 0 38 47v-9h9c.553 0 1-.452 1-1.01v-1.98A1 1 0 0 0 47 34h-9v-9c0-.553-.452-1-1.01-1h-1.98A1 1 0 0 0 34 25v9z"
-                      fill="#5268ff"
-                      fill-rule="nonzero"
+                      fill="#5268ff" fillRule="nonzero"
                     ></path>
                   </svg>
                   <h3 className="text-2xl font-thin mx-4">Upload files</h3>
                 </button>
                 <input type="file" className="hidden" onChange={handleChange} ref={inputFile}/>
               </div>
-              
             ) : (
               <div>
                 <button
@@ -84,8 +87,7 @@ const SendForm = () => {
                   <svg viewBox="0 0 72 72" className="w-9">
                     <path
                       d="M36.493 72C16.118 72 0 55.883 0 36.493 0 16.118 16.118 0 36.493 0 55.882 0 72 16.118 72 36.493 72 55.882 55.883 72 36.493 72zM34 34h-9c-.553 0-1 .452-1 1.01v1.98A1 1 0 0 0 25 38h9v9c0 .553.452 1 1.01 1h1.98A1 1 0 0 0 38 47v-9h9c.553 0 1-.452 1-1.01v-1.98A1 1 0 0 0 47 34h-9v-9c0-.553-.452-1-1.01-1h-1.98A1 1 0 0 0 34 25v9z"
-                      fill="rgb(29 78 216)"
-                      fill-rule="nonzero"
+                      fill="rgb(29 78 216)" fillRule="nonzero"
                     ></path>
                   </svg>
                   <h3 className="text-2xl font-extralight mx-4">Upload files</h3>
@@ -136,36 +138,44 @@ const SendForm = () => {
                   e.preventDefault();
                   console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
                   status = nextStep(status);
+                  setIsLoading(true);
+                  setState("... encrypting your file");
                   console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
-                  const encryptedFile = await encryption();
-
+                  const encryptedFile = await encryptFile(selectedFiles[0]);
+                  const fileName = selectedFiles[0].name;
+                  const fileSize = selectedFiles[0].size;
+                  console.log(fileName);
+                  console.log("Size:", fileSize);
                   status = nextStep(status);
-                  console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
-                  var url = await upload(encryptedFile);
+                  setState("... uploading your file");
+                  console.log("Step", status, ": ", steps[status]); // 2
+                  var fileUrl = await uploadData(encryptedFile)
+                  console.log("File uploaded at", fileUrl)
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)
+                  setState("... checking your file availability on IPFS");
 
                   var ok = false;
                   while (!ok) {
-                    console.log("Checking file availability")
-                    console.log(imgUrl)
-                    ok = await checkFileAvailability(imgUrl, () => console.log("checking ended..."))
+                    console.log("Checking file availability at", fileUrl)
+                    ok = await checkFileAvailability("", () => console.log("checking ended...")) //fileUrl
                     console.log(ok)
                   }
-
                   nextStep(status);
-                  console.log(`Step ${status}: ${steps[status]}`); // Write the different steps in order to have the workflow
+                  console.log(`Step ${status}: ${steps[status]}`); // 3
                   setIsAvailable(ok);
 
-                  if (IS_TEE) {
-                    nextStep(status);
-                    console.log(`Step ${status}: ${steps[status]}`);
-                  }
-                  const encryptedDataset = await datasetEncryption()
 
                   nextStep(status);
+                  setState("... encrypting the dataset containing your file");
+                  console.log(`Step ${status}: ${steps[status]}`);
+                  const encryptedDataset = await encryptDataset(fileUrl, message, fileSize)
+
+                  nextStep(status);
+                  setState("... uploading dataset");
                   console.log(`Step ${status}: ${steps[status]}`); // 5
-                  var datasetUrl = await upload(encryptedDataset)
+                  var datasetUrl = await uploadData(encryptedDataset)
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)
+                  setState("... checking your dataset availability on IPFS");
 
                   ok = false;
                   while (!ok) {
@@ -178,23 +188,34 @@ const SendForm = () => {
                   console.log(`Step ${status}: ${steps[status]}`); // 6
 
                   nextStep(status);
+                  setState("... deploying dataset");
                   console.log(`Step ${status}: ${steps[status]}`); // 7
-                  var datasetName = "file-name-test" //file name
+                  const datasetName = fileName;
                   console.log("Dataset Url : ", datasetUrl);
-                  const checksum = await generateChecksum(encryptedDataset);
+                  const checksum = await generateEncryptedFileChecksum(encryptedDataset);
                   const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
 
                   if(IS_TEE) {
                     nextStep(status);
-                    console.log(`Step ${status}: ${steps[status]}`);
-                    await pushSecret(datasetAddress);
+                    setState("... pushing secret (encryption key)");
+                    console.log(`Step ${status}: ${steps[status]}`); //8
+                    console.log("Before secret : dataset encryption key", datasetEncryptionKey);
+                    await pushSecret(datasetAddress, datasetEncryptionKey);
+                  } else {
+                    nextStep(status);
                   }
-                  await pushOrder(datasetAddress, "0x2bd8FDFA9A2Fc441939402441EcFfc9F2De22eBd", "0xdD2FD4581271e230360230F9337D5c0430Bf44C0")
+                  const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
+                  console.log("secret is pushed?", isSecretPushed)
+
+                  nextStep(status);
+                  setState("... making order");
+                  console.log(`Step ${status}: ${steps[status]}`); //9
+                  await pushOrder(datasetAddress, addressTo)
                   
 
                   nextStep(status);
+                  setState("Your file is uploaded ✅");
                   console.log(`Step ${status}: ${steps[status]}`);
-                  
                 }}
               >
                 Transfer
@@ -202,7 +223,7 @@ const SendForm = () => {
           </div>
         </div>
       </form>
-    </div>
+    </>
   )
 }
 

@@ -1,15 +1,17 @@
-import React, {useContext} from 'react';
-import { NavLink } from 'react-router-dom';
-import { AceContext } from '../context/context';
-import { shortenAddress } from '../utils/shortenAddress';
+import {disconnect} from "process";
+import React, { useContext } from "react";
+import { NavLink } from "react-router-dom";
+import { AceContext } from "../context/context";
+import { shortenAddress } from "../utils/shortenAddress";
 
 const NavBar = () => {
-    const {connectWallet, connectedAccount } = useContext(AceContext);
-    //console.log(connectedAccount);
+  const { connectWallet, connectedAccount } = useContext(AceContext);
+  //console.log(connectedAccount);
 
-    return (
-      <div className="text-white">
-        <nav className="flex justify-between p-8">
+  return (
+    <>
+      <div>
+        <nav className="flex text-white justify-between p-8">
           <div>
             <h1 className="text-4xl font-bold">
               <NavLink to="/">ACE</NavLink>
@@ -36,9 +38,11 @@ const NavBar = () => {
                 activeclassname="is-active"
                 to="/settings"
               >
-                Settings
+                My account
               </NavLink>
-              <p className="mx-8">Hello! {shortenAddress(connectedAccount)} 👋 </p>
+              <p className="mx-8">
+                Hello! {shortenAddress(connectedAccount)} 👋{" "}
+              </p>
             </div>
           ) : (
             <button
@@ -50,7 +54,8 @@ const NavBar = () => {
           )}
         </nav>
       </div>
-    );
-}
+    </>
+  );
+};
 
 export default NavBar;
