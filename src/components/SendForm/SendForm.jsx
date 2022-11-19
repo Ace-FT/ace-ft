@@ -4,7 +4,7 @@ import { AceContext } from '../../context/context';
 import { delay } from '../../utils/delay';
 import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from './encryption';
 import uploadData from './upload';
-import { deployDataset, pushSecret, pushOrder } from './deploy';
+import { deployDataset, pushSecret, pushOrder } from './deploy.js';
 
 const SendForm = () => {
   const { isLoading, setIsLoading, addressTo, setAddressTo, state, setState, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);

@@ -5,6 +5,7 @@ import useRequest from "../hooks/useRequest";
 import * as ace from "../shared/constants";
 import { requestQueryOnApp } from "../shared/queries";
 import structureResponse from "../utils/structureResponse";
+import requestDataset from "./Inbox/requesting";
 
 const Inbox = () => {
   const { ethereum } = window;
@@ -15,10 +16,17 @@ const Inbox = () => {
   console.log(connectedAccount);
   const queryType = "INBOX";
   const query = requestQueryOnApp(queryType, connectedAccount);
+  console.log(query)
+
+  const WAITING_FOR_REQUEST = 0;
+  const REQUESTING = 1;
+  const READY_FOR_DOWNLOAD = 2;
 
   const { data, loading, error } = useRequest(query);
   const [renders, setRendered] = useState(false);
   const [allData, setAllData] = useState();
+  const [step, setStep] = useState(WAITING_FOR_REQUEST)
+  const [isReadyForDownload] = useState(false)
   var structuredResponse = null;
 
   useEffect(() => {
@@ -36,8 +44,31 @@ const Inbox = () => {
     }
   }, [data]);
 
+  useEffect(() => {
+
+  }, [step])
+
+  const verifyIfReadyForDownload = (datasetOrder) => {
+      if (
+        datasetOrder.deals &&datasetOrder.deals[0] &&
+        datasetOrder.deals[0].tasks &&
+        datasetOrder.deals[0].tasks[0] &&
+        datasetOrder.deals[0].tasks[0].status
+      ) {
+        return datasetOrder.deals[0].tasks[0].status === "COMPLETED"
+      }
+      return false;
+  }
+
+
   const getAppOrder = async (appAddress) => {
-    const { orders } = await iexec.orderbook.fetchAppOrderbook(appAddress);
+    const { count, orders } = await iexec.orderbook.fetchAppOrderbook(
+      appAddress,
+      {
+        workerpool: ace.WORKERPOOL_ADDRESS
+      }
+    );
+    console.log('total orders:', count);
     console.log("App orders:", orders);
     console.log("One order:", orders[0]);
     return orders[0];
@@ -45,7 +76,10 @@ const Inbox = () => {
 
   const getWorkerpoolOrder = async () => {
     const { orders } = await iexec.orderbook.fetchWorkerpoolOrderbook({
+      workerpool: ace.WORKERPOOL_ADDRESS,
       category: 0,
+      minTag:"0x0000000000000000000000000000000000000000000000000000000000000001",
+      maxTag:"0x0000000000000000000000000000000000000000000000000000000000000001"
     });
     console.log("Workerpool orders", orders);
     console.log("One workerpool order", orders[0]);
@@ -59,10 +93,10 @@ const Inbox = () => {
    */
   const getDatasetOrder = async (appAddress) => {
     const { orders } = await iexec.orderbook.fetchDatasetOrderbook(
-      "0x8288d4F6C21Ad3aEB8fD7C87394aBFE84d197db8",
+      "0xc6d219d62a667264946fe6133b31495ae3cce2ea",
       {
         app: appAddress,
-        requester: "0xdD2FD4581271e230360230F9337D5c0430Bf44C0",
+        requester: connectedAccount,
       }
     );
     console.log("dataset orders", orders);
@@ -72,52 +106,19 @@ const Inbox = () => {
 
   const fetchMyRequestOrders = async () => {
     // const { app } = await iexec.app.showApp(
-    //   "0x2bd8FDFA9A2Fc441939402441EcFfc9F2De22eBd"
+    //   ace.APP_ADDRESS
     // );
 
     const { myRequestOrders } = await iexec.orderbook.fetchRequestOrderbook({
       app: ace.APP_ADDRESS,
-      requester: "0xdD2FD4581271e230360230F9337D5c0430Bf44C0",
+      requester: connectedAccount,
+      workerpool: ace.WORKERPOOL_ADDRESS
     });
-    // console.log(app);
+    // console.log("app\n", app);
     console.log("My request orders", myRequestOrders);
     return myRequestOrders;
   };
 
-  const runDowloadTask = async () => {
-    const isPushed = await iexec.storage.pushStorageToken("ipfs", {
-      forceUpdate: true,
-    });
-    console.log(isPushed);
-
-    const appOrder = getAppOrder(ace.APP_ADDRESS); // order on my app
-    const workerpoolOrder = getWorkerpoolOrder();
-    const datasetOrder = getDatasetOrder(ace.APP_ADDRESS);
-
-    const myRequestOrder = await iexec.order.createRequestorder({
-      app: ace.APP_ADDRESS,
-      category: 0,
-      dataset: "0x8288d4F6C21Ad3aEB8fD7C87394aBFE84d197db8",
-      //params: { iexec_developer_logger: true },
-    });
-
-    console.log("Request order", myRequestOrder);
-    const signedRequestOrder = await iexec.order.signRequestorder(
-      myRequestOrder
-    );
-    console.log("Signed:", signedRequestOrder);
-
-    console.log("-------------------------------------------");
-
-    const { dealid, txHash } = await iexec.order.matchOrders({
-      apporder: (await appOrder).order,
-      datasetorder: (await datasetOrder).order,
-      workerpoolorder: (await workerpoolOrder).order,
-      requestorder: signedRequestOrder,
-    });
-    console.log("deal id:", dealid);
-    console.log("Tx hash", txHash);
-  };
 
   return (
     <div className="mt-16 mx-8">
@@ -125,7 +126,7 @@ const Inbox = () => {
       <button
         className="rounded-md bg-white text-black px-6 py-2"
         onClick={async () => {
-          getAppOrder();
+          getAppOrder(ace.APP_ADDRESS);
           fetchMyRequestOrders();
         }}
       >
@@ -133,7 +134,7 @@ const Inbox = () => {
       </button>
       <button
         className="rounded-r-md bg-white text-black px-6 py-2"
-        onClick={async () => runDowloadTask()}
+        onClick={async () => requestDataset("0xC6D219D62A667264946Fe6133B31495AE3ccE2ea", connectedAccount)}
       >
         Run task
       </button>
@@ -154,6 +155,7 @@ const Inbox = () => {
               console.log(allData);
               console.log(datasetOrder);
 
+              const needsToBeRequested = !(datasetOrder.deals && datasetOrder.deals[0] && datasetOrder.deals[0].tasks)
               const isCompleted =
                 datasetOrder.deals &&
                 datasetOrder.deals[0] &&
@@ -175,7 +177,49 @@ const Inbox = () => {
                     {datasetOrder.datasetprice}
                   </td>
                   <td className="border-r border-gray-200 p-3">
-                    {isCompleted ? <p>Download</p> : <p>Transfer pending</p>}
+                    <p>
+                      {
+                        step === READY_FOR_DOWNLOAD
+                        ? (
+                          <button>Download</button>
+                        )
+                        : (
+                          needsToBeRequested && step === WAITING_FOR_REQUEST
+                          ? <button onClick={async (e) => {
+                              e.preventDefault()
+                              const datasetId = datasetOrder.dataset.id;
+                              await requestDataset(datasetId, connectedAccount)
+                              setStep(REQUESTING)
+                              }}
+                            >
+                              Request
+                            </button>
+                          : 
+                          setTimeout(() => {
+                              isCompleted = verifyIfReadyForDownload(datasetOrder)
+                              if (isCompleted) {
+                                setStep(READY_FOR_DOWNLOAD)
+                              }
+                            }, 15000)
+                            
+                        )
+                      }
+                    </p>
+                    
+                    {/* {
+
+
+
+                      needsToBeRequested
+                      ? <p>
+                          <button onClick={async () => {
+                            const datasetId = datasetOrder.dataset.id;
+                            await requestDataset(datasetId, connectedAccount)
+                            
+                          }}>Request</button>
+                        </p> 
+                      : <p>Transfer pending</p>
+                    } */}
                   </td>
                 </tr>
               );
