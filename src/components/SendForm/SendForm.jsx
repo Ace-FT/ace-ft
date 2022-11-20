@@ -1,11 +1,16 @@
-import { IExec } from 'iexec';
 import React, {useRef, useState, useContext} from 'react';
 import { AceContext } from '../../context/context';
+import { IExec } from 'iexec';
+import * as ace from "../../shared/constants";
 import { delay } from '../../utils/delay';
 import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from './encryption.js';
 import uploadData from './upload';
 import { deployDataset, pushSecret, pushOrder } from './deploy.js';
 import {generateDatasetName} from "../../utils/datasetNameGenerator.ts";
+
+const configArgs = { ethProvider: window.ethereum,  chainId : 134};
+const configOptions = { smsURL: ace.SMS_URL };
+const iexec = new IExec(configArgs, configOptions);
 
 
 const SendForm = () => {
@@ -15,9 +20,7 @@ const SendForm = () => {
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
   const IS_TEE = true;
-  const configArgs = { ethProvider: window.ethereum,  chainId : 134};
-  const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
-  const iexec = new IExec(configArgs, configOptions);
+  
 
   const BEGINNING_PROCESS = 0;
   const steps = [

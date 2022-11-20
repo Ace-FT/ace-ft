@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AceContext } from "../context/context";
 import { IExec } from "iexec";
-import { create } from 'ipfs-http-client'
 import useRequest from "../hooks/useRequest";
 import * as ace from "../shared/constants";
 import { inboxDatasetsQuery } from "../shared/queries.ts";
@@ -12,12 +11,13 @@ import JSZip from "jszip";
 import downloadFile from "./Inbox/download";
 import {getDatasetOrders} from "./Inbox/getOrders";
 
+const configArgs = { ethProvider: window.ethereum,  chainId : 134};
+const configOptions = { smsURL: ace.SMS_URL };
+const iexec = new IExec(configArgs, configOptions);
+
 
 function Inbox() {
   const { ethereum } = window;
-  const configArgs = { ethProvider: window.ethereum,  chainId : 134};
-  const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
-  const iexec = new IExec(configArgs, configOptions);
   const { connectedAccount } = useContext(AceContext);
 
 
@@ -46,7 +46,6 @@ function Inbox() {
   const [inboxItems, setInboxItems] = useState();
 
   useEffect(() => {
-
     const doMapping = async () => {
       setInboxItems (await mapInboxOrders(connectedAccount, structuredResponse)) ; 
       console.log("INBOX ITEMS SET") ;
@@ -59,7 +58,6 @@ function Inbox() {
       doMapping();
       setRendered(true);
       return ; 
-
     }
   }, [data]);
 
@@ -101,8 +99,8 @@ function Inbox() {
     const { orders } = await iexec.orderbook.fetchWorkerpoolOrderbook({
       workerpool: ace.WORKERPOOL_ADDRESS,
       category: 0,
-      minTag:"0x0000000000000000000000000000000000000000000000000000000000000001",
-      maxTag:"0x0000000000000000000000000000000000000000000000000000000000000001"
+      minTag: ace.TEE_TAG,
+      maxTag: ace.TEE_TAG
     });
     console.log("Workerpool orders", orders);
     console.log("One workerpool order", orders[0]);
@@ -251,7 +249,19 @@ function Inbox() {
                   {
                     inboxItem.status === STATUS_OPEN_ORDER 
                     ? <p>
-                        <button onClick={async () => { await requestDataset(inboxItem.id, connectedAccount)}}>Request</button>
+                        <button onClick={async () => {
+                            await requestDataset(inboxItem.id, connectedAccount)
+                          }}
+                        >
+                          Request
+                        </button>
+                      </p> 
+                    : ""
+                  }
+                  {
+                    inboxItem.status === STATUS_ACTIVE_ORDER 
+                    ? <p>
+                        Request started at {inboxItem.downloadDate.toString()}
                       </p> 
                     : ""
                   }
@@ -259,16 +269,10 @@ function Inbox() {
                     inboxItem.status === STATUS_COMPLETED_ORDER 
                     ? <p>
                         Downloaded on {inboxItem.downloadDate.toString()}
-                      </p> 
+                      </p>
                     : ""
                   }     
-                  {
-                    inboxItem.status === STATUS_ACTIVE_ORDER 
-                    ? <p>
-                        Download started at {inboxItem.downloadDate.toString()}
-                      </p> 
-                    : ""
-                  }
+                  
 
                   </td>
                 </tr>

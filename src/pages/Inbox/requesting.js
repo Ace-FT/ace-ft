@@ -3,24 +3,17 @@ import * as ace from "../../shared/constants";
 import { getAppOrders, getWorkerpoolOrders, getDatasetOrders } from "./getOrders";
 
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
-const configOptions = {
-    smsURL: "https://v7.sms.debug-tee-services.bellecour.iex.ec",
-};
+const configOptions = {smsURL: ace.SMS_URL};
 const iexec = new IExec(configArgs, configOptions);
 
 
 const requestDataset = async(datasetAddress, datasetRequester) => {
-
-
     console.log("START requestDataset");
-
 
     const ipfsToken = await iexec.storage.defaultStorageLogin();
     console.log("datasetAddress, datasetRequester, ipfsToken", datasetAddress, datasetRequester, ipfsToken);
     const { isPushed } = await iexec.storage.pushStorageToken(ipfsToken, { forceUpdate: true });
     console.log('Default storage initialized:', isPushed);
-
-
 
     const appOrders = await getAppOrders(); // order on my app
     const workerpoolOrders = await getWorkerpoolOrders();
@@ -33,12 +26,10 @@ const requestDataset = async(datasetAddress, datasetRequester) => {
     if (appOrders && appOrders[0]) {
         appOrderToMatch = appOrders[0];
     }
-
     var workerpoolOrderToMatch = null;
     if (workerpoolOrders && workerpoolOrders[0]) {
         workerpoolOrderToMatch = workerpoolOrders[0];
     }
-
     var datasetOrderToMatch = null;
     if (datasetOrders && datasetOrders[0]) {
         datasetOrderToMatch = datasetOrders[0];
@@ -72,7 +63,6 @@ const requestDataset = async(datasetAddress, datasetRequester) => {
         datasetorder: datasetOrderToMatch.order,
         workerpoolorder: workerpoolOrderToMatch.order,
         requestorder: signedRequestOrder,
-
     });
     console.log("deal id:", dealid);
     console.log("Tx hash", txHash);

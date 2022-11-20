@@ -1,8 +1,6 @@
 import React, { useState, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, NavLink, Outlet,} from "react-router-dom";
 import SettingsForm from "../../components/PersonnalDataForm";
-import Params from "./Params";
-import PersonnalData from "./PersonnalData";
 
 function Settings() {
   return (
