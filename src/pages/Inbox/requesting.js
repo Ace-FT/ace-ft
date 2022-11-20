@@ -10,10 +10,18 @@ const iexec = new IExec(configArgs, configOptions);
 
 
 const requestDataset = async (datasetAddress, datasetRequester) => {
+
+  
+  console.log("START requestDataset") ;
+  
+
   const ipfsToken = await iexec.storage.defaultStorageLogin();
-  const { isPushed } = await iexec.storage.pushStorageToken(ipfsToken);
+  console.log("datasetAddress, datasetRequester, ipfsToken", datasetAddress, datasetRequester, ipfsToken) ; 
+  const { isPushed } = await iexec.storage.pushStorageToken(ipfsToken, {forceUpdate:true});
   console.log('Default storage initialized:', isPushed);
 
+
+  
   const appOrders = await getAppOrders(); // order on my app
   const workerpoolOrders = await getWorkerpoolOrders();
   const datasetOrders = await getDatasetOrders(
@@ -28,19 +36,22 @@ const requestDataset = async (datasetAddress, datasetRequester) => {
 
   var workerpoolOrderToMatch = null;
   if (workerpoolOrders && workerpoolOrders[0]) {
-    workerpoolOrderToMatch = appOrders[0];
+    workerpoolOrderToMatch = workerpoolOrders[0];
   }
 
   var datasetOrderToMatch = null;
   if (datasetOrders && datasetOrders[0]) {
-    datasetOrderToMatch = appOrders[0];
+    datasetOrderToMatch = datasetOrders[0];
   }
+
+  console.log("START createRequestorder") ;
 
   const requestOrderTemplate = await iexec.order.createRequestorder({
     app: ace.APP_ADDRESS,
     category: 0,
     dataset: datasetAddress,
     workerpool: ace.WORKERPOOL_ADDRESS,
+    tag: "tee"
     //params: { iexec_developer_logger: true },
   });
   console.log("Request order", requestOrderTemplate);
@@ -48,16 +59,17 @@ const requestDataset = async (datasetAddress, datasetRequester) => {
   const signedRequestOrder = await iexec.order.signRequestorder(
     requestOrderTemplate
   );
-  console.log("Signed:", signedRequestOrder);
+  console.log("signedRequestOrder:", signedRequestOrder);
 
   console.log("---------------------------------------------");
-  console.log("Matching orders...");
+  console.log("Matching orders...", appOrderToMatch, datasetOrderToMatch, workerpoolOrderToMatch, signedRequestOrder);
 
   const { dealid, txHash } = await iexec.order.matchOrders({
-    apporder: appOrderToMatch,
-    datasetorder: datasetOrderToMatch,
-    workerpoolorder: workerpoolOrderToMatch,
+    apporder: appOrderToMatch.order,
+    datasetorder: datasetOrderToMatch.order,
+    workerpoolorder: workerpoolOrderToMatch.order,
     requestorder: signedRequestOrder,
+  
   });
   console.log("deal id:", dealid);
   console.log("Tx hash", txHash);

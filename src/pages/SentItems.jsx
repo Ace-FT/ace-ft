@@ -7,16 +7,15 @@ import { inboxDatasetsQuery } from "../shared/queries.ts";
 
 import structureResponse from "../utils/structureResponse";
 import requestDataset from "./Inbox/requesting";
-import {mapInboxOrders} from "../shared/itemMapper";
+import {mapSentItemsOrders} from "../shared/itemMapper";
 
 
-const Inbox = () => {
+const SentItems = () => {
   const { ethereum } = window;
   const configArgs = { ethProvider: window.ethereum,  chainId : 134};
   const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
   const iexec = new IExec(configArgs, configOptions);
   const { connectedAccount } = useContext(AceContext);
-
 
   const WAITING_FOR_REQUEST = 0;
   const REQUESTING = 1;
@@ -26,7 +25,7 @@ const Inbox = () => {
   const STATUS_ACTIVE_ORDER = "ACTIVE";
 
 
-  const query = inboxDatasetsQuery(null, connectedAccount) ;
+  const query = inboxDatasetsQuery(connectedAccount, null) ;
 
 
   console.log("QUERY", query) ; 
@@ -43,16 +42,16 @@ const Inbox = () => {
   useEffect(() => {
 
     const doMapping = async () => {
-      setInboxItems (await mapInboxOrders(connectedAccount, structuredResponse)) ; 
+      setInboxItems (await mapSentItemsOrders(connectedAccount, structuredResponse)) ; 
       console.log("INBOX ITEMS SET") ;
     }
 
-    if (data) {
+    if (data && !renders) {
+      setRendered(true);
       structuredResponse = structureResponse(data);
       console.log("structuredResponse", structuredResponse) ;
 
       doMapping();
-      setRendered(true);
       return ; 
 
     }
@@ -172,8 +171,8 @@ const Inbox = () => {
         <table className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black table-auto">
           <thead>
             <tr className="border-b border-gray-200">
-              <th className="border-r border-gray-200 py-3">Received date</th>
-              <th className="border-r border-gray-200 py-3">From</th>
+              <th className="border-r border-gray-200 py-3">Send date</th>
+              <th className="border-r border-gray-200 py-3">To</th>
               <th className="border-r border-gray-200 py-3">Price (in RLC)</th>
               <th className="px-3">Status</th>
             </tr>
@@ -187,7 +186,7 @@ const Inbox = () => {
                     {inboxItem.sendDate.toString()}
                   </td>
                   <td className="border-r border-gray-200 p-3">
-                    {inboxItem.from}
+                    {inboxItem.to}
                   </td>
                   <td className="border-r border-gray-200 p-3">
                     {inboxItem.price}
@@ -196,7 +195,7 @@ const Inbox = () => {
                   {
                     inboxItem.status === STATUS_OPEN_ORDER  ?  
                         <p>
-                          <button onClick={async () => { await requestDataset(inboxItem.id, connectedAccount)}}>Request</button>
+                          En attente
                         </p> 
                     : ""
                   }
@@ -231,4 +230,4 @@ const Inbox = () => {
   );
 };
 
-export default Inbox;
+export default SentItems;

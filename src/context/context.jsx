@@ -52,7 +52,7 @@ export const AceProvider = ({ children }) => {
   const fetchImages = async () => {
     try {
       const response = await fetch(
-        `http://api.unsplash.com/photos/random?query=nfts&query=sustainability&query=human-rights&orientation=landscape&count=4&client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}`
+        `https://api.unsplash.com/photos/random?query=nfts&query=sustainability&query=human-rights&orientation=landscape&count=4&client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}`
       );
       const data = await response.json();
       //console.log('success');

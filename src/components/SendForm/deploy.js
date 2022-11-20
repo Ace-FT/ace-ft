@@ -61,12 +61,33 @@ const pushSecret = async (datasetAddress, datasetEncryptionKey) => {
  */
 const pushOrder = async(datasetAddress, requesterrestrict) => {
     try {
-      const orderTemplate = await iexec.order.createDatasetorder({ dataset: datasetAddress, volume: 100, apprestrict: ace.APP_ADDRESS, requesterrestrict: requesterrestrict})
+      const orderTemplate = await iexec.order.createDatasetorder({ dataset: datasetAddress,
+                                                                    volume: 100,
+                                                                    apprestrict: ace.APP_ADDRESS, 
+                                                                    requesterrestrict: requesterrestrict,
+                                                                    tag: "tee"
+                                                                  })
       console.log("Unsigned order",orderTemplate)
       const signedOrder = await iexec.order.signDatasetorder(orderTemplate)
       console.log("Signed order", signedOrder)
       const pushedOrder = await iexec.order.publishDatasetorder(signedOrder)
       console.log(pushedOrder);
+
+
+
+      const foundorders = await iexec.orderbook.fetchDatasetOrderbook(
+        datasetAddress,
+        {
+          app: ace.APP_ADDRESS,
+          requester: requesterrestrict,
+          workerpool: ace.WORKERPOOL_ADDRESS,
+          minTag: ace.TEE_TAG,
+          maxTag: ace.TEE_TAG
+        }
+      );
+      console.log("dataset foundorders", foundorders);
+
+
     } catch (err) {
       console.log(err)
     }
