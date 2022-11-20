@@ -1,11 +1,16 @@
-import { IExec } from 'iexec';
 import React, {useRef, useState, useContext} from 'react';
 import { AceContext } from '../../context/context';
+import { IExec } from 'iexec';
+import * as ace from "../../shared/constants";
 import { delay } from '../../utils/delay';
-import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from './encryption';
+import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from './encryption.js';
 import uploadData from './upload';
 import { deployDataset, pushSecret, pushOrder } from './deploy.js';
 import {generateDatasetName} from "../../utils/datasetNameGenerator.ts";
+
+const configArgs = { ethProvider: window.ethereum,  chainId : 134};
+const configOptions = { smsURL: ace.SMS_URL };
+const iexec = new IExec(configArgs, configOptions);
 
 
 const SendForm = () => {
@@ -15,9 +20,7 @@ const SendForm = () => {
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
   const IS_TEE = true;
-  const configArgs = { ethProvider: window.ethereum,  chainId : 134};
-  const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
-  const iexec = new IExec(configArgs, configOptions);
+  
 
   const BEGINNING_PROCESS = 0;
   const steps = [
@@ -154,6 +157,7 @@ const SendForm = () => {
                   status = nextStep(status);
                   setState("... uploading your file");
                   console.log("Step", status, ": ", steps[status]); // 2
+                  console.log(encryptedFile)
                   var fileUrl = await uploadData(encryptedFile)
                   console.log("File uploaded at", fileUrl)
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)
@@ -182,7 +186,7 @@ const SendForm = () => {
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)
                   setState("... checking your dataset availability on IPFS");
 
-                  ok = true;
+                  ok = false;
                   while (!ok) {
                     console.log("Checking dataset availability")
                     ok = await checkFileAvailability(datasetUrl, () => console.log("checking ended..."))

@@ -4,17 +4,20 @@ import { IExec } from "iexec";
 import useRequest from "../hooks/useRequest";
 import * as ace from "../shared/constants";
 import { inboxDatasetsQuery } from "../shared/queries.ts";
-
 import structureResponse from "../utils/structureResponse";
 import requestDataset from "./Inbox/requesting";
 import {mapInboxOrders} from "../shared/itemMapper";
+import JSZip from "jszip";
+import downloadFile from "./Inbox/download";
+import {getDatasetOrders} from "./Inbox/getOrders";
+
+const configArgs = { ethProvider: window.ethereum,  chainId : 134};
+const configOptions = { smsURL: ace.SMS_URL };
+const iexec = new IExec(configArgs, configOptions);
 
 
-const Inbox = () => {
+function Inbox() {
   const { ethereum } = window;
-  const configArgs = { ethProvider: window.ethereum,  chainId : 134};
-  const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
-  const iexec = new IExec(configArgs, configOptions);
   const { connectedAccount } = useContext(AceContext);
 
 
@@ -34,14 +37,15 @@ const Inbox = () => {
   const { data, loading, error } = useRequest(query);
 
   const [renders, setRendered] = useState(false);
-  
   const [isReadyForDownload] = useState(false)
   var structuredResponse = null;
   
+
+  var taskId = "";
+
   const [inboxItems, setInboxItems] = useState();
 
   useEffect(() => {
-
     const doMapping = async () => {
       setInboxItems (await mapInboxOrders(connectedAccount, structuredResponse)) ; 
       console.log("INBOX ITEMS SET") ;
@@ -54,7 +58,6 @@ const Inbox = () => {
       doMapping();
       setRendered(true);
       return ; 
-
     }
   }, [data]);
 
@@ -96,8 +99,8 @@ const Inbox = () => {
     const { orders } = await iexec.orderbook.fetchWorkerpoolOrderbook({
       workerpool: ace.WORKERPOOL_ADDRESS,
       category: 0,
-      minTag:"0x0000000000000000000000000000000000000000000000000000000000000001",
-      maxTag:"0x0000000000000000000000000000000000000000000000000000000000000001"
+      minTag: ace.TEE_TAG,
+      maxTag: ace.TEE_TAG
     });
     console.log("Workerpool orders", orders);
     console.log("One workerpool order", orders[0]);
@@ -159,15 +162,65 @@ const Inbox = () => {
         onClick={async () => {
           getAppOrder(ace.APP_ADDRESS);
           fetchMyRequestOrders();
+          await iexec.dataset.encrypt
         }}
       >
-        Get my orders
+        Get app orders
+      </button>
+      <button
+        className="rounded-md bg-white text-black px-6 py-2"
+        onClick={async () => {
+          getDatasetOrders("0xbfF6ae401e7202ea9bC006B17F6dc4bD5264De39", connectedAccount) // fetch dataset address from table here
+        }}
+      >
+        Get my dataset orders for me
       </button>
       <button
         className="rounded-r-md bg-white text-black px-6 py-2"
-        onClick={async () => requestDataset("0xC6D219D62A667264946Fe6133B31495AE3ccE2ea", connectedAccount)}
+        onClick={async () => taskId = await requestDataset("0xbfF6ae401e7202ea9bC006B17F6dc4bD5264De39", connectedAccount)} // fetch dataset address from table here
       >
         Run task
+      </button>
+      <button
+        className="rounded-r-md bg-white text-black px-6 py-2"
+        onClick={async () => {
+          //console.log("Task id (check before fetching)\n", "0xa72f778db41aee44cf782d91c534d34849588f12b8feef2853d010677fe253a1")
+          const task = await iexec.task.show("0x33af944de7330aadf4b49b2f89d0200e3d4f63104f55a8495a714186d9fd70e7") // fetch task id from table here
+          console.log('task show:\n', task);
+          const dealId = task.dealid
+          const deal = await iexec.deal.show(dealId)
+        
+          const resp = await iexec.task.fetchResults("0x33af944de7330aadf4b49b2f89d0200e3d4f63104f55a8495a714186d9fd70e7") // fetch task id from table here
+          console.log(resp)
+          const url = await resp.url;
+          console.log(url);
+          const binary = await resp.blob();
+          console.log("Response binary", binary);
+          var zipInstance = new JSZip();
+          var resultFile = await zipInstance.loadAsync(binary).then((zip) => {
+            return zip.file("result.json").async("string")
+          })
+          
+          resultFile = JSON.parse(resultFile)
+          console.log("resultFile", resultFile)
+          const resultFileUrl = resultFile.url
+          const resultFileKey = resultFile.key
+
+          console.log(resultFileUrl)
+          console.log("resultFileKey", resultFileKey)
+          const responseArray = await fetch(
+            resultFileUrl, {method: 'GET'}
+          ).then(response => {
+            return response.arrayBuffer();
+          })
+          console.log("The encrypted received file is\n", responseArray)
+          let fileName = task.taskid;
+          fileName = fileName.substring(0, 22)
+          console.log("filename", fileName);
+          downloadFile(responseArray, fileName);
+        }}
+      >
+        Download file (after running task)
       </button>
 
       {inboxItems ? (
@@ -184,7 +237,7 @@ const Inbox = () => {
             {inboxItems.map((inboxItem, i) => {
               console.log("INBOX ITEM", inboxItem)  ;   
               return (
-                <tr className="text-center border-b border-gray-200" key={i}>
+                <tr className="text-center border-b border-gray-200" key={i}  >
                   <td className="border-r border-gray-200 p-3">
                     {inboxItem.sendDate.toString()}
                   </td>
@@ -196,27 +249,32 @@ const Inbox = () => {
                   </td>
                   <td className="border-r border-gray-200 p-3">
                   {
-                    inboxItem.status === STATUS_OPEN_ORDER  ?  
-                        <p>
-                          <button onClick={async () => { await requestDataset(inboxItem.id, connectedAccount)}}>Request</button>
-                        </p> 
+                    inboxItem.status === STATUS_OPEN_ORDER 
+                    ? <p>
+                        <button onClick={async () => {
+                            await requestDataset(inboxItem.id, connectedAccount)
+                          }}
+                        >
+                          Request
+                        </button>
+                      </p> 
                     : ""
                   }
-                   {
-                    inboxItem.status === STATUS_COMPLETED_ORDER  ?  
-                        <p>
-                          Downloaded on {inboxItem.downloadDate.toString()}
-                        </p> 
-                    : ""
-                  }     
                   {
-                    inboxItem.status === STATUS_ACTIVE_ORDER  ?  
-                        <p>
-                          Download started at {inboxItem.downloadDate.toString()}
-                        </p> 
+                    inboxItem.status === STATUS_ACTIVE_ORDER 
+                    ? <p>
+                        Request started at {inboxItem.downloadDate.toString()}
+                      </p> 
+                    : ""
+                  }
+                  {
+                    inboxItem.status === STATUS_COMPLETED_ORDER 
+                    ? <p>
+                        Downloaded on {inboxItem.downloadDate.toString()}
+                      </p>
                     : ""
                   }     
-
+                  
 
                   </td>
                 </tr>

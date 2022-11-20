@@ -7,7 +7,9 @@ import * as ace from "../../shared/constants";
 const { ethereum } = window;
 const configArgs = { ethProvider: window.ethereum,  chainId : 134};
 const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
-const iexec = new IExec(configArgs, configOptions);var fileEncryptionKey = "";
+const iexec = new IExec(configArgs, configOptions);
+var fileEncryptionKey = null;
+var fileEncrInitialisationVector = null;
 var datasetEncryptionKey = "";
 
 /**
@@ -23,6 +25,7 @@ const encryptFile = async (selectedFile) => {
       //console.log("INFURA_ID: " + process.env.REACT_APP_INFURA_ID);
       //console.log("INFURA_SECRET_KEY: " + process.env.REACT_APP_INFURA_SECRET_KEY);
 
+      
       fileEncryptionKey = iexec.dataset.generateEncryptionKey();
       console.log("Encryption key: " + fileEncryptionKey);
       console.log(selectedFile)
@@ -34,9 +37,9 @@ const encryptFile = async (selectedFile) => {
           fileReader.onabort = () => reject(Error(`Error : aborded`))
       });
       console.log(fileBytes)
-      const encrypted = await iexec.dataset.encrypt(fileBytes, fileEncryptionKey);
-      console.log("encrypted file", encrypted)
-      return encrypted;
+      const encryptedFile = await iexec.dataset.encrypt(fileBytes, fileEncryptionKey);
+      console.log("encrypted file", encryptedFile)
+      return encryptedFile;
     } catch (err) {
       console.log(err);
     }
@@ -59,6 +62,7 @@ const encryptDataset = async (fileUrl, message, size) => {
 
     const encryptedDataset = await iexec.dataset.encrypt(datasetBuffer, datasetEncryptionKey);
     console.log("encrypted dataset", encryptedDataset)
+    //return datasetBuffer;
     //return datasetBuffer;
     return encryptedDataset;
 }
