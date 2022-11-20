@@ -2,7 +2,7 @@ import { IExec } from 'iexec';
 import React, {useRef, useState, useContext} from 'react';
 import { AceContext } from '../../context/context';
 import { delay } from '../../utils/delay';
-import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from './encryption';
+import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from './encryption.js';
 import uploadData from './upload';
 import { deployDataset, pushSecret, pushOrder } from './deploy.js';
 
@@ -149,6 +149,7 @@ const SendForm = () => {
                   status = nextStep(status);
                   setState("... uploading your file");
                   console.log("Step", status, ": ", steps[status]); // 2
+                  console.log(encryptedFile)
                   var fileUrl = await uploadData(encryptedFile)
                   console.log("File uploaded at", fileUrl)
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)

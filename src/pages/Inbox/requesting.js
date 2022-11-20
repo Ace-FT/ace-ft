@@ -11,7 +11,7 @@ const iexec = new IExec(configArgs, configOptions);
 
 const requestDataset = async (datasetAddress, datasetRequester) => {
   const ipfsToken = await iexec.storage.defaultStorageLogin();
-  const { isPushed } = await iexec.storage.pushStorageToken(ipfsToken);
+  const { isPushed } = await iexec.storage.pushStorageToken(ipfsToken, {forceUpdate: true});
   console.log('Default storage initialized:', isPushed);
 
   const appOrders = await getAppOrders(); // order on my app
@@ -28,12 +28,12 @@ const requestDataset = async (datasetAddress, datasetRequester) => {
 
   var workerpoolOrderToMatch = null;
   if (workerpoolOrders && workerpoolOrders[0]) {
-    workerpoolOrderToMatch = appOrders[0];
+    workerpoolOrderToMatch = workerpoolOrders[0];
   }
 
   var datasetOrderToMatch = null;
   if (datasetOrders && datasetOrders[0]) {
-    datasetOrderToMatch = appOrders[0];
+    datasetOrderToMatch = datasetOrders[0];
   }
 
   const requestOrderTemplate = await iexec.order.createRequestorder({
@@ -52,15 +52,24 @@ const requestDataset = async (datasetAddress, datasetRequester) => {
 
   console.log("---------------------------------------------");
   console.log("Matching orders...");
+  console.log("datasetorder\n", datasetOrderToMatch)
+  console.log("workerpoolorder\n", workerpoolOrderToMatch);
+  console.log("apporder\n", appOrderToMatch)
 
   const { dealid, txHash } = await iexec.order.matchOrders({
-    apporder: appOrderToMatch,
-    datasetorder: datasetOrderToMatch,
-    workerpoolorder: workerpoolOrderToMatch,
+    apporder: appOrderToMatch.order,
+    datasetorder: datasetOrderToMatch.order,
+    workerpoolorder: workerpoolOrderToMatch.order,
     requestorder: signedRequestOrder,
   });
   console.log("deal id:", dealid);
   console.log("Tx hash", txHash);
+  const deal = await iexec.deal.show(dealid)
+  console.log("deat\n", deal)
+  const task = deal.tasks;
+  console.log(task)
+  console.log(task[0])
+  return task[0];
 };
 
 export default requestDataset;
