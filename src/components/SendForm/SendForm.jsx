@@ -145,6 +145,7 @@ const SendForm = () => {
                   setIsLoading(true);
                   setState("... encrypting your file");
                   console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
+                
                   const encryptedFile = await encryptFile(selectedFiles[0]);
                   const fileName = selectedFiles[0].name;
                   const fileSize = selectedFiles[0].size;
