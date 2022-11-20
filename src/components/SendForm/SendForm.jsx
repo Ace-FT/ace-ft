@@ -182,7 +182,7 @@ const SendForm = () => {
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)
                   setState("... checking your dataset availability on IPFS");
 
-                  ok = true;
+                  ok = false;
                   while (!ok) {
                     console.log("Checking dataset availability")
                     ok = await checkFileAvailability(datasetUrl, () => console.log("checking ended..."))

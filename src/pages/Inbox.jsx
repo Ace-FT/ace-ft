@@ -5,13 +5,15 @@ import { create } from 'ipfs-http-client'
 import useRequest from "../hooks/useRequest";
 import * as ace from "../shared/constants";
 import { inboxDatasetsQuery } from "../shared/queries.ts";
-
 import structureResponse from "../utils/structureResponse";
 import requestDataset from "./Inbox/requesting";
 import {mapInboxOrders} from "../shared/itemMapper";
+import JSZip from "jszip";
+import downloadFile from "./Inbox/download";
+import {getDatasetOrders} from "./Inbox/getOrders";
 
 
-const Inbox = () => {
+function Inbox() {
   const { ethereum } = window;
   const configArgs = { ethProvider: window.ethereum,  chainId : 134};
   const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
@@ -168,7 +170,7 @@ const Inbox = () => {
       <button
         className="rounded-md bg-white text-black px-6 py-2"
         onClick={async () => {
-         getDatasetOrders("0xbfF6ae401e7202ea9bC006B17F6dc4bD5264De39", connectedAccount) // fetch dataset address from table here
+          getDatasetOrders("0xbfF6ae401e7202ea9bC006B17F6dc4bD5264De39", connectedAccount) // fetch dataset address from table here
         }}
       >
         Get my dataset orders for me
@@ -194,7 +196,7 @@ const Inbox = () => {
           console.log(url);
           const binary = await resp.blob();
           console.log("Response binary", binary);
-          var zipInstance = new JSZip()
+          var zipInstance = new JSZip();
           var resultFile = await zipInstance.loadAsync(binary).then((zip) => {
             return zip.file("result.json").async("string")
           })
@@ -207,13 +209,10 @@ const Inbox = () => {
           console.log(resultFileUrl)
           console.log("resultFileKey", resultFileKey)
           const responseArray = await fetch(
-            resultFileUrl,
-            {method: 'GET'}
-          ).then(
-            response => {
-              return response.arrayBuffer();
-            }
-          )
+            resultFileUrl, {method: 'GET'}
+          ).then(response => {
+            return response.arrayBuffer();
+          })
           console.log("The encrypted received file is\n", responseArray)
           let fileName = task.taskid;
           fileName = fileName.substring(0, 22)
@@ -250,27 +249,26 @@ const Inbox = () => {
                   </td>
                   <td className="border-r border-gray-200 p-3">
                   {
-                    inboxItem.status === STATUS_OPEN_ORDER  ?  
-                        <p>
-                          <button onClick={async () => { await requestDataset(inboxItem.id, connectedAccount)}}>Request</button>
-                        </p> 
+                    inboxItem.status === STATUS_OPEN_ORDER 
+                    ? <p>
+                        <button onClick={async () => { await requestDataset(inboxItem.id, connectedAccount)}}>Request</button>
+                      </p> 
                     : ""
                   }
-                   {
-                    inboxItem.status === STATUS_COMPLETED_ORDER  ?  
-                        <p>
-                          Downloaded on {inboxItem.downloadDate.toString()}
-                        </p> 
+                  {
+                    inboxItem.status === STATUS_COMPLETED_ORDER 
+                    ? <p>
+                        Downloaded on {inboxItem.downloadDate.toString()}
+                      </p> 
                     : ""
                   }     
                   {
-                    inboxItem.status === STATUS_ACTIVE_ORDER  ?  
-                        <p>
-                          Download started at {inboxItem.downloadDate.toString()}
-                        </p> 
+                    inboxItem.status === STATUS_ACTIVE_ORDER 
+                    ? <p>
+                        Download started at {inboxItem.downloadDate.toString()}
+                      </p> 
                     : ""
-                  }     
-
+                  }
 
                   </td>
                 </tr>
