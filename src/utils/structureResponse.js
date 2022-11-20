@@ -1,7 +1,8 @@
 const structureResponse = (data) => {
-    if(data && data.data) {
-        data.data.datasetOrders.map((e)=> console.log(e));
-        return data.data.datasetOrders;
+    
+    if(data && data.data.datasets) {
+        data.data.datasets.map((e)=> console.log("ds-------->",  e));
+        return data.data.datasets;
     }
     return null;
 }

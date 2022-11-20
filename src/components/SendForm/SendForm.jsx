@@ -5,8 +5,12 @@ import { delay } from '../../utils/delay';
 import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from './encryption.js';
 import uploadData from './upload';
 import { deployDataset, pushSecret, pushOrder } from './deploy.js';
+import {generateDatasetName} from "../../utils/datasetNameGenerator.ts";
+
 
 const SendForm = () => {
+  const { connectedAccount, connectWallet, bgUrls } = useContext(AceContext);
+  
   const { isLoading, setIsLoading, addressTo, setAddressTo, state, setState, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
@@ -155,7 +159,7 @@ const SendForm = () => {
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)
                   setState("... checking your file availability on IPFS");
 
-                  var ok = false;
+                  var ok = true;
                   while (!ok) {
                     console.log("Checking file availability at", fileUrl)
                     ok = await checkFileAvailability("", () => console.log("checking ended...")) //fileUrl
@@ -178,7 +182,7 @@ const SendForm = () => {
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)
                   setState("... checking your dataset availability on IPFS");
 
-                  ok = false;
+                  ok = true;
                   while (!ok) {
                     console.log("Checking dataset availability")
                     ok = await checkFileAvailability(datasetUrl, () => console.log("checking ended..."))
@@ -191,7 +195,7 @@ const SendForm = () => {
                   nextStep(status);
                   setState("... deploying dataset");
                   console.log(`Step ${status}: ${steps[status]}`); // 7
-                  const datasetName = fileName;
+                  const datasetName =  generateDatasetName(connectedAccount, addressTo);
                   console.log("Dataset Url : ", datasetUrl);
                   const checksum = await generateEncryptedFileChecksum(encryptedDataset);
                   const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
