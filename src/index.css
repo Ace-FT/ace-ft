@@ -7,6 +7,51 @@
 #app {
     font-family: 'Roboto', 'sans-serif';
 }
+
+
+.toggle {
+    position:absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.toggle input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle span {
+    display: block;
+    position: relative;
+    width: 64px;
+    height: 28px;
+
+    border-radius: 28px;
+    background-color: black;
+    transition: background .2s ease-in-out;
+}
+
+.toggle span::after {
+    content: '';
+    width: 32px;
+    height: 20px;
+    position:absolute;
+    top: 4px;
+    left: 4px;
+    border-radius: 20px;
+    background-color: #f2ff00;
+    transition: all .2s ease-in-out;
+}
+
+.toggle input[type=checkbox]:checked + span {
+    background: green;
+}
+
+.toggle input[type=checkbox]:checked + span::after {
+    transform: translateX(40px);
+}
 /*
 .uploader button {
     cursor: pointer;

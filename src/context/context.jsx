@@ -20,6 +20,7 @@ export const AceProvider = ({ children }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [background, setBackground] = useState({});
   const [bgCreator, setBgCreator] = useState({});
+  const [creativeMode, setCreativeMode] = useState(false);
   const [bgUrls, setBgUrls] = useState({});
   const [bgCreatorSocial, setBgCreatorSocial] = useState({});
   const [imgUrl, setImgUrl] = useState("");
@@ -43,34 +44,25 @@ export const AceProvider = ({ children }) => {
     },
   });
   
-
   useEffect(() => {
-    //checkIsWalletConnected();
-    fetchImages();
+    fetchImages()
   }, []);
+
 
   const fetchImages = async () => {
     try {
       const response = await fetch(
-        `https://api.unsplash.com/photos/random?query=nfts&query=sustainability&query=human-rights&orientation=landscape&count=4&client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}`
+        `https://api.unsplash.com/photos/random?query=nfts&query=sustainability&query=human-rights&orientation=landscape&count=3&client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}`
       );
       const data = await response.json();
       //console.log('success');
-      const bg = data[3];
+      const bg = data[2];
       const creator = bg.user;
       setBackground(bg);
       setBgCreator(creator);
       setBgUrls(bg.urls);
       setBgCreatorSocial(creator.social);
-      /*
-            console.log(bg)
-            console.log(bg.id)
-            console.log(bg.user)
-            var backgroundCreatorName = background.user.name;
-            this.backgroundCreatorUsername = background.user.username;
-            console.log(backgroundCreatorName);
-            console.log(this.backgroundCreatorUsername); //OK
-            return data[1];*/
+
     } catch (e) {
       console.log(e);
     }
@@ -207,6 +199,8 @@ export const AceProvider = ({ children }) => {
         setBgUrls,
         bgCreatorSocial,
         setBgCreatorSocial,
+        creativeMode,
+        setCreativeMode,
         imgUrl,
         setImgUrl,
         state,

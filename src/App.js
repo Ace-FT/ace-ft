@@ -12,8 +12,7 @@ import Protected from "./pages/Protected";
 //import {queryForMyInbox} from './shared/queries';
 
 function App() {
-  const { connectedAccount, connectWallet, bgUrls } =
-    useContext(AceContext);
+  const { connectedAccount, connectWallet, bgUrls, background, creativeMode, setCreativeMode } = useContext(AceContext);
 
     useEffect(() => {
       const connectWalletOnPageLoad = async () => {
@@ -28,6 +27,15 @@ function App() {
       connectWalletOnPageLoad()
     }, [])
 
+    useEffect(() => {
+      // const app = document.getElementById("app").style;
+      // const backgroundImage = app.backgroundImage;
+      // app.backgroundImage = "";
+      // app.backgroundColor = "#ffffff";
+      // console.log(backgroundImage)
+      console.log(creativeMode)
+    }, [creativeMode])
+
   const isConnected = connectedAccount !== "";
 
   return (
@@ -35,7 +43,8 @@ function App() {
       className="min-h-screen bg-center bg-contain text-white"
       id="app"
       style={{
-        backgroundImage: `url(${bgUrls.full})`,
+        backgroundImage: creativeMode ? `url(${bgUrls.full})` : "",
+        backgroundColor: creativeMode ? '' : "black",
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",

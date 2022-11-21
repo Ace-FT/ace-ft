@@ -5,7 +5,7 @@ import { useState } from 'react';
 import crypto from 'crypto-browserify';
 
 function Home() {
-  const { isLoading, setIsLoading, state, background, bgCreator, bgUrls, bgCreatorSocial, imgUrl, checkFileAvailability, selectedFiles } = useContext(AceContext);
+  const { isLoading, setIsLoading, state, background, bgCreator, bgUrls, bgCreatorSocial, creativeMode, setCreativeMode, imgUrl, checkFileAvailability, selectedFiles } = useContext(AceContext);
 
   const [message, setMessage] = useState("")
 
@@ -136,7 +136,7 @@ function Home() {
   }
 
   return (
-    <div className="flex flex-col mt-16 mx-8">
+    <div className="relative flex mt-16 mx-8">
       <div className="flex">
         <SendForm />
         {isLoading ? (
@@ -178,17 +178,24 @@ function Home() {
           Test bg Urls
         </button>
       </div>
-      <div className="fixed right-0 bottom-0 flex flex-col text-sm font-extralight p-16">
-        <h4>Credits</h4>
-        <p>{bgCreator.id}</p>
-        <p>{bgCreator.name}</p>
-        <p>{bgCreator.username}</p>
-        {bgCreatorSocial ? (
-          <p>Instagram : {bgCreatorSocial.instagram_username}</p>
-        ) : (
-          <div></div>
-        )}
-
+      <div className="absolute h-1/2 right-0 bottom-0 flex flex-col text-sm font-extralight px-8">
+        <div>
+          <h4>Credits</h4>
+          <p>{bgCreator.id}</p>
+          <p>{bgCreator.name}</p>
+          <p>{bgCreator.username}</p>
+          {bgCreatorSocial ? (
+            <p>Instagram : {bgCreatorSocial.instagram_username}</p>
+          ) : (
+            <div>
+            </div>
+          )}
+        </div>
+        <div>
+          <button className="mt-8" onClick={() => {
+            setCreativeMode(creativeMode => !creativeMode)
+          }}> Creative mode { creativeMode ? <span>ON</span> : <span>OFF</span>}</button>
+        </div>
       </div>
     </div>
   )

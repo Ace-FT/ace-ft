@@ -28,8 +28,8 @@ const uploadData = async (encrypted) => {
   //UPLOADING
   console.log(encrypted)
   
-  let toUpload = JSON.parse(encrypted)
-  console.log(toUpload)
+  // let toUpload = JSON.parse(encrypted)
+  // console.log(toUpload)
 
   const uploaded = await client.add(encrypted, {
     progress: (prog) => console.log(`received: ${prog}`),

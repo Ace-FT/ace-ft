@@ -43,7 +43,7 @@ const fromFileToDownloadableFileArray = async (fileUrl) => {
         fileUrl, {method: 'GET'}
     ).then((response) => {
         //return new Uint8Array(response.arrayBuffer()); //to convert to UintArray8
-        return response.json()
+        return response.arrayBuffer();
     })
     return responseArray;
 }
