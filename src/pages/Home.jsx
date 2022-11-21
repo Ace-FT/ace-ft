@@ -37,7 +37,7 @@ function Home() {
   // An encrypt function
   function fr7encrypt(text) {
 
-      // Defining iv
+    // Defining iv
     const iv = crypto.randomBytes(16);
 
 
@@ -61,18 +61,18 @@ function Home() {
   }
 
   // A decrypt function
-  function fr7decrypt(text) {
+  function fr7decrypt(enckey, text) {
 
     let iv = Buffer.from(text.iv, 'hex');
     //let encryptedText =
     //  Buffer.from(text.encryptedData, 'hex');
 
     let encryptedText =
-        Buffer.from(text.encryptedData);
+      Buffer.from(text.encryptedData);
 
     // Creating Decipher
     let decipher = crypto.createDecipheriv(
-      'aes-256-cbc', Buffer.from(key), iv);
+      'aes-256-cbc', Buffer.from(enckey), iv);
 
     // Updating encrypted text
     let decrypted = decipher.update(encryptedText);
@@ -88,7 +88,7 @@ function Home() {
     document.body.appendChild(a);
     a.style = "display: none";
     return function (blobdata, fileName) {
-      console.log("blobdata", blobdata) ;
+      console.log("blobdata", blobdata);
 
       var url = window.URL.createObjectURL(blobdata);
       a.href = url;
@@ -97,6 +97,8 @@ function Home() {
       window.URL.revokeObjectURL(url);
     };
   }());
+
+
 
 
   const testEncrypt = async () => {
@@ -108,30 +110,137 @@ function Home() {
 
     // Decrypts output
     console.log(fr7decrypt(output));*/
-
-    let selectedFile = selectedFiles[0];
-
-    const fileBytes = await new Promise(async (resolve, reject) => {
-      const fileReader = new FileReader();
-      await fileReader.readAsArrayBuffer(selectedFile);
-      fileReader.onload = (e) => { resolve(e.target.result) }
-      fileReader.onerror = () => reject(Error(`Error`))
-      fileReader.onabort = () => reject(Error(`Error : aborded`))
-    });
-
-    let arr =  new Uint8Array(fileBytes)
-    console.log("arraybuff", arr) ;
-
+    /*
+        let selectedFile = selectedFiles[0];
     
-    var output = fr7encrypt(arr);
+        const fileBytes = await new Promise(async (resolve, reject) => {
+          const fileReader = new FileReader();
+          await fileReader.readAsArrayBuffer(selectedFile);
+          fileReader.onload = (e) => { resolve(e.target.result) }
+          fileReader.onerror = () => reject(Error(`Error`))
+          fileReader.onabort = () => reject(Error(`Error : aborded`))
+        });
+    
+        let arr =  new Uint8Array(fileBytes)
+        console.log("arraybuff", arr) ;
+    
+        
+        var output = fr7encrypt(arr);
+        console.log("output", output);
+    */
+
+
+
+    /*
+    
+        {
+          "iv": "11cb767327d4389bf7bf8f9a6cd64b28",
+          "encryptedData": {
+              "type": "Buffer",
+              "data": [
+                  220,
+                  82,
+                  165,
+                  219,
+                  21,
+                  82,
+                  218,
+                  110,
+                  39,
+                  155,
+                  149,
+                  44,
+                  152,
+                  14,
+                  63,
+                  124,
+                  1,
+                  208,
+                  215,
+                  145,
+                  211,
+                  228,
+                  250,
+                  19,
+                  84,
+                  78,
+                  32,
+                  83,
+                  29,
+                  232,
+                  */
+
+
+    // A L UPLOAD
+    //    let buffer = Buffer.from(JSON.stringify(encrypted));
+
+
+
+    let fileUrl = 'https://infura-ipfs.io/ipfs/QmQDUxQRv8LBm4nTPG37V2Av44UKg2L3o543YKMJhcjydr';
+    let enckey = 'qehKhvP7XAxNLilwF4qm75bIu+322SZ2Gu6mge+jOCg=';
+
+    let responseArray = await fetch(
+      fileUrl, { method: 'GET' }
+    ).then((response) => {
+      //return new Uint8Array(response.arrayBuffer()); //to convert to UintArray8
+      return response.arrayBuffer()
+    })
+
+
+    let buff = Buffer.from(responseArray)
+    let output = JSON.parse(buff.toString());
+
     console.log("output", output);
 
+    let lacle =
+    {
+      "type": "Buffer",
+      "data": [
+        215,
+        145,
+        156,
+        250,
+        250,
+        127,
+        27,
+        85,
+        51,
+        12,
+        130,
+        21,
+        53,
+        238,
+        22,
+        40,
+        40,
+        136,
+        146,
+        252,
+        181,
+        179,
+        19,
+        25,
+        196,
+        181,
+        227,
+        170,
+        6,
+        48,
+        145,
+        236
+      ]
+    };
+
+    let bytesView = new Uint8Array(lacle);
+
+    let strk = new TextDecoder().decode(bytesView);
+
     // Decrypts output
-    let decrypted = fr7decrypt(output) ;
+    let decrypted = fr7decrypt(lacle, output);
     console.log("decrypted", decrypted);
 
-    let blob = new Blob([decrypted], {type: 'application/octet-stream'});
-    saveData(blob, "poly.pdf") ;
+    let blob = new Blob([decrypted], { type: 'application/octet-stream' });
+    saveData(blob, "poly.png");
 
   }
 

@@ -26,12 +26,17 @@ const client = create({
  */
 const uploadData = async (encrypted) => {
   //UPLOADING
-  console.log(encrypted)
+  console.log("encrypted", encrypted);
   
-  let toUpload = JSON.parse(encrypted)
-  console.log(toUpload)
+  //let toUpload = JSON.parse(encrypted)
+  //console.log(toUpload)
 
-  const uploaded = await client.add(encrypted, {
+  let buffer = Buffer.from(JSON.stringify(encrypted));
+    
+
+  const uploaded = await client.add(buffer, {
+
+    
     progress: (prog) => console.log(`received: ${prog}`),
   });
 

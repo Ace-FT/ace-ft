@@ -32,8 +32,6 @@ const encryptFile = async (selectedFile) => {
       //console.log("INFURA_SECRET_KEY: " + process.env.REACT_APP_INFURA_SECRET_KEY);
 
       
-      fileEncryptionKey = iexec.dataset.generateEncryptionKey();
-      console.log("Encryption key: " + fileEncryptionKey);
       console.log(selectedFile)
       const fileBytes = await new Promise(async (resolve, reject) => {
           const fileReader = new FileReader();
@@ -67,6 +65,10 @@ const encryptFile = async (selectedFile) => {
 const encryptDataset = async (fileUrl, message, size) => {
     datasetEncryptionKey = iexec.dataset.generateEncryptionKey();
     console.log("Dataset encryption key: " + datasetEncryptionKey);
+    console.log("FILE encryption key:", fileEncKey);
+    console.log("FILE encryption key tostring:", fileEncKey.toString());
+    console.log("FILE encryption buffer:", Buffer.from(fileEncKey));
+
     var datasetContent = datasetStruct(fileEncKey, fileUrl, message, size);
     console.log("Dataset content :", datasetContent)
     const datasetBuffer = jsonToBuffer(datasetContent);
