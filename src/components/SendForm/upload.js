@@ -26,7 +26,7 @@ const client = create({
  */
 const uploadData = async (encrypted) => {
   //UPLOADING
-  console.log(encrypted)
+  console.log("encrypted", encrypted);
   
   const toUpload = Buffer.from(JSON.stringify(encrypted))
 
