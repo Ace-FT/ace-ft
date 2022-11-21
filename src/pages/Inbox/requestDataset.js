@@ -6,7 +6,11 @@ const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = {smsURL: ace.SMS_URL};
 const iexec = new IExec(configArgs, configOptions);
 
-
+/**
+ * Request the dataset in order to download the contained file
+ * @param {string} datasetAddress address of the requested dataset
+ * @param {string} datasetRequester wallet address requesting the dataset
+ */
 const requestDataset = async(datasetAddress, datasetRequester) => {
     console.log("START requestDataset");
 
@@ -66,12 +70,12 @@ const requestDataset = async(datasetAddress, datasetRequester) => {
     });
     console.log("deal id:", dealid);
     console.log("Tx hash", txHash);
-    const deal = await iexec.deal.show(dealid)
-    console.log("deat\n", deal)
-    const task = deal.tasks;
-    console.log(task)
-    console.log(task[0])
-    return task[0];
+    // const deal = await iexec.deal.show(dealid)
+    // console.log("deat\n", deal)
+    // const task = deal.tasks;
+    // console.log(task)
+    // console.log(task[0])
+    // return task[0];
 };
 
 export default requestDataset;

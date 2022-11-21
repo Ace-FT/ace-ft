@@ -2,16 +2,17 @@ import { IExec } from "iexec";
 import * as ace from "./constants";
 import inboxItemStruct from "../utils/inboxItemStruct.ts";
 
-const iexec = new IExec({ ethProvider: window.ethereum });
+const configArgs = { ethProvider: window.ethereum, chainId: 134 };
+const configOptions = {smsURL: ace.SMS_URL};
+const iexec = new IExec(configArgs, configOptions);
 
 
 export const mapInboxOrders = async (connectedAccount, structuredResponseItems) =>
 {
-    console.log("structuredResponseItems", structuredResponseItems) ;
-    let mapped =  await Promise.all( structuredResponseItems.map(async(item) => {
+    console.log("structuredResponseItems", structuredResponseItems);
 
-        var inboxItem = inboxItemStruct(item.id, item.name, item.owner.id) ;
-
+    let mapped = await Promise.all(structuredResponseItems.map(async(item) => {
+        var inboxItem = inboxItemStruct(item.id, item.name, item.owner.id);
         var orderBook = await iexec.orderbook.fetchDatasetOrderbook(
             item.id,
             {
@@ -25,22 +26,20 @@ export const mapInboxOrders = async (connectedAccount, structuredResponseItems) 
         if (orderBook && orderBook.orders.length > 0 )
         {
             console.log("ORDER BOOK", orderBook) ;
-            inboxItem.status = orderBook.orders[0].status ;
-            inboxItem.to = orderBook.orders[0].order.requesterrestrict  ;
+            inboxItem.status = orderBook.orders[0].status;
+            inboxItem.to = orderBook.orders[0].order.requesterrestrict;
             inboxItem.orderHash = orderBook.orders[0].orderHash;
             inboxItem.sendDate = new Date(orderBook.orders[0].publicationTimestamp);
-            inboxItem.price =  orderBook.orders[0].order.datasetprice;
-            inboxItem.tag =  orderBook.orders[0].order.tag;
+            inboxItem.price = orderBook.orders[0].order.datasetprice;
+            inboxItem.tag = orderBook.orders[0].order.tag;
             inboxItem.workerpoolrestrict =  orderBook.orders[0].order.workerpoolrestrict;
 
-
             if (item.orders && 
-                item.orders.length>0 && 
+                item.orders.length > 0 && 
                 item.orders[0].deals && 
                 item.orders[0].deals.length > 0 
                 )
             {
-
                 inboxItem.dealid = item.orders[0].deals[0].id;
                 console.log("item.orders[0].deals[0].startTime", Number(item.orders[0].deals[0].startTime)) ; 
                 inboxItem.downloadDate = new Date(Number(item.orders[0].deals[0].startTime)*1000);
@@ -50,11 +49,8 @@ export const mapInboxOrders = async (connectedAccount, structuredResponseItems) 
                 {
                     inboxItem.status = item.orders[0].deals[0].tasks[0].status ;
                     inboxItem.taskid = item.orders[0].deals[0].tasks[0].id;
-                    
                 }
-
             }
-
             return inboxItem
         }
         
@@ -66,7 +62,7 @@ export const mapInboxOrders = async (connectedAccount, structuredResponseItems) 
 
     console.log("mapped", mapped) ;
 
-    return mapped ; 
+    return mapped; 
 }
 
 export const mapSentItemsOrders = async (connectedAccount, structuredResponseItems) =>
@@ -141,9 +137,7 @@ export const mapSentItemsOrders = async (connectedAccount, structuredResponseIte
                     inboxItem.status = item.orders[0].deals[0].tasks[0].status ;
                     inboxItem.taskid = item.orders[0].deals[0].tasks[0].id;
                 }
-
             }
-
             return inboxItem
         }
         

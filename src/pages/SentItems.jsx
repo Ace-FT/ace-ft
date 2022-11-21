@@ -6,7 +6,7 @@ import * as ace from "../shared/constants";
 import { inboxDatasetsQuery } from "../shared/queries.ts";
 
 import structureResponse from "../utils/structureResponse";
-import requestDataset from "./Inbox/requesting";
+import requestDataset from "./Inbox/requestDataset";
 import {mapSentItemsOrders} from "../shared/itemMapper";
 
 
