@@ -34,6 +34,6 @@ export function generateDatasetName(owner: string, requesterrestrict: string) {
 
   const hash = `${hashIt(str1)}${hashIt(str2)}`;
   const name = `${hash}${new Date().getTime().toString()}#${requesterrestrict}`
-  
+            // file name
   return name;
 }

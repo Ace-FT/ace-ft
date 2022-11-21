@@ -42,7 +42,8 @@ const fromFileToDownloadableFileArray = async (fileUrl) => {
     let responseArray = await fetch(
         fileUrl, {method: 'GET'}
     ).then((response) => {
-        return new Uint8Array(response.arrayBuffer()); //to convert to UintArray8
+        //return new Uint8Array(response.arrayBuffer()); //to convert to UintArray8
+        return response.json()
     })
     return responseArray;
 }

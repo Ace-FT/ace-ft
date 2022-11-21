@@ -3,14 +3,20 @@ import { Buffer } from "buffer";
 import { datasetStruct } from "../../utils/datasetStruct.ts";
 import { jsonToBuffer } from "../../utils/jsonToBuffer";
 import * as ace from "../../shared/constants";
+import crypto from 'crypto-browserify';
+import {fileEncKey, fromFileToEncryptedFile} from "../../utils/fileAESEncryption";
 
 const { ethereum } = window;
-const configArgs = { ethProvider: window.ethereum,  chainId : 134};
-const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
+const configArgs = { ethProvider: window.ethereum, chainId : 134};
+const configOptions = { smsURL: ace.SMS_URL };
 const iexec = new IExec(configArgs, configOptions);
+const ALGORITHM = "aes-256-cbc";
+
+
 var fileEncryptionKey = null;
 var fileEncrInitialisationVector = null;
 var datasetEncryptionKey = "";
+
 
 /**
  * Encrypt a selected file using iExec encryption module
@@ -36,10 +42,16 @@ const encryptFile = async (selectedFile) => {
           fileReader.onerror = () => reject(Error(`Error`))
           fileReader.onabort = () => reject(Error(`Error : aborded`))
       });
-      console.log(fileBytes)
-      const encryptedFile = await iexec.dataset.encrypt(fileBytes, fileEncryptionKey);
-      console.log("encrypted file", encryptedFile)
-      return encryptedFile;
+
+      let fileArray = new Uint8Array(fileBytes)
+      console.log("File array\n", fileArray)
+
+      let output = fromFileToEncryptedFile(fileArray)
+      return output;
+
+      // const encryptedFile = await iexec.dataset.encrypt(fileBytes, fileEncryptionKey);
+      // console.log("encrypted file", encryptedFile)
+      // return encryptedFile;
     } catch (err) {
       console.log(err);
     }
@@ -55,7 +67,7 @@ const encryptFile = async (selectedFile) => {
 const encryptDataset = async (fileUrl, message, size) => {
     datasetEncryptionKey = iexec.dataset.generateEncryptionKey();
     console.log("Dataset encryption key: " + datasetEncryptionKey);
-    var datasetContent = datasetStruct(fileEncryptionKey, fileUrl, message, size);
+    var datasetContent = datasetStruct(fileEncKey, fileUrl, message, size);
     console.log("Dataset content :", datasetContent)
     const datasetBuffer = jsonToBuffer(datasetContent);
     console.log(datasetBuffer)

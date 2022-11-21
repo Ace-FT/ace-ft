@@ -263,10 +263,11 @@ function Inbox() {
                           console.log("resultFileUrl", resultFileUrl)
                           console.log("resultFileKey", resultFileKey);
                           const fileArray = await fromFileToDownloadableFileArray(resultFileUrl);
+                          console.log(fileArray)
                         }}>
-
+                          Download
                         </button>
-                        Downloaded on {inboxItem.downloadDate.toString()}
+                        {/* Downloaded on {inboxItem.downloadDate.toString()} */}
                       </p>
                     : ""
                   }     

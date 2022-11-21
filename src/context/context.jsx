@@ -15,7 +15,7 @@ export const AceProvider = ({ children }) => {
   const [connectedAccount, setConnectedAccount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [addressTo, setAddressTo] = useState("");
-  const [price, setPrice] = useState();
+  const [price, setPrice] = useState(0);
   const [message, setMessage] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [background, setBackground] = useState({});

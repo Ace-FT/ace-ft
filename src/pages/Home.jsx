@@ -34,7 +34,6 @@ function Home() {
   // Defining key
   const key = crypto.randomBytes(32);
 
-
   // An encrypt function
   function fr7encrypt(text) {
 
@@ -122,6 +121,8 @@ function Home() {
 
     let arr =  new Uint8Array(fileBytes)
     console.log("arraybuff", arr) ;
+
+    
     var output = fr7encrypt(arr);
     console.log("output", output);
 

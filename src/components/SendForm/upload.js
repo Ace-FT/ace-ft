@@ -21,11 +21,16 @@ const client = create({
 
 /**
  * Upload the encrypted file or data to IPFS.
- * @param {Buffer} encrypted encrypted data to upload
+ * @param {*} encrypted encrypted data to upload
  * @returns the IPFS location file URL
  */
 const uploadData = async (encrypted) => {
   //UPLOADING
+  console.log(encrypted)
+  
+  let toUpload = JSON.parse(encrypted)
+  console.log(toUpload)
+
   const uploaded = await client.add(encrypted, {
     progress: (prog) => console.log(`received: ${prog}`),
   });
