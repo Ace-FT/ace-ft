@@ -10,7 +10,7 @@ import {mapInboxOrders} from "../shared/itemMapper";
 import JSZip from "jszip";
 import downloadFile from "../utils/downloadFile";
 import {getDatasetOrders} from "./Inbox/getOrders";
-import {fromDatasetToFileJSON, fromFileToDownloadableFileArray} from "./Inbox/download";
+import { fromDatasetToFileJSON, fetchFromFileToDownloadableFileObject } from "./Inbox/download";
 
 const configArgs = { ethProvider: window.ethereum,  chainId : 134};
 const configOptions = { smsURL: ace.SMS_URL };
@@ -262,8 +262,8 @@ function Inbox() {
                           const resultFileKey = resultFile.key;
                           console.log("resultFileUrl", resultFileUrl)
                           console.log("resultFileKey", resultFileKey);
-                          const fileArray = await fromFileToDownloadableFileArray(resultFileUrl);
-                          console.log(fileArray)
+                          const fileBuffer = await fetchFromFileToDownloadableFileObject(resultFileUrl);
+                          console.log(fileBuffer)
                         }}>
                           Download
                         </button>

@@ -13,8 +13,6 @@ const iexec = new IExec(configArgs, configOptions);
 const ALGORITHM = "aes-256-cbc";
 
 
-var fileEncryptionKey = null;
-var fileEncrInitialisationVector = null;
 var datasetEncryptionKey = "";
 
 
@@ -32,8 +30,7 @@ const encryptFile = async (selectedFile) => {
       //console.log("INFURA_SECRET_KEY: " + process.env.REACT_APP_INFURA_SECRET_KEY);
 
       
-      fileEncryptionKey = iexec.dataset.generateEncryptionKey();
-      console.log("Encryption key: " + fileEncryptionKey);
+      console.log("Encryption key: " + fileEncKey);
       console.log(selectedFile)
       const fileBytes = await new Promise(async (resolve, reject) => {
           const fileReader = new FileReader();

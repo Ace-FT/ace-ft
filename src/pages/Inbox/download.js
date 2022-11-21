@@ -1,6 +1,7 @@
 import { IExec } from "iexec";
 import * as ace from "../../shared/constants";
 import JSZip from "jszip";
+import {bufferToJson} from "../../utils/bufferToJson";
 
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = { smsURL: ace.SMS_URL };
@@ -38,14 +39,16 @@ const fromDatasetToFileJSON = async (taskId) => {
  * @param {string} fileUrl
  * @returns the file from the url in a UInt8Array object
  */
-const fromFileToDownloadableFileArray = async (fileUrl) => {
+const fetchFromFileToDownloadableFileObject = async (fileUrl) => {
     let responseArray = await fetch(
         fileUrl, {method: 'GET'}
     ).then((response) => {
         //return new Uint8Array(response.arrayBuffer()); //to convert to UintArray8
         return response.arrayBuffer();
     })
-    return responseArray;
+    let responseBuffer = Buffer.from(responseArray);
+    let responseObject = bufferToJson(responseBuffer)
+    return responseBuffer;
 }
 
-export { fromDatasetToFileJSON, fromFileToDownloadableFileArray };
+export { fromDatasetToFileJSON, fetchFromFileToDownloadableFileObject };
