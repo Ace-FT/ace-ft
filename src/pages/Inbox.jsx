@@ -10,7 +10,8 @@ import {mapInboxOrders} from "../shared/itemMapper";
 import JSZip from "jszip";
 import downloadFile from "../utils/downloadFile";
 import {getDatasetOrders} from "./Inbox/getOrders";
-import { fromDatasetToFileJSON, fetchFromFileToDownloadableFileObject } from "./Inbox/download";
+import { fromDatasetToFileJSON, fetchFromFileToDownloadableFileObject, saveFile } from "./Inbox/download";
+import {fromEnryptedFileToFile} from "../utils/fileAESEncryption";
 
 const configArgs = { ethProvider: window.ethereum,  chainId : 134};
 const configOptions = { smsURL: ace.SMS_URL };
@@ -262,8 +263,11 @@ function Inbox() {
                           const resultFileKey = resultFile.key;
                           console.log("resultFileUrl", resultFileUrl)
                           console.log("resultFileKey", resultFileKey);
-                          const fileBuffer = await fetchFromFileToDownloadableFileObject(resultFileUrl);
-                          console.log(fileBuffer)
+                          const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
+                          console.log(fileObject)
+                          let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
+                          let fileBlob = new Blob([decryptedFile], { type: 'application/octet-stream' });
+                          saveFile(fileBlob, "dowloaded");
                         }}>
                           Download
                         </button>
