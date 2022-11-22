@@ -1,7 +1,7 @@
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
-// import { datasetStruct } from "../utils/datasetStruct.ts";
 import * as ace from "../../shared/constants";
+import { jsonToBuffer } from "../../utils/jsonToBuffer";
 
 const auth = "Basic " + Buffer.from(
     process.env.REACT_APP_INFURA_ID +
@@ -9,14 +9,14 @@ const auth = "Basic " + Buffer.from(
 ).toString("base64");
 
 const client = create({
-  host: "ipfs.infura.io",
-  port: 5001,
-  protocol: "https",
-  //apiPath: "/api/v0",
-  headers: {
-    authorization: auth,
-    "Access-Control-Allow-Origin": ["*"],
-  },
+    host: "ipfs.infura.io",
+    port: 5001,
+    protocol: "https",
+    //apiPath: "/api/v0",
+    headers: {
+        authorization: auth,
+        "Access-Control-Allow-Origin": ["*"],
+    },
 });
 
 /**
@@ -24,21 +24,21 @@ const client = create({
  * @param {*} encrypted encrypted data to upload
  * @returns the IPFS location file URL
  */
-const uploadData = async (encrypted) => {
-  //UPLOADING
-  console.log("encrypted", encrypted);
-  
-  const toUpload = Buffer.from(JSON.stringify(encrypted))
+const uploadData = async(encrypted) => {
+    //UPLOADING
+    console.log(encrypted)
 
-  const uploaded = await client.add(toUpload, {
-    progress: (prog) => console.log(`received: ${prog}`),
-  });
+    const toUpload = jsonToBuffer(encrypted)
 
-  console.log(uploaded);
-  console.log(`https://infura-ipfs.io/ipfs/${uploaded.path}`);
+    const uploaded = await client.add(toUpload, {
+        progress: (prog) => console.log(`received: ${prog}`),
+    });
 
-  const url = `https://infura-ipfs.io/ipfs/${uploaded.path}`;
-  return url;
+    console.log(uploaded);
+    console.log(`https://infura-ipfs.io/ipfs/${uploaded.path}`);
+
+    const url = `https://infura-ipfs.io/ipfs/${uploaded.path}`;
+    return url;
 };
 
 export default uploadData;

@@ -23,13 +23,6 @@ var datasetEncryptionKey = "";
  */
 const encryptFile = async (selectedFile) => {  
     try {
-      // ENCRYPTION
-      //console.log("auth", auth);
-      //console.log(process.env)
-      //console.log("INFURA_ID: " + process.env.REACT_APP_INFURA_ID);
-      //console.log("INFURA_SECRET_KEY: " + process.env.REACT_APP_INFURA_SECRET_KEY);
-
-      
       console.log("Encryption key: " + fileEncKey);
       console.log(selectedFile)
       const fileBytes = await new Promise(async (resolve, reject) => {

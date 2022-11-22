@@ -45,7 +45,6 @@ const getWorkerpoolOrders = async() => {
  * @returns the dataset orders from the orderbook for the dataset address
  */
 const getDatasetOrders = async(datasetAddress, datasetRequester) => {
-    await iexec.orderbook
     const { orders } = await iexec.orderbook.fetchDatasetOrderbook(
         datasetAddress, {
             app: ace.APP_ADDRESS,

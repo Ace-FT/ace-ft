@@ -157,6 +157,7 @@ const SendForm = () => {
                   status = nextStep(status);
                   setState("... uploading your file");
                   console.log("Step", status, ": ", steps[status]); // 2
+
                   console.log(encryptedFile)
                   var fileUrl = await uploadData(encryptedFile)
                   console.log("File uploaded at", fileUrl)
@@ -199,7 +200,7 @@ const SendForm = () => {
                   nextStep(status);
                   setState("... deploying dataset");
                   console.log(`Step ${status}: ${steps[status]}`); // 7
-                  const datasetName =  generateDatasetName(connectedAccount, addressTo);
+                  const datasetName = generateDatasetName(connectedAccount, addressTo);
                   console.log("Dataset Url : ", datasetUrl);
                   const checksum = await generateEncryptedFileChecksum(encryptedDataset);
                   const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
