@@ -228,7 +228,7 @@ const SendForm = () => {
                   
 
                   nextStep(status);
-                  setState("Your file is uploaded ✅");
+                  setState(ace.STEP_COMPLETED);
                   console.log(`Step ${status}: ${steps[status]}`);
                 }}
               >

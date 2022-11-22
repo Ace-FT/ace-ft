@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import SendForm from "../components/SendForm/SendForm";
 import { AceContext } from '../context/context';
-import { useState } from 'react';
+import * as ace from "../shared/constants";
 import crypto from 'crypto-browserify';
 
 function Home() {
@@ -104,79 +104,6 @@ function Home() {
 
   const testEncrypt = async () => {
 
-
-    // Encrypts output
-    /*var output = fr7encrypt("GeeksforGeeks");
-    console.log(output);
-
-    // Decrypts output
-    console.log(fr7decrypt(output));*/
-    /*
-        let selectedFile = selectedFiles[0];
-    
-        const fileBytes = await new Promise(async (resolve, reject) => {
-          const fileReader = new FileReader();
-          await fileReader.readAsArrayBuffer(selectedFile);
-          fileReader.onload = (e) => { resolve(e.target.result) }
-          fileReader.onerror = () => reject(Error(`Error`))
-          fileReader.onabort = () => reject(Error(`Error : aborded`))
-        });
-    
-        let arr =  new Uint8Array(fileBytes)
-        console.log("arraybuff", arr) ;
-    
-        
-        var output = fr7encrypt(arr);
-        console.log("output", output);
-    */
-
-
-
-    /*
-    
-        {
-          "iv": "11cb767327d4389bf7bf8f9a6cd64b28",
-          "encryptedData": {
-              "type": "Buffer",
-              "data": [
-                  220,
-                  82,
-                  165,
-                  219,
-                  21,
-                  82,
-                  218,
-                  110,
-                  39,
-                  155,
-                  149,
-                  44,
-                  152,
-                  14,
-                  63,
-                  124,
-                  1,
-                  208,
-                  215,
-                  145,
-                  211,
-                  228,
-                  250,
-                  19,
-                  84,
-                  78,
-                  32,
-                  83,
-                  29,
-                  232,
-                  */
-
-
-    // A L UPLOAD
-    //    let buffer = Buffer.from(JSON.stringify(encrypted));
-
-
-
     let fileUrl = 'https://infura-ipfs.io/ipfs/QmQDUxQRv8LBm4nTPG37V2Av44UKg2L3o543YKMJhcjydr';
     let enckey = 'qehKhvP7XAxNLilwF4qm75bIu+322SZ2Gu6mge+jOCg=';
 
@@ -255,7 +182,7 @@ function Home() {
           <SendForm />
           {isLoading ? (
             <div className="flex">
-              <div className="w-8 h-8 border-4 border-gray-400 rounded-full border-t-blue-700 animate-spin pr-4"></div>
+              { state === ace.STEP_COMPLETED && <div className="w-8 h-8 border-4 border-gray-400 rounded-full border-t-blue-700 animate-spin pr-4"></div> }
               {writeStatus(state)}
             </div>
           ) : (
