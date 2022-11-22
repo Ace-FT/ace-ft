@@ -145,7 +145,7 @@ const SentItems = () => {
       <Helmet>
         <title>ACE-ft | Sent items</title>
       </Helmet>
-      <div className="mt-16 mx-8">
+      <div className="mt-16 mx-8 pb-16">
         <button
           className="rounded-md bg-white text-black px-6 py-2"
           onClick={async () => {
@@ -174,7 +174,7 @@ const SentItems = () => {
         {inboxItems ? (
           <table className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black table-auto">
             <thead>
-              <tr className="border-b border-gray-200">
+              <tr>
                 <th className="border-r border-gray-200 py-3">Send date</th>
                 <th className="border-r border-gray-200 py-3">To</th>
                 <th className="border-r border-gray-200 py-3">Price (in RLC)</th>
@@ -185,7 +185,7 @@ const SentItems = () => {
               {inboxItems.map((inboxItem, i) => {
                 console.log("INBOX ITEM", inboxItem)  ;   
                 return (
-                  <tr className="text-center border-b border-gray-200" key={i}>
+                  <tr className="text-center border-t border-gray-200" key={i}>
                     <td className="border-r border-gray-200 p-3">
                       {inboxItem.sendDate.toString()}
                     </td>
@@ -195,7 +195,7 @@ const SentItems = () => {
                     <td className="border-r border-gray-200 p-3">
                       {inboxItem.price}
                     </td>
-                    <td className="border-r border-gray-200 p-3">
+                    <td className="p-3">
                     {
                       inboxItem.status === STATUS_OPEN_ORDER  ?  
                           <p>

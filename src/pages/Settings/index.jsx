@@ -9,8 +9,8 @@ function Settings() {
       <Helmet>
         <title>ACE-ft | Settings</title>
       </Helmet>
-      <div className="flex mt-16 mx-8">
-        <div className="flex w-full rounded-2xl shadow-xl bg-white text-black mr-8 px-4 py-4">
+      <div className="flex my-16 mx-8">
+        <div className="flex w-full rounded-2xl shadow-xl bg-white text-black px-4 py-4">
           <nav className="flex flex-col border-r border-gray-400 pr-8 pl-2 py-2">
             <Link
               className="text-black border-b border-gray-400 pb-2"

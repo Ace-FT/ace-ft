@@ -155,30 +155,17 @@ function Inbox() {
       <Helmet>
         <title>ACE-ft | Inbox</title>
       </Helmet>
-      <div className="mt-16 mx-8">      
-        <button
+      <div className="mt-16 mx-8 pb-16">      
+        {/* <button
           className="rounded-md bg-white text-black px-6 py-2"
           onClick={async () => {
             getDatasetOrder();
           }}
         >
           Data set orders
-        </button>
-        <button
-          className="rounded-md bg-white text-black px-6 py-2"
-          onClick={async () => {
-            getDatasetOrders("0xbfF6ae401e7202ea9bC006B17F6dc4bD5264De39", connectedAccount) // fetch dataset address from table here
-          }}
-        >
-          Get my dataset orders for me
-        </button>
-        <button
-          className="rounded-r-md bg-white text-black px-6 py-2"
-          onClick={async () => taskId = await requestDataset("0xbfF6ae401e7202ea9bC006B17F6dc4bD5264De39", connectedAccount)} // fetch dataset address from table here
-        >
-          Run task
-        </button>
-        <button
+        </button> */}
+
+        {/* <button
           className="rounded-r-md bg-white text-black px-6 py-2"
           onClick={async () => {
             //const deal = await iexec.deal.show(dealId)
@@ -214,12 +201,12 @@ function Inbox() {
           }}
         >
           Download file (after running task)
-        </button>
+        </button> */}
 
         {inboxItems ? (
           <table className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black table-auto">
             <thead>
-              <tr className="border-b border-gray-200">
+              <tr>
                 <th className="border-r border-gray-200 py-3">Received date</th>
                 <th className="border-r border-gray-200 py-3">From</th>
                 <th className="border-r border-gray-200 py-3">Price (in RLC)</th>
@@ -230,7 +217,7 @@ function Inbox() {
               {inboxItems.map((inboxItem, i) => {
                 console.log("INBOX ITEM", inboxItem)  ;   
                 return (
-                  <tr className="text-center border-b border-gray-200" key={i}  >
+                  <tr className="text-center border-t border-gray-200" key={i}  >
                     <td className="border-r border-gray-200 p-3">
                       {inboxItem.sendDate.toString()}
                     </td>
@@ -240,7 +227,7 @@ function Inbox() {
                     <td className="border-r border-gray-200 p-3">
                       {inboxItem.price}
                     </td>
-                    <td className="border-r border-gray-200 p-3">
+                    <td className="border-gray-200 p-3">
                     {
                       inboxItem.status === STATUS_OPEN_ORDER 
                       ? <p>
