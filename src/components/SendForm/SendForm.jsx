@@ -7,6 +7,7 @@ import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncr
 import uploadData from './upload';
 import { deployDataset, pushSecret, pushOrder } from './deploy.js';
 import {generateDatasetName} from "../../utils/datasetNameGenerator.ts";
+import {jsonToBuffer} from '../../utils/jsonToBuffer';
 
 const configArgs = { ethProvider: window.ethereum,  chainId : 134};
 const configOptions = { smsURL: ace.SMS_URL };
@@ -149,7 +150,7 @@ const SendForm = () => {
                   setState("... encrypting your file");
                   console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
                 
-                  const encryptedFile = await encryptFile(selectedFiles[0]);
+                  const encryptedFileJSON = await encryptFile(selectedFiles[0]);
                   const fileName = selectedFiles[0].name;
                   const fileSize = selectedFiles[0].size;
                   console.log(fileName);
@@ -157,14 +158,17 @@ const SendForm = () => {
                   status = nextStep(status);
                   setState("... uploading your file");
                   console.log("Step", status, ": ", steps[status]); // 2
+                  console.log("encryptedFile JSON:", encryptedFileJSON)
 
-                  console.log(encryptedFile)
+                  const encryptedFile = jsonToBuffer(encryptedFileJSON)
+                  console.log("encryptedFile:", encryptedFile)
+
                   var fileUrl = await uploadData(encryptedFile)
                   console.log("File uploaded at", fileUrl)
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED)
                   setState("... checking your file availability on IPFS");
 
-                  var ok = true;
+                  var ok = false;
                   while (!ok) {
                     console.log("Checking file availability at", fileUrl)
                     ok = await checkFileAvailability("", () => console.log("checking ended...")) //fileUrl

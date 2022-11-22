@@ -51,20 +51,18 @@ const fetchFromFileToDownloadableFileObject = async (fileUrl) => {
 };
 
 
-const saveFile = () => {
+const saveFile = (blobdata, fileName) => {
   var a = document.createElement("a");
   document.body.appendChild(a);
   a.style = "display: none";
 
-  return function (blobdata, fileName) {
-    console.log("blobdata", blobdata);
+  console.log("blobdata", blobdata);
 
-    var url = window.URL.createObjectURL(blobdata);
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
+  var url = window.URL.createObjectURL(blobdata);
+  a.href = url;
+  a.download = fileName;
+  a.click();
+  window.URL.revokeObjectURL(url);
 };
 
 export {

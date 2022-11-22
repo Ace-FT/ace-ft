@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import SendForm from "../components/SendForm/SendForm";
 import { AceContext } from '../context/context';
 import { useState } from 'react';
@@ -245,68 +246,74 @@ function Home() {
   }
 
   return (
-    <div className="relative flex mt-16 mx-8">
-      <div className="flex">
-        <SendForm />
-        {isLoading ? (
-          <div className="flex">
-            <div className="w-8 h-8 border-4 border-gray-400 rounded-full border-t-blue-700 animate-spin pr-4"></div>
-            {writeStatus(state)}
-          </div>
-        ) : (
-          <p></p>
-        )}
-      </div>
-
-      <div className="text-white">
-        <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
-          onClick={(e) => {
-            testEncrypt();
-          }}
-        >
-          TEST ENCRYPT
-        </button>
-
-        <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
-          onClick={(e) => {
-            e.preventDefault();
-            console.log(bgCreator)
-            console.log(background.user)
-          }}
-        >
-          Test bg creator
-        </button>
-        <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
-          onClick={(e) => {
-            e.preventDefault();
-            console.log(bgUrls)
-            console.log(bgUrls.full)
-
-          }}
-        >
-          Test bg Urls
-        </button>
-      </div>
-      <div className="absolute h-1/2 right-0 bottom-0 flex flex-col text-sm font-extralight px-8">
-        <div>
-          <h4>Credits</h4>
-          <p>{bgCreator.id}</p>
-          <p>{bgCreator.name}</p>
-          <p>{bgCreator.username}</p>
-          {bgCreatorSocial ? (
-            <p>Instagram : {bgCreatorSocial.instagram_username}</p>
-          ) : (
-            <div>
+    <>
+      <Helmet>
+        <title>ACE-ft | Home</title>
+      </Helmet>
+      <div className="relative flex mt-16 mx-8">
+        <div className="flex">
+          <SendForm />
+          {isLoading ? (
+            <div className="flex">
+              <div className="w-8 h-8 border-4 border-gray-400 rounded-full border-t-blue-700 animate-spin pr-4"></div>
+              {writeStatus(state)}
             </div>
+          ) : (
+            <p></p>
           )}
         </div>
-        <div>
-          <button className="mt-8" onClick={() => {
-            setCreativeMode(creativeMode => !creativeMode)
-          }}> Creative mode { creativeMode ? <span>ON</span> : <span>OFF</span>}</button>
+
+        <div className="text-white">
+          <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
+            onClick={(e) => {
+              testEncrypt();
+            }}
+          >
+            TEST ENCRYPT
+          </button>
+
+          <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
+            onClick={(e) => {
+              e.preventDefault();
+              console.log(bgCreator)
+              console.log(background.user)
+            }}
+          >
+            Test bg creator
+          </button>
+          <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
+            onClick={(e) => {
+              e.preventDefault();
+              console.log(bgUrls)
+              console.log(bgUrls.full)
+
+            }}
+          >
+            Test bg Urls
+          </button>
+        </div>
+        <div className="absolute h-1/2 right-0 bottom-0 flex flex-col text-sm font-extralight px-8">
+          <div>
+            <h4>Credits</h4>
+            <p>{bgCreator.id}</p>
+            <p>{bgCreator.name}</p>
+            <p>{bgCreator.username}</p>
+            {bgCreatorSocial ? (
+              <p>Instagram : {bgCreatorSocial.instagram_username}</p>
+            ) : (
+              <div>
+              </div>
+            )}
+          </div>
+          <div>
+            <button className="mt-8" onClick={() => {
+              setCreativeMode(creativeMode => !creativeMode)
+            }}> Creative mode { creativeMode ? <span>ON</span> : <span>OFF</span>}</button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
+
   )
 }
 

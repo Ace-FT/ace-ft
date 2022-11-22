@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { AceContext } from "../context/context";
 import { IExec } from "iexec";
 import useRequest from "../hooks/useRequest";
@@ -140,93 +141,98 @@ const SentItems = () => {
 
 
   return (
-    <div className="mt-16 mx-8">
-      <h1>This is the Inbox page</h1>
-      <button
-        className="rounded-md bg-white text-black px-6 py-2"
-        onClick={async () => {
-          getDatasetOrder();
-        }}
-      >
-        Data set orders
-      </button>
+    <>
+      <Helmet>
+        <title>ACE-ft | Sent items</title>
+      </Helmet>
+      <div className="mt-16 mx-8">
+        <button
+          className="rounded-md bg-white text-black px-6 py-2"
+          onClick={async () => {
+            getDatasetOrder();
+          }}
+        >
+          Data set orders
+        </button>
 
-      <button
-        className="rounded-md bg-white text-black px-6 py-2"
-        onClick={async () => {
-          getAppOrder(ace.APP_ADDRESS);
-          fetchMyRequestOrders();
-        }}
-      >
-        Get my orders
-      </button>
-      <button
-        className="rounded-r-md bg-white text-black px-6 py-2"
-        onClick={async () => requestDataset("0xC6D219D62A667264946Fe6133B31495AE3ccE2ea", connectedAccount)}
-      >
-        Run task
-      </button>
+        <button
+          className="rounded-md bg-white text-black px-6 py-2"
+          onClick={async () => {
+            getAppOrder(ace.APP_ADDRESS);
+            fetchMyRequestOrders();
+          }}
+        >
+          Get my orders
+        </button>
+        <button
+          className="rounded-r-md bg-white text-black px-6 py-2"
+          onClick={async () => requestDataset("0xC6D219D62A667264946Fe6133B31495AE3ccE2ea", connectedAccount)}
+        >
+          Run task
+        </button>
 
-      {inboxItems ? (
-        <table className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black table-auto">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="border-r border-gray-200 py-3">Send date</th>
-              <th className="border-r border-gray-200 py-3">To</th>
-              <th className="border-r border-gray-200 py-3">Price (in RLC)</th>
-              <th className="px-3">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {inboxItems.map((inboxItem, i) => {
-              console.log("INBOX ITEM", inboxItem)  ;   
-              return (
-                <tr className="text-center border-b border-gray-200" key={i}>
-                  <td className="border-r border-gray-200 p-3">
-                    {inboxItem.sendDate.toString()}
-                  </td>
-                  <td className="border-r border-gray-200 p-3">
-                    {inboxItem.to}
-                  </td>
-                  <td className="border-r border-gray-200 p-3">
-                    {inboxItem.price}
-                  </td>
-                  <td className="border-r border-gray-200 p-3">
-                  {
-                    inboxItem.status === STATUS_OPEN_ORDER  ?  
-                        <p>
-                          En attente
-                        </p> 
-                    : ""
-                  }
-                   {
-                    inboxItem.status === STATUS_COMPLETED_ORDER  ?  
-                        <p>
-                          Downloaded on {inboxItem.downloadDate.toString()}
-                        </p> 
-                    : ""
-                  }     
-                  {
-                    inboxItem.status === STATUS_ACTIVE_ORDER  ?  
-                        <p>
-                          Download started at {inboxItem.downloadDate.toString()}
-                        </p> 
-                    : ""
-                  }     
+        {inboxItems ? (
+          <table className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black table-auto">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="border-r border-gray-200 py-3">Send date</th>
+                <th className="border-r border-gray-200 py-3">To</th>
+                <th className="border-r border-gray-200 py-3">Price (in RLC)</th>
+                <th className="px-3">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {inboxItems.map((inboxItem, i) => {
+                console.log("INBOX ITEM", inboxItem)  ;   
+                return (
+                  <tr className="text-center border-b border-gray-200" key={i}>
+                    <td className="border-r border-gray-200 p-3">
+                      {inboxItem.sendDate.toString()}
+                    </td>
+                    <td className="border-r border-gray-200 p-3">
+                      {inboxItem.to}
+                    </td>
+                    <td className="border-r border-gray-200 p-3">
+                      {inboxItem.price}
+                    </td>
+                    <td className="border-r border-gray-200 p-3">
+                    {
+                      inboxItem.status === STATUS_OPEN_ORDER  ?  
+                          <p>
+                            En attente
+                          </p> 
+                      : ""
+                    }
+                    {
+                      inboxItem.status === STATUS_COMPLETED_ORDER  ?  
+                          <p>
+                            Downloaded on {inboxItem.downloadDate.toString()}
+                          </p> 
+                      : ""
+                    }     
+                    {
+                      inboxItem.status === STATUS_ACTIVE_ORDER  ?  
+                          <p>
+                            Download started at {inboxItem.downloadDate.toString()}
+                          </p> 
+                      : ""
+                    }     
 
 
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      ) : (
-        <div className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black">
-          You have no pending files in your inbox.
-        </div>
-      )}
-    </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <div className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black">
+            You have no pending files in your inbox.
+          </div>
+        )}
+      </div>
+    </>
+
   );
 };
 
