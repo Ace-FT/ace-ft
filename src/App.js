@@ -44,14 +44,14 @@ function App() {
       id="app"
       style={{
         backgroundImage: creativeMode ? `url(${bgUrls.full})` : "",
-        backgroundColor: creativeMode ? '' : "black",
+        backgroundColor: creativeMode ? '' : "#0d0d12",
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
       }}
     >
       <div className="mx-auto">
-        <main className="max-w-7xl mx-auto">
+        <main className="max-w-7xl mx-auto text-iexwhite">
           <Router>
             <NavBar />
             <Routes>

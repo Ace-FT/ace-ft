@@ -4,6 +4,7 @@ import SendForm from "../components/SendForm/SendForm";
 import { AceContext } from '../context/context';
 import * as ace from "../shared/constants";
 import crypto from 'crypto-browserify';
+import OnOffToggleButton from '../components/OnOffToggleButton';
 
 function Home() {
   const { isLoading, setIsLoading, state, background, bgCreator, bgUrls, bgCreatorSocial, creativeMode, setCreativeMode, imgUrl, checkFileAvailability, selectedFiles } = useContext(AceContext);
@@ -182,7 +183,7 @@ function Home() {
           <SendForm />
           {isLoading ? (
             <div className="flex">
-              { state === ace.STEP_COMPLETED && <div className="w-8 h-8 border-4 border-gray-400 rounded-full border-t-blue-700 animate-spin pr-4"></div> }
+              { state !== ace.STEP_COMPLETED && <div className="w-8 h-8 border-4 border-gray-400 rounded-full border-t-blue-700 animate-spin pr-4"></div> }
               {writeStatus(state)}
             </div>
           ) : (
@@ -190,8 +191,8 @@ function Home() {
           )}
         </div>
 
-        <div className="text-white">
-          <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
+        <div className="text-iexwhite">
+          <button className="rounded-l-full rounded-r-full border border-iexwhite ml-8 px-4 py-2"
             onClick={(e) => {
               e.preventDefault();
               console.log(bgCreator)
@@ -200,20 +201,19 @@ function Home() {
           >
             Test bg creator
           </button>
-          <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
+          {/* <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
             onClick={(e) => {
               e.preventDefault();
               console.log(bgUrls)
               console.log(bgUrls.full)
-
             }}
           >
             Test bg Urls
-          </button>
+          </button> */}
         </div>
         <div className="h-1/2 absolute right-0 bottom-0 flex flex-col text-sm font-extralight px-8">
           <div className="w-full relative flex-col justify-end">
-            <div className="top-0">
+            <div className="h-1/2 top-0">
               { creativeMode && (
                 <>
                   <h4>Credits</h4>
@@ -229,16 +229,16 @@ function Home() {
                 </>
               )}
             </div>
-            <div className="top-0">
-              <button className="mt-8" onClick={() => {
+            <div className="h-1/3 top-0">
+              <OnOffToggleButton />
+              {/* <button className="mt-8" onClick={() => {
                 setCreativeMode(creativeMode => !creativeMode)
-              }}> Creative mode { creativeMode ? <span>ON</span> : <span>OFF</span>}</button>
+              }}> Creative mode { creativeMode ? <span>ON</span> : <span>OFF</span>}</button> */}
             </div>
           </div>
         </div>
       </div>
     </>
-
   )
 }
 
