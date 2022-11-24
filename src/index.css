@@ -1451,3 +1451,19 @@ table {
     color: #f3f4f2 !important;
     font-family: Mulish,sans-serif!important;;
 }
+
+
+.creative-container
+{
+    line-height: 0.5rem !important;
+    height: 10px;
+    border:1px solid red;
+}
+
+
+.tg-logo
+{
+    width: 1.5rem !important;
+    display: inline !important;
+    vertical-align: top !important;
+}

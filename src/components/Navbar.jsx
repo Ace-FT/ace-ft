@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { AceContext } from "../context/context";
 import { shortenAddress } from "../utils/shortenAddress";
+import OnOffToggleButton from '../components/OnOffToggleButton';
 
 const NavBar = () => {
   const { connectWallet, connectedAccount } = useContext(AceContext);
@@ -29,10 +30,19 @@ const NavBar = () => {
                   <NavLink to="/sent" relative="path">Sent</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/settings" relative="path">Account</NavLink>
+                
                 </li>
+                <li>&nbsp;
+                </li>
+
               </ul>
             </nav>
+            <div>
+            <OnOffToggleButton />
+          </div>
+          </div>
+          <div >
+              <NavLink to="/settings" relative="path"><img src="/tg.png" class="tg-logo"/>&nbsp;Notification bot</NavLink>
           </div>
           <div class="basis-1/5 max-w-2/10 justify-end">
             {connectedAccount ? (
