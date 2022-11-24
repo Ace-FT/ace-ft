@@ -10,29 +10,42 @@ const NavBar = () => {
 
   return (
     <>
+
+<div class="top"><div class="top-container">
+        <div class="top-left">
+          <div class="logo-container">
+            Ace File Transfer
+          </div>
+            <nav class="top-navigation">
+              <ul>
+                <li>
+                <NavLink to="/#" relative="path">Home</NavLink>
+                </li>
+                <li>
+                <NavLink to="/inbox" relative="path">Inbox</NavLink>
+                </li>
+                <li>
+                <NavLink to="/sent" relative="path">Sent</NavLink>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <div class="top-right">
+            <a href="/signup">
+              <button class="btn" to="/signup">Connect Wallet</button>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
       <div>
         <nav className="flex text-white justify-between p-8">
-          <div>
-            <h1 className="text-4xl font-bold">
-              <NavLink to="/">ACE</NavLink>
-            </h1>
-          </div>
+         
           {connectedAccount ? (
             <div className="flex items-center">
-              <NavLink
-                className="rounded-l-md border-r border-gray-200 bg-white text-black px-6 py-2"
-                activeclassname="is-active"
-                to="/inbox"
-              >
-                My inbox
-              </NavLink>
-              <NavLink
-                className="border-r border-gray-200 bg-white text-black px-6 py-2"
-                activeclassname="is-active"
-                to="/sent"
-              >
-                Sent items
-              </NavLink>
+             
+              
               <NavLink
                 className="rounded-r-md bg-white text-black px-6 py-2"
                 activeclassname="is-active"
