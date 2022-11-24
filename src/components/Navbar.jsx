@@ -11,9 +11,10 @@ const NavBar = () => {
   return (
     <>
 
-<div class="top"><div class="top-container">
-        <div class="top-left">
-          <div class="logo-container">
+<div class="flex items-center justify-center mt-2 mb-s">
+  <div class="top-container">
+        <div class="items-center flex">
+          <div class="logo-container font-logo text-xl h-6 flex-none not-italic text-left">
             Ace File Transfer
           </div>
             <nav class="top-navigation">
@@ -27,45 +28,24 @@ const NavBar = () => {
                 <li>
                 <NavLink to="/sent" relative="path">Sent</NavLink>
                 </li>
+                <li>
+                <NavLink to="/settings" relative="path">Account</NavLink>
+                </li>
               </ul>
             </nav>
           </div>
-          <div class="top-right">
-            <a href="/signup">
-              <button class="btn" to="/signup">Connect Wallet</button>
-            </a>
+          <div class="top-right justify-center">
+            {connectedAccount ? (
+              <div className="items-center">
+                <p className="mx-8 text-iexwhite">
+                  Hello! {shortenAddress(connectedAccount)} 👋{" "}
+                </p>
+              </div>
+            ) : 
+              <button class="btn" onClick={connectWallet}>Connect Wallet</button>
+            }  
           </div>
         </div>
-      </div>
-
-
-      <div>
-        <nav className="flex text-white justify-between p-8">
-         
-          {connectedAccount ? (
-            <div className="flex items-center">
-             
-              
-              <NavLink
-                className="rounded-r-md bg-white text-black px-6 py-2"
-                activeclassname="is-active"
-                to="/settings"
-              >
-                My account
-              </NavLink>
-              <p className="mx-8 text-iexwhite">
-                Hello! {shortenAddress(connectedAccount)} 👋{" "}
-              </p>
-            </div>
-          ) : (
-            <button
-              className="rounded-md bg-secondary px-6 py-2 text-iexblk bg-iexyellow"
-              onClick={connectWallet}
-            >
-              Connect Wallet
-            </button>
-          )}
-        </nav>
       </div>
     </>
   );
