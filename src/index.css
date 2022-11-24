@@ -610,13 +610,6 @@ a {
     width:12em
 }
 
-.top-navigation ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding:0
-}
-
 .top-navigation ul li {
     margin-left: 30px;
     position: relative;
@@ -628,12 +621,7 @@ a {
 }
 
 .top-navigation a.active {
-    color:#fff
-}
-
-.top-right {
-    flex-basis: 10%;
-    max-width:40%
+    color:#f3f4f2
 }
 
 .pulse-icon {
