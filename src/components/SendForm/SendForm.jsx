@@ -3,7 +3,12 @@ import { AceContext } from "../../context/context";
 import { IExec } from "iexec";
 import * as ace from "../../shared/constants";
 import { delay } from "../../utils/delay";
-import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from "./encryption.js";
+import {
+  encryptFile,
+  encryptDataset,
+  generateEncryptedFileChecksum,
+  datasetEncryptionKey,
+} from "./encryption.js";
 import uploadData from "./upload";
 import { deployDataset, pushSecret, pushOrder } from "./deploy.js";
 import { generateDatasetName } from "../../utils/datasetNameGenerator.ts";
@@ -16,22 +21,7 @@ const iexec = new IExec(configArgs, configOptions);
 const SendForm = () => {
   const { connectedAccount, connectWallet, bgUrls } = useContext(AceContext);
 
-  const {
-    isLoading,
-    setIsLoading,
-    addressTo,
-    setAddressTo,
-    state,
-    setState,
-    price,
-    setPrice,
-    message,
-    setMessage,
-    selectedFiles,
-    setSelectedFiles,
-    checkFileAvailability,
-    setIsAvailable,
-  } = useContext(AceContext);
+  const { isLoading, setIsLoading, addressTo, setAddressTo, state, setState, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
   const IS_TEE = true;
@@ -87,10 +77,10 @@ const SendForm = () => {
                     inputFile.current.click();
                   }}
                 >
-                  <svg viewBox="0 0 72 72" className="w-9 bg-iexblk">
+                  <svg viewBox="0 0 72 72" className="w-9">
                     <path
                       d="M36.493 72C16.118 72 0 55.883 0 36.493 0 16.118 16.118 0 36.493 0 55.882 0 72 16.118 72 36.493 72 55.882 55.883 72 36.493 72zM34 34h-9c-.553 0-1 .452-1 1.01v1.98A1 1 0 0 0 25 38h9v9c0 .553.452 1 1.01 1h1.98A1 1 0 0 0 38 47v-9h9c.553 0 1-.452 1-1.01v-1.98A1 1 0 0 0 47 34h-9v-9c0-.553-.452-1-1.01-1h-1.98A1 1 0 0 0 34 25v9z"
-                      fill="#5268ff"
+                      fill="rgb(252 209 90)"
                       fillRule="nonzero"
                     ></path>
                   </svg>
@@ -211,7 +201,11 @@ const SendForm = () => {
                 nextStep(status);
                 setState("... encrypting the dataset containing your file");
                 console.log(`Step ${status}: ${steps[status]}`);
-                const encryptedDataset = await encryptDataset(fileUrl, message, fileSize);
+                const encryptedDataset = await encryptDataset(
+                  fileUrl,
+                  message,
+                  fileSize
+                );
 
                 nextStep(status);
                 setState("... uploading dataset");
@@ -235,23 +229,34 @@ const SendForm = () => {
                 nextStep(status);
                 setState("... deploying dataset");
                 console.log(`Step ${status}: ${steps[status]}`); // 7
-                const datasetName = generateDatasetName(connectedAccount, addressTo);
+                const datasetName = generateDatasetName(
+                  connectedAccount,
+                  addressTo
+                );
                 console.log("Dataset Url : ", datasetUrl);
                 const checksum = await generateEncryptedFileChecksum(
                   encryptedDataset
                 );
-                const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
+                const datasetAddress = await deployDataset(
+                  datasetName,
+                  datasetUrl,
+                  checksum
+                );
 
                 if (IS_TEE) {
                   nextStep(status);
                   setState("... pushing secret (encryption key)");
                   console.log(`Step ${status}: ${steps[status]}`); //8
-                  console.log("Before secret : dataset encryption key",datasetEncryptionKey);
+                  console.log(
+                    "Before secret : dataset encryption key",
+                    datasetEncryptionKey
+                  );
                   await pushSecret(datasetAddress, datasetEncryptionKey);
                 } else {
                   nextStep(status);
                 }
-                const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
+                const isSecretPushed =
+                  await iexec.dataset.checkDatasetSecretExists(datasetAddress);
                 console.log("secret is pushed?", isSecretPushed);
 
                 nextStep(status);

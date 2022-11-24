@@ -11,39 +11,39 @@ const NavBar = () => {
   return (
     <>
 
-<div class="flex items-center justify-center mt-2 mb-s">
+<div class="flex items-center justify-center mb-s">
   <div class="top-container">
-        <div class="items-center flex">
-          <div class="logo-container font-logo text-xl h-6 flex-none not-italic text-left">
+        <div className="items-center flex">
+          <div className="logo-container font-logo text-xl h-6 flex-none not-italic text-left">
             Ace File Transfer
           </div>
-            <nav class="top-navigation">
-              <ul>
+            <nav className="top-navigation">
+              <ul className="flex list-none">
                 <li>
-                <NavLink to="/#" relative="path">Home</NavLink>
+                  <NavLink to="/" relative="path">Home</NavLink>
                 </li>
                 <li>
-                <NavLink to="/inbox" relative="path">Inbox</NavLink>
+                  <NavLink to="/inbox" relative="path">Inbox</NavLink>
                 </li>
                 <li>
-                <NavLink to="/sent" relative="path">Sent</NavLink>
+                  <NavLink to="/sent" relative="path">Sent</NavLink>
                 </li>
                 <li>
-                <NavLink to="/settings" relative="path">Account</NavLink>
+                  <NavLink to="/settings" relative="path">Account</NavLink>
                 </li>
               </ul>
             </nav>
           </div>
-          <div class="top-right justify-center">
+          <div class="basis-1/5 max-w-2/10 justify-end">
             {connectedAccount ? (
               <div className="items-center">
-                <p className="mx-8 text-iexwhite">
-                  Hello! {shortenAddress(connectedAccount)} 👋{" "}
+                <p className="ml-8 text-iexwhite text-left">
+                  Hello! {shortenAddress(connectedAccount)} 👋
                 </p>
               </div>
             ) : 
               <button class="btn" onClick={connectWallet}>Connect Wallet</button>
-            }  
+            }
           </div>
         </div>
       </div>
