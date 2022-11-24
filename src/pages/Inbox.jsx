@@ -231,7 +231,7 @@ function Inbox() {
                     {
                       inboxItem.status === STATUS_OPEN_ORDER 
                       ? <p>
-                          <button onClick={async () => { await requestDataset(inboxItem.id, connectedAccount) }}>
+                          <button className="btn" onClick={async () => { await requestDataset(inboxItem.id, connectedAccount) }}>
                             Request
                           </button>
                         </p> 
@@ -247,7 +247,7 @@ function Inbox() {
                     {
                       inboxItem.status === STATUS_COMPLETED_ORDER 
                       ? <p>
-                          <button onClick={async () => {
+                          <button className="bg-iexyellow btn" onClick={async () => {
                             const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
                             const resultFileUrl = resultFile.url;
                             const resultFileKey = resultFile.key;

@@ -59,7 +59,7 @@ input:checked ~ .toggleEl {
 
 [class * =hint--]:after {
     background: #383838;
-    color: #fff;
+    color: #f3f4f2;
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 12px;
     line-height: 12px;
@@ -493,11 +493,11 @@ input:checked ~ .toggleEl {
 :root {
     --background-color: #0d0d12;
     --iexec-yellow: #fcd15a;
-    --text-color:#fff
+    --text-color:#f3f4f2
 }
 
 html {
-    color: #fff;
+    color: #f3f4f2;
     font-family: Mulish, sans-serif;
     font-size: .8rem;
     height:100%
@@ -516,7 +516,7 @@ html {
 }
 
 a {
-    color: #fff;
+    color: #f3f4f2;
     cursor: pointer;
     text-decoration:none
 }
@@ -605,7 +605,7 @@ a {
 }
 
 .logo {
-    fill: #fff;
+    fill: #f3f4f2;
     margin: 0 20px 0 0;
     width:12em
 }
@@ -704,7 +704,7 @@ a {
     background: rgba(29, 29, 36, .5);
     border: 1px solid #5d5d69;
     border-radius: 8px;
-    color: #fff;
+    color: #f3f4f2;
     color: var(--text-color);
     display: flex;
     flex-direction: column;
@@ -1031,7 +1031,6 @@ a {
 .btn {
     background-color: #fcd15a;
     background-color: var(--iexec-yellow);
-    border: 0;
     border-radius: 8px;
     clear: both;
     color: #000;
@@ -1043,7 +1042,6 @@ a {
     line-height: 32px;
     padding: 0 16px;
     text-align: center;
-    text-decoration: none;
     transition: all .23s ease-in-out 0s;
     vertical-align: top;
     white-space: nowrap;
@@ -1112,7 +1110,7 @@ a {
     }
 
     .logo {
-        fill: #fff;
+        fill: #f3f4f2;
         margin: 0 0 5px;
         width:10em
     }
@@ -1263,9 +1261,9 @@ a {
     --fcc-digit-block-height: 80px;
     --fcc-digit-font-size: 50px;
     --fcc-label-font-size: 16px;
-    --fcc-label-color: #fff;
+    --fcc-label-color: #f3f4f2;
     --fcc-background: #0f181a;
-    --fcc-digit-color: #fff;
+    --fcc-digit-color: #f3f4f2;
     --fcc-divider-color: #ffffff66;
     --fcc-divider-height: 1px;
     --fcc-shadow: 0 0 2px 1px rgba(0, 0, 0, .1);
@@ -1450,6 +1448,6 @@ a {
 
 table {
     background-color: #1e1e22!important;;
-    color: #fff !important;
+    color: #f3f4f2 !important;
     font-family: Mulish,sans-serif!important;;
 }
