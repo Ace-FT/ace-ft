@@ -4,7 +4,7 @@ import SendForm from "../components/SendForm/SendForm";
 import { AceContext } from '../context/context';
 import * as ace from "../shared/constants";
 import crypto from 'crypto-browserify';
-import OnOffToggleButton from '../components/OnOffToggleButton';
+
 
 function Home() {
   const { isLoading, setIsLoading, state, background, bgCreator, bgUrls, bgCreatorSocial, creativeMode, setCreativeMode, imgUrl, checkFileAvailability, selectedFiles } = useContext(AceContext);
@@ -229,12 +229,7 @@ function Home() {
                 </>
               )}
             </div>
-            <div className="h-1/3 top-0">
-              <OnOffToggleButton />
-              {/* <button className="mt-8" onClick={() => {
-                setCreativeMode(creativeMode => !creativeMode)
-              }}> Creative mode { creativeMode ? <span>ON</span> : <span>OFF</span>}</button> */}
-            </div>
+            
           </div>
         </div>
       </div>
