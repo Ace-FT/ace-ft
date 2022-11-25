@@ -12,7 +12,7 @@ const NavBar = () => {
   return (
     <>
 
-<div class="flex items-center justify-center mb-s">
+<div class="flex items-center justify-center mb-s w-full bg-iexblk">
   <div class="top-container">
         <div className="items-center flex">
           <div className="logo-container font-logo text-xl h-6 flex-none not-italic text-left">
@@ -47,7 +47,7 @@ const NavBar = () => {
           <div class="basis-1/5 max-w-2/10 justify-end">
             {connectedAccount ? (
               <div className="items-center">
-                <p className="ml-8 text-iexwhite text-left">
+                <p className="ml-8 text-iexwhite text-right">
                   Hello! {shortenAddress(connectedAccount)} 👋
                 </p>
               </div>

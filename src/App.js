@@ -12,63 +12,76 @@ import Protected from "./pages/Protected";
 //import {queryForMyInbox} from './shared/queries';
 
 function App() {
-  const { connectedAccount, connectWallet, bgUrls, background, creativeMode, setCreativeMode } = useContext(AceContext);
+  const {
+    connectedAccount,
+    connectWallet,
+    bgUrls,
+    background,
+    creativeMode,
+    setCreativeMode,
+  } = useContext(AceContext);
 
-    useEffect(() => {
-      const connectWalletOnPageLoad = async () => {
-        if (localStorage?.getItem('isWalletConnected') === 'true') {
-          try {
-            await connectWallet()
-          } catch (ex) {
-            console.log(ex)
-          }
+  useEffect(() => {
+    const connectWalletOnPageLoad = async () => {
+      if (localStorage?.getItem("isWalletConnected") === "true") {
+        try {
+          await connectWallet();
+        } catch (ex) {
+          console.log(ex);
         }
       }
-      connectWalletOnPageLoad()
-    }, [])
+    };
+    connectWalletOnPageLoad();
+  }, []);
 
-    useEffect(() => {
-      // const app = document.getElementById("app").style;
-      // const backgroundImage = app.backgroundImage;
-      // app.backgroundImage = "";
-      // app.backgroundColor = "#ffffff";
-      // console.log(backgroundImage)
-      console.log(creativeMode)
-    }, [creativeMode])
+  useEffect(() => {
+    // const app = document.getElementById("app").style;
+    // const backgroundImage = app.backgroundImage;
+    // app.backgroundImage = "";
+    // app.backgroundColor = "#ffffff";
+    // console.log(backgroundImage)
+    console.log(creativeMode);
+  }, [creativeMode]);
 
   const isConnected = connectedAccount !== "";
 
   return (
     <div
-      className="min-h-screen bg-center bg-contain text-white"
+      className="min-h-screen bg-contain bg-center text-white"
       id="app"
       style={{
         backgroundImage: creativeMode ? `url(${bgUrls.full})` : "",
-        backgroundColor: creativeMode ? '' : "#0d0d12",
+        backgroundColor: creativeMode ? "" : "#0d0d12",
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="mx-auto">
-        <main className="max-w-7xl mx-auto text-iexwhite">
-          <Router>
-            <NavBar />
+      <Router>
+        <NavBar />
+        <div className="mx-auto">
+          <main className="mx-auto max-w-7xl text-iexwhite">  
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/inbox" element={
+              <Route
+                path="/inbox"
+                element={
                   <Protected isLoggedIn={isConnected}>
                     <Inbox />
                   </Protected>
                 }
               />
-              <Route path="/sent" element={
+              <Route
+                path="/sent"
+                element={
                   <Protected isLoggedIn={isConnected}>
                     <SentItems />
                   </Protected>
                 }
               />
-              <Route path="/settings" element={
+              <Route
+                path="/settings"
+                element={
                   <Protected isLoggedIn={isConnected}>
                     <Settings />
                   </Protected>
@@ -79,9 +92,9 @@ function App() {
                 <Route path="params" element={<Params />} />
               </Route>
             </Routes>
-          </Router>
-        </main>
-      </div>
+          </main>
+        </div>
+      </Router>
     </div>
   );
 }

@@ -178,7 +178,7 @@ function Home() {
       <Helmet>
         <title>ACE-ft | Home</title>
       </Helmet>
-      <div className="relative flex mx-8 py-16">
+      <div className="relative flex mx-m py-16">
         <div className="flex">
           <SendForm />
           {isLoading ? (

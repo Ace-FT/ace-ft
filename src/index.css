@@ -574,9 +574,17 @@ a {
 
 .top-container {
     align-items: center;
-    justify-content:space-between;
-    margin: 20px 0;
+    justify-content: space-between;
+    height: 50px;
+    margin: 10px 0;
+    padding: 0 120px;
     vertical-align:middle
+}
+
+@media only screen and (max-width: 1120px) {
+    .top-container {
+        padding: 0 1.5rem;
+    }
 }
 
 .page-container, .top-container {
