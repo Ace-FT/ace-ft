@@ -7,24 +7,35 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        iexblk: "#0d0d12",
+        iexblk: "rgb(13 13 18)",
         iexyellow: "#fcd15a",
-        iexwhite: "#f3f4f2",
-        'nav': '#8c8c90'
+        iexwhite: "#f1f2f0",
+        nav: "#8c8c90",
       },
       margin: {
+        xs: "15px",
         s: "30px",
+        m: "60px",
       },
       fontFamily: {
         logo: ["Space Mono"],
       },
       maxWidth: {
-        '2/10': "20%"
+        "2/10": "20%",
+      },
+      borderRadius: {
+        "lg": "9px",
+      },
+      height: {
+        "6": "24px",
+        "8": "32px",
+      },
+      minHeight: {
+        "8": "32px",
       },
       fontSize: {
-        xl: [ "1.3rem", {
-            lineHeight: "0.2rem",
-        }],
+        "l": "15px",
+        xl: ["1.3rem", "0.2rem"],
       },
     },
   },

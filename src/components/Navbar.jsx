@@ -12,7 +12,7 @@ const NavBar = () => {
   return (
     <>
 
-<div class="flex items-center justify-center mb-s">
+<div class="flex items-center justify-center mb-s w-full bg-iexblk">
   <div class="top-container">
         <div className="items-center flex">
           <div className="logo-container font-logo text-xl h-6 flex-none not-italic text-left">
@@ -32,9 +32,6 @@ const NavBar = () => {
                 <li>
                 
                 </li>
-                <li>&nbsp;
-                </li>
-
               </ul>
             </nav>
           </div>
@@ -44,15 +41,15 @@ const NavBar = () => {
           <div >
               <NavLink to="/settings" relative="path"><img src="/tg.png" class="tg-logo"/>&nbsp;Notification bot</NavLink>
           </div>
-          <div class="basis-1/5 max-w-2/10 justify-end">
+          <div class="basis-1/5 max-w-2/10 flex flex-end">
             {connectedAccount ? (
-              <div className="items-center">
-                <p className="ml-8 text-iexwhite text-left">
+              <div className="ml-auto items-center">
+                <p className="ml-8 text-right">
                   Hello! {shortenAddress(connectedAccount)} 👋
                 </p>
               </div>
             ) : 
-              <button class="btn" onClick={connectWallet}>Connect Wallet</button>
+              <button class="btn font-bold h-8 ml-auto text-l" onClick={connectWallet}>Connect Wallet</button>
             }
           </div>
         </div>

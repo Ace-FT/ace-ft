@@ -574,9 +574,17 @@ a {
 
 .top-container {
     align-items: center;
-    justify-content:space-between;
-    margin: 20px 0;
+    justify-content: space-between;
+    height: 50px;
+    margin: 10px 0;
+    padding: 0 120px;
     vertical-align:middle
+}
+
+@media only screen and (max-width: 1120px) {
+    .top-container {
+        padding: 0 1.5rem;
+    }
 }
 
 .page-container, .top-container {
@@ -611,7 +619,8 @@ a {
 }
 
 .top-navigation ul li {
-    margin-left: 30px;
+    margin-left: 15px;
+    margin-right: 15px;
     position: relative;
     top:-1px
 }
@@ -1029,20 +1038,14 @@ a {
 }
 
 .btn {
-    background-color: #fcd15a;
     background-color: var(--iexec-yellow);
     border-radius: 8px;
     clear: both;
-    color: #000;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 15px;
-    font-weight: 700;
-    height: 33px;
-    line-height: 32px;
+    color: rgb(13 13 18);
+    cursor: pointer;    
     padding: 0 16px;
     text-align: center;
-    transition: all .23s ease-in-out 0s;
+    transition: all .25s ease-in-out 0s;
     vertical-align: top;
     white-space: nowrap;
     width: -webkit-fit-content;
@@ -1051,7 +1054,8 @@ a {
 }
 
 .btn:hover {
-    opacity:.8
+    opacity:.8;
+    /* background-color: #e9cd67;  */
 }
 
 .page-landing {
@@ -1441,7 +1445,7 @@ a {
 
 .logo-container {
     height: 1.5rem;
-    margin: 0.9375rem 0.9375rem 0px 0px;
+    margin: 0.9375rem 30px 0px 0px;
     font-stretch: normal;
 }
 

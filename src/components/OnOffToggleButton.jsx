@@ -31,8 +31,8 @@ const OnOffToggleButton = () => {
                 onClick={() => handleOnClick()}
               />
             )}
-            <div className="toggleEl block h-8 w-14 rounded-full bg-gray-600"></div>
-            <div className="dot absolute left-1 top-1 h-6 w-6 rounded-full bg-iexwhite transition"></div>
+            <div className="toggleEl block h-7 w-12 rounded-full bg-gray-600"></div>
+            <div className="dot absolute left-1 top-1 h-5 w-5 rounded-full bg-iexwhite transition"></div>
           </div>
           Creative mode
         </label>

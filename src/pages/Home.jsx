@@ -178,7 +178,7 @@ function Home() {
       <Helmet>
         <title>ACE-ft | Home</title>
       </Helmet>
-      <div className="relative flex mx-8 py-16">
+      <div className="relative flex mx-m py-16">
         <div className="flex">
           <SendForm />
           {isLoading ? (
@@ -211,9 +211,9 @@ function Home() {
             Test bg Urls
           </button> */}
         </div>
-        <div className="h-1/2 absolute right-0 bottom-0 flex flex-col text-sm font-extralight px-8">
+        <div className="h-1/3 absolute right-0 bottom-0 flex flex-col text-sm font-extralight px-8">
           <div className="w-full relative flex-col justify-end">
-            <div className="h-1/2 top-0">
+            <div className="top-0">
               { creativeMode && (
                 <>
                   <h4>Credits</h4>
