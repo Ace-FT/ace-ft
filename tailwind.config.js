@@ -9,10 +9,11 @@ module.exports = {
       colors: {
         iexblk: "rgb(13 13 18)",
         iexyellow: "#fcd15a",
-        iexwhite: "#f2f3f1",
+        iexwhite: "#f1f2f0",
         nav: "#8c8c90",
       },
       margin: {
+        xs: "15px",
         s: "30px",
         m: "60px",
       },

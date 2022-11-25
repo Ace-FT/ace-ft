@@ -47,7 +47,7 @@ function App() {
 
   return (
     <div
-      className="min-h-screen bg-contain bg-center text-white"
+      className="min-h-screen bg-contain bg-center text-iexwhite"
       id="app"
       style={{
         backgroundImage: creativeMode ? `url(${bgUrls.full})` : "",

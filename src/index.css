@@ -619,7 +619,8 @@ a {
 }
 
 .top-navigation ul li {
-    margin-left: 30px;
+    margin-left: 15px;
+    margin-right: 15px;
     position: relative;
     top:-1px
 }
@@ -1449,7 +1450,7 @@ a {
 
 .logo-container {
     height: 1.5rem;
-    margin: 0.9375rem 0.9375rem 0px 0px;
+    margin: 0.9375rem 30px 0px 0px;
     font-stretch: normal;
 }
 

@@ -32,9 +32,6 @@ const NavBar = () => {
                 <li>
                 
                 </li>
-                <li>&nbsp;
-                </li>
-
               </ul>
             </nav>
             <div>
@@ -44,10 +41,10 @@ const NavBar = () => {
           <div >
               <NavLink to="/settings" relative="path"><img src="/tg.png" class="tg-logo"/>&nbsp;Notification bot</NavLink>
           </div>
-          <div class="basis-1/5 max-w-2/10 justify-end">
+          <div class="basis-1/5 max-w-2/10">
             {connectedAccount ? (
               <div className="items-center">
-                <p className="ml-8 text-iexwhite text-right">
+                <p className="ml-8 text-right">
                   Hello! {shortenAddress(connectedAccount)} 👋
                 </p>
               </div>
