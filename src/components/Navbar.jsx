@@ -41,15 +41,15 @@ const NavBar = () => {
           <div >
               <NavLink to="/settings" relative="path"><img src="/tg.png" class="tg-logo"/>&nbsp;Notification bot</NavLink>
           </div>
-          <div class="basis-1/5 max-w-2/10">
+          <div class="basis-1/5 max-w-2/10 flex flex-end">
             {connectedAccount ? (
-              <div className="items-center">
+              <div className="ml-auto items-center">
                 <p className="ml-8 text-right">
                   Hello! {shortenAddress(connectedAccount)} 👋
                 </p>
               </div>
             ) : 
-              <button class="btn" onClick={connectWallet}>Connect Wallet</button>
+              <button class="btn font-bold h-8 ml-auto text-l" onClick={connectWallet}>Connect Wallet</button>
             }
           </div>
         </div>

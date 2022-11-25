@@ -23,7 +23,18 @@ module.exports = {
       maxWidth: {
         "2/10": "20%",
       },
+      borderRadius: {
+        "lg": "9px",
+      },
+      height: {
+        "6": "24px",
+        "8": "32px",
+      },
+      minHeight: {
+        "8": "32px",
+      },
       fontSize: {
+        "l": "15px",
         xl: ["1.3rem", "0.2rem"],
       },
     },

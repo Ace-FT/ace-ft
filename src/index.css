@@ -1038,20 +1038,14 @@ a {
 }
 
 .btn {
-    background-color: #fcd15a;
     background-color: var(--iexec-yellow);
     border-radius: 8px;
     clear: both;
-    color: #000;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 15px;
-    font-weight: 700;
-    height: 33px;
-    line-height: 32px;
+    color: rgb(13 13 18);
+    cursor: pointer;    
     padding: 0 16px;
     text-align: center;
-    transition: all .23s ease-in-out 0s;
+    transition: all .25s ease-in-out 0s;
     vertical-align: top;
     white-space: nowrap;
     width: -webkit-fit-content;
@@ -1060,7 +1054,8 @@ a {
 }
 
 .btn:hover {
-    opacity:.8
+    opacity:.8;
+    /* background-color: #e9cd67;  */
 }
 
 .page-landing {

@@ -157,8 +157,9 @@ const SendForm = () => {
             </div>
           </div>
           <div className="formFooter mx-auto items-center p-4">
+            <div className="bg-iexblk rounded-lg">
             <button
-              className="rounded-l-full rounded-r-full bg-iexyellow px-8 py-2 font-bold text-iexblk"
+              className="btn font-bold h-8"
               type="submit"
               onClick={async (e) => {
                 e.preventDefault();
@@ -271,6 +272,8 @@ const SendForm = () => {
             >
               Transfer
             </button>
+            </div>
+
           </div>
         </div>
       </form>
