@@ -37,9 +37,9 @@ const NavBar = () => {
 
               </ul>
             </nav>
-            <div>
-            <OnOffToggleButton />
           </div>
+          <div>
+            <OnOffToggleButton />
           </div>
           <div >
               <NavLink to="/settings" relative="path"><img src="/tg.png" class="tg-logo"/>&nbsp;Notification bot</NavLink>
