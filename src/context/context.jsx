@@ -24,7 +24,7 @@ export const AceProvider = ({ children }) => {
   const [bgUrls, setBgUrls] = useState({});
   const [bgCreatorSocial, setBgCreatorSocial] = useState({});
   const [imgUrl, setImgUrl] = useState("");
-  const [state, setState] = useState("");
+  const [step, setStep] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
   const [datasetUrl, setDatasetUrl] = useState("");
 
@@ -203,8 +203,8 @@ export const AceProvider = ({ children }) => {
         setCreativeMode,
         imgUrl,
         setImgUrl,
-        state,
-        setState,
+        step,
+        setStep,
         checkFileAvailability,
         isAvailable,
         setIsAvailable,

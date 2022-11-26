@@ -491,7 +491,7 @@ input:checked ~ .toggleEl {
 }
 
 :root {
-    --background-color: #0d0d12;
+    --background-color: rgb(13 13 18);
     --iexec-yellow: #fcd15a;
     --text-color:#f3f4f2
 }
@@ -631,6 +631,50 @@ a {
 
 .top-navigation a.active {
     color:#f3f4f2
+}
+
+.progress {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0 20px;
+    align-items: center;
+    justify-content: center;
+    line-height: 30px;
+    vertical-align: top;
+    text-align: center;
+    color: #a2b5d2;
+    border: 1px;
+    z-index: 10;
+    background-color: #d4dcea;
+    position: relative;
+}
+.progress::after {
+    content: "";
+    position: absolute;
+    height: 27px;
+    width: 4px;
+    top: -27px;
+    left: 43%;
+    z-index: 2;
+    background-color: #d4dcea;
+}
+.inprogr {
+    background-color: var(--iexec-yellow);
+    color: var(--background-color);
+}
+.inprogr + p {
+    color: var(--iexec-yellow);
+}
+.inprogr::after {
+    background-color: var(--iexec-yellow);
+}
+
+
+
+.one::after {
+    width: 0;
+    height: 0;
 }
 
 .pulse-icon {

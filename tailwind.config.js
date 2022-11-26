@@ -16,6 +16,7 @@ module.exports = {
         xs: "15px",
         s: "30px",
         m: "60px",
+        l: "90px",
       },
       fontFamily: {
         logo: ["Space Mono"],
@@ -29,6 +30,7 @@ module.exports = {
       height: {
         "6": "24px",
         "8": "32px",
+        "1/10": "10%"
       },
       minHeight: {
         "8": "32px",
