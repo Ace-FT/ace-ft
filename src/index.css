@@ -1048,9 +1048,6 @@ a {
     transition: all .25s ease-in-out 0s;
     vertical-align: top;
     white-space: nowrap;
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width:fit-content
 }
 
 .btn:hover {

@@ -60,7 +60,7 @@ function App() {
       <Router>
         <NavBar />
         <div className="mx-auto">
-          <main className="mx-auto max-w-7xl text-iexwhite">  
+          <main className="mx-auto max-w-7xl text-iexwhite py-s">  
             <Routes>
               <Route path="/" element={<Home />} />
               <Route

@@ -12,8 +12,8 @@ const NavBar = () => {
   return (
     <>
 
-<div class="flex items-center justify-center mb-s w-full bg-iexblk">
-  <div class="top-container">
+<div className="flex items-center justify-center w-full bg-iexblk">
+  <div className="top-container">
         <div className="items-center flex">
           <div className="logo-container font-logo text-xl h-6 flex-none not-italic text-left">
             Ace File Transfer
@@ -39,9 +39,9 @@ const NavBar = () => {
             <OnOffToggleButton />
           </div>
           <div >
-              <NavLink to="/settings" relative="path"><img src="/tg.png" class="tg-logo"/>&nbsp;Notification bot</NavLink>
+              <NavLink to="/settings" relative="path"><img src="/tg.png" className="tg-logo"/>&nbsp;Notification bot</NavLink>
           </div>
-          <div class="basis-1/5 max-w-2/10 flex flex-end">
+          <div className="basis-1/5 max-w-2/10 flex flex-end">
             {connectedAccount ? (
               <div className="ml-auto items-center">
                 <p className="ml-8 text-right">
@@ -49,7 +49,7 @@ const NavBar = () => {
                 </p>
               </div>
             ) : 
-              <button class="btn font-bold h-8 ml-auto text-l" onClick={connectWallet}>Connect Wallet</button>
+              <button className="btn font-bold h-8 ml-auto text-l" onClick={connectWallet}>Connect Wallet</button>
             }
           </div>
         </div>

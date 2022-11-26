@@ -208,7 +208,7 @@ export const AceProvider = ({ children }) => {
         checkFileAvailability,
         isAvailable,
         setIsAvailable,
-        pushOrder
+        pushOrder,
       }}
     >
       {children}

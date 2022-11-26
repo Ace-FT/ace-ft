@@ -21,7 +21,7 @@ const iexec = new IExec(configArgs, configOptions);
 
 function Inbox() {
   const { ethereum } = window;
-  const { connectedAccount } = useContext(AceContext);
+  const { connectedAccount, checkFileAvailability } = useContext(AceContext);
 
 
   const WAITING_FOR_REQUEST = 0;
@@ -155,7 +155,7 @@ function Inbox() {
       <Helmet>
         <title>ACE-ft | Inbox</title>
       </Helmet>
-      <div className="mt-16 mx-8 pb-16">      
+      <div className="py-m mx-8">      
         {/* <button
           className="rounded-md bg-white text-black px-6 py-2"
           onClick={async () => {
@@ -253,6 +253,14 @@ function Inbox() {
                             const resultFileKey = resultFile.key;
                             console.log("resultFileUrl", resultFileUrl)
                             console.log("resultFileKey", resultFileKey);
+                            var ok = false;
+                            while (!ok) {
+                              console.log("Checking file availability at", resultFileUrl);
+                              ok = await checkFileAvailability("", () =>
+                                console.log("checking ended...")
+                              ); //fileUrl
+                              console.log(ok);
+                            }
                             const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
                             console.log(fileObject)
                             let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);

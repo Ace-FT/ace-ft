@@ -1,14 +1,9 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import { AceContext } from "../../context/context";
 import { IExec } from "iexec";
 import * as ace from "../../shared/constants";
 import { delay } from "../../utils/delay";
-import {
-  encryptFile,
-  encryptDataset,
-  generateEncryptedFileChecksum,
-  datasetEncryptionKey,
-} from "./encryption.js";
+import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from "./encryption.js";
 import uploadData from "./upload";
 import { deployDataset, pushSecret, pushOrder } from "./deploy.js";
 import { generateDatasetName } from "../../utils/datasetNameGenerator.ts";
@@ -24,7 +19,7 @@ const SendForm = () => {
   const { isLoading, setIsLoading, addressTo, setAddressTo, state, setState, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
-  const IS_TEE = true;
+
 
   const BEGINNING_PROCESS = 0;
   const steps = [
@@ -46,6 +41,7 @@ const SendForm = () => {
     return (status = status + 1);
   }
 
+
   const DELAY_BEFORE_CHECKING_FILE_UPLOADED = 3;
 
   const handleChange = (event) => {
@@ -55,6 +51,14 @@ const SendForm = () => {
       console.log(selectedFiles[i]);
     }
   };
+
+
+  var optimistic = false;
+  const handleChecked = () => {
+    const checkbox = document.getElementById("optimistic")
+    console.log(checkbox.checked)
+    optimistic = !optimistic;
+  }
 
   return (
     <>
@@ -157,12 +161,20 @@ const SendForm = () => {
             </div>
           </div>
           <div className="formFooter mx-auto items-center p-4">
-            <div className="bg-iexblk rounded-lg">
+            <div className="mb-4">
+              <input type="checkbox" name="optimistic" id="optimistic" onClick={handleChecked} />
+              <label htmlFor="optimistic" className="ml-2">
+                Optimistic upload
+              </label>
+            </div>
+
+            <div className="bg-iexblk rounded-lg mx-4">
             <button
-              className="btn font-bold h-8"
+              className="btn w-full font-bold h-8"
               type="submit"
               onClick={async (e) => {
                 e.preventDefault();
+                console.log("optimistic", optimistic)
                 console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
                 status = nextStep(status);
                 setIsLoading(true);
@@ -187,14 +199,17 @@ const SendForm = () => {
                 await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
                 setState("... checking your file availability on IPFS");
 
-                var ok = false;
-                while (!ok) {
-                  console.log("Checking file availability at", fileUrl);
-                  ok = await checkFileAvailability("", () =>
-                    console.log("checking ended...")
-                  ); //fileUrl
-                  console.log(ok);
+                if(!optimistic) {
+                  var ok = false;
+                  while (!ok) {
+                    console.log("Checking file availability at", fileUrl);
+                    ok = await checkFileAvailability("", () =>
+                      console.log("checking ended...")
+                    ); //fileUrl
+                    console.log(ok);
+                  }
                 }
+                
                 nextStep(status);
                 console.log(`Step ${status}: ${steps[status]}`); // 3
                 setIsAvailable(ok);
@@ -244,20 +259,13 @@ const SendForm = () => {
                   checksum
                 );
 
-                if (IS_TEE) {
-                  nextStep(status);
-                  setState("... pushing secret (encryption key)");
-                  console.log(`Step ${status}: ${steps[status]}`); //8
-                  console.log(
-                    "Before secret : dataset encryption key",
-                    datasetEncryptionKey
-                  );
-                  await pushSecret(datasetAddress, datasetEncryptionKey);
-                } else {
-                  nextStep(status);
-                }
-                const isSecretPushed =
-                  await iexec.dataset.checkDatasetSecretExists(datasetAddress);
+                nextStep(status);
+                setState("... pushing secret (encryption key)");
+                console.log(`Step ${status}: ${steps[status]}`); //8
+                console.log("Before secret : dataset encryption key", datasetEncryptionKey);
+                await pushSecret(datasetAddress, datasetEncryptionKey);
+                nextStep(status);
+                const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
                 console.log("secret is pushed?", isSecretPushed);
 
                 nextStep(status);

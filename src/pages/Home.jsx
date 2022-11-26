@@ -178,12 +178,12 @@ function Home() {
       <Helmet>
         <title>ACE-ft | Home</title>
       </Helmet>
-      <div className="relative flex mx-m py-16">
+      <div className="relative flex mx-m py-m">
         <div className="flex">
           <SendForm />
           {isLoading ? (
             <div className="flex">
-              { state !== ace.STEP_COMPLETED && <div className="w-8 h-8 border-4 border-gray-400 rounded-full border-t-blue-700 animate-spin pr-4"></div> }
+              { state !== ace.STEP_COMPLETED && <div className="w-7 h-7 border-4 border-gray-400 rounded-full border-t-iexyellow animate-spin mr-4 pr-4"></div> }
               {writeStatus(state)}
             </div>
           ) : (

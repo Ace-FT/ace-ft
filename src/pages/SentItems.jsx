@@ -145,31 +145,15 @@ const SentItems = () => {
       <Helmet>
         <title>ACE-ft | Sent items</title>
       </Helmet>
-      <div className="mt-16 mx-8 pb-16">
-        <button
+      <div className="py-m mx-8">
+        {/* <button
           className="rounded-md bg-white text-black px-6 py-2"
           onClick={async () => {
             getDatasetOrder();
           }}
         >
           Data set orders
-        </button>
-
-        <button
-          className="rounded-md bg-white text-black px-6 py-2"
-          onClick={async () => {
-            getAppOrder(ace.APP_ADDRESS);
-            fetchMyRequestOrders();
-          }}
-        >
-          Get my orders
-        </button>
-        <button
-          className="rounded-r-md bg-white text-black px-6 py-2"
-          onClick={async () => requestDataset("0xC6D219D62A667264946Fe6133B31495AE3ccE2ea", connectedAccount)}
-        >
-          Run task
-        </button>
+        </button> */}
 
         {inboxItems ? (
           <table className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black table-auto">

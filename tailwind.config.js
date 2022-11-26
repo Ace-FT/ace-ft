@@ -12,7 +12,7 @@ module.exports = {
         iexwhite: "#f1f2f0",
         nav: "#8c8c90",
       },
-      margin: {
+      spacing: {
         xs: "15px",
         s: "30px",
         m: "60px",
