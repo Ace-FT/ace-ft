@@ -233,6 +233,7 @@ const SendForm = () => {
                     ); //fileUrl
                     console.log(ok);
                   }
+                }
 
                   nextStep(status);
                   console.log(`Step ${status}: ${steps[status]}`); // 3
@@ -248,11 +249,11 @@ const SendForm = () => {
                 );
 
                 nextStep(status);
-                setState("... uploading dataset");
+                setStep(UPLOADING_DATASET);
                 console.log(`Step ${status}: ${steps[status]}`); // 5
                 var datasetUrl = await uploadData(encryptedDataset);
                 await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
-                setState("... checking your dataset availability on IPFS");
+                
 
                   if (!optimistic) {
                     ok = false;
@@ -294,12 +295,11 @@ const SendForm = () => {
                 console.log("secret is pushed?", isSecretPushed);
 
                 nextStep(status);
-                setState("... making order");
                 console.log(`Step ${status}: ${steps[status]}`); //9
                 await pushOrder(datasetAddress, addressTo);
 
                 nextStep(status);
-                setState(ace.STEP_COMPLETED);
+                setStep(FINISHED);
                 console.log(`Step ${status}: ${steps[status]}`);
               }}
             >
