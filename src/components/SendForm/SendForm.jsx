@@ -164,122 +164,123 @@ const SendForm = () => {
             <div className="mb-4">
               <input type="checkbox" name="optimistic" id="optimistic" onClick={handleChecked} />
               <label htmlFor="optimistic" className="ml-2">
-                Optimistic upload
+                Optimistic IPFS upload
               </label>
             </div>
 
             <div className="bg-iexblk rounded-lg mx-4">
-            <button
-              className="btn w-full font-bold h-8"
-              type="submit"
-              onClick={async (e) => {
-                e.preventDefault();
-                console.log("optimistic", optimistic)
-                console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
-                status = nextStep(status);
-                setIsLoading(true);
-                setState("... encrypting your file");
-                console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
+              <button
+                className="btn w-full font-bold h-8"
+                type="submit"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  console.log("optimistic", optimistic)
+                  console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
+                  status = nextStep(status);
+                  setIsLoading(true);
+                  setState("... encrypting your file");
+                  console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
 
-                const encryptedFileJSON = await encryptFile(selectedFiles[0]);
-                const fileName = selectedFiles[0].name;
-                const fileSize = selectedFiles[0].size;
-                console.log(fileName);
-                console.log("Size:", fileSize);
-                status = nextStep(status);
-                setState("... uploading your file");
-                console.log("Step", status, ": ", steps[status]); // 2
-                console.log("encryptedFile JSON:", encryptedFileJSON);
+                  const encryptedFileJSON = await encryptFile(selectedFiles[0]);
+                  const fileName = selectedFiles[0].name;
+                  const fileSize = selectedFiles[0].size;
+                  console.log(fileName);
+                  console.log("Size:", fileSize);
+                  status = nextStep(status);
+                  setState("... uploading your file");
+                  console.log("Step", status, ": ", steps[status]); // 2
+                  console.log("encryptedFile JSON:", encryptedFileJSON);
 
-                const encryptedFile = jsonToBuffer(encryptedFileJSON);
-                console.log("encryptedFile:", encryptedFile);
+                  const encryptedFile = jsonToBuffer(encryptedFileJSON);
+                  console.log("encryptedFile:", encryptedFile);
 
-                var fileUrl = await uploadData(encryptedFile);
-                console.log("File uploaded at", fileUrl);
-                await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
-                setState("... checking your file availability on IPFS");
+                  var fileUrl = await uploadData(encryptedFile);
+                  console.log("File uploaded at", fileUrl);
+                  await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
+                  setState("... checking your file availability on IPFS");
 
-                if(!optimistic) {
-                  var ok = false;
-                  while (!ok) {
-                    console.log("Checking file availability at", fileUrl);
-                    ok = await checkFileAvailability("", () =>
-                      console.log("checking ended...")
-                    ); //fileUrl
-                    console.log(ok);
+                  if (!optimistic) {
+                    var ok = false;
+                    while (!ok) {
+                      console.log("Checking file availability at", fileUrl);
+                      ok = await checkFileAvailability("", () =>
+                        console.log("checking ended...")
+                      ); //fileUrl
+                      console.log(ok);
+                    }
                   }
-                }
-                
-                nextStep(status);
-                console.log(`Step ${status}: ${steps[status]}`); // 3
-                setIsAvailable(ok);
 
-                nextStep(status);
-                setState("... encrypting the dataset containing your file");
-                console.log(`Step ${status}: ${steps[status]}`);
-                const encryptedDataset = await encryptDataset(
-                  fileUrl,
-                  message,
-                  fileSize
-                );
+                  nextStep(status);
+                  console.log(`Step ${status}: ${steps[status]}`); // 3
+                  setIsAvailable(ok);
 
-                nextStep(status);
-                setState("... uploading dataset");
-                console.log(`Step ${status}: ${steps[status]}`); // 5
-                var datasetUrl = await uploadData(encryptedDataset);
-                await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
-                setState("... checking your dataset availability on IPFS");
-
-                ok = false;
-                while (!ok) {
-                  console.log("Checking dataset availability");
-                  ok = await checkFileAvailability(datasetUrl, () =>
-                    console.log("checking ended...")
+                  nextStep(status);
+                  setState("... encrypting the dataset containing your file");
+                  console.log(`Step ${status}: ${steps[status]}`);
+                  const encryptedDataset = await encryptDataset(
+                    fileUrl,
+                    message,
+                    fileSize
                   );
-                  console.log(ok);
-                }
 
-                nextStep(status);
-                console.log(`Step ${status}: ${steps[status]}`); // 6
+                  nextStep(status);
+                  setState("... uploading dataset");
+                  console.log(`Step ${status}: ${steps[status]}`); // 5
+                  var datasetUrl = await uploadData(encryptedDataset);
+                  await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
+                  setState("... checking your dataset availability on IPFS");
 
-                nextStep(status);
-                setState("... deploying dataset");
-                console.log(`Step ${status}: ${steps[status]}`); // 7
-                const datasetName = generateDatasetName(
-                  connectedAccount,
-                  addressTo
-                );
-                console.log("Dataset Url : ", datasetUrl);
-                const checksum = await generateEncryptedFileChecksum(
-                  encryptedDataset
-                );
-                const datasetAddress = await deployDataset(
-                  datasetName,
-                  datasetUrl,
-                  checksum
-                );
+                  if (!optimistic) {
+                    ok = false;
+                    while (!ok) {
+                      console.log("Checking dataset availability");
+                      ok = await checkFileAvailability(datasetUrl, () =>
+                        console.log("checking ended...")
+                      );
+                      console.log(ok);
+                    }
+                  }
+                  nextStep(status);
+                  console.log(`Step ${status}: ${steps[status]}`); // 6
 
-                nextStep(status);
-                setState("... pushing secret (encryption key)");
-                console.log(`Step ${status}: ${steps[status]}`); //8
-                console.log("Before secret : dataset encryption key", datasetEncryptionKey);
-                await pushSecret(datasetAddress, datasetEncryptionKey);
-                nextStep(status);
-                const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
-                console.log("secret is pushed?", isSecretPushed);
+                  nextStep(status);
+                  setState("... deploying dataset");
+                  console.log(`Step ${status}: ${steps[status]}`); // 7
+                  const datasetName = generateDatasetName(
+                    connectedAccount,
+                    addressTo
+                  );
+                  console.log("Dataset Url : ", datasetUrl);
+                  const checksum = await generateEncryptedFileChecksum(
+                    encryptedDataset
+                  );
+                  const datasetAddress = await deployDataset(
+                    datasetName,
+                    datasetUrl,
+                    checksum
+                  );
 
-                nextStep(status);
-                setState("... making order");
-                console.log(`Step ${status}: ${steps[status]}`); //9
-                await pushOrder(datasetAddress, addressTo);
+                  nextStep(status);
+                  setState("... pushing secret (encryption key)");
+                  console.log(`Step ${status}: ${steps[status]}`); //8
+                  console.log("Before secret : dataset encryption key", datasetEncryptionKey);
+                  await pushSecret(datasetAddress, datasetEncryptionKey);
+                  nextStep(status);
+                  const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
+                  console.log("secret is pushed?", isSecretPushed);
 
-                nextStep(status);
-                setState(ace.STEP_COMPLETED);
-                console.log(`Step ${status}: ${steps[status]}`);
-              }}
-            >
-              Transfer
-            </button>
+                  nextStep(status);
+                  setState("... making order");
+                  console.log(`Step ${status}: ${steps[status]}`); //9
+                  await pushOrder(datasetAddress, addressTo);
+
+                  nextStep(status);
+                  setState(ace.STEP_COMPLETED);
+                  console.log(`Step ${status}: ${steps[status]}`);
+                }}
+              >
+                Transfer
+              </button>
             </div>
 
           </div>
