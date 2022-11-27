@@ -4,6 +4,7 @@ import SendForm from "../components/SendForm/SendForm";
 import { AceContext } from '../context/context';
 import * as ace from "../shared/constants";
 import crypto from 'crypto-browserify';
+import StepBar from '../components/StepBar';
 
 
 function Home() {
@@ -181,18 +182,19 @@ function Home() {
       <div className="relative flex mx-m py-m">
         <div className="flex">
           <SendForm />
-          {isLoading ? (
+          {/* {isLoading ? (
             <div className="flex">
               { state !== ace.STEP_COMPLETED && <div className="w-7 h-7 border-4 border-gray-400 rounded-full border-t-iexyellow animate-spin mr-4 pr-4"></div> }
               {writeStatus(state)}
             </div>
           ) : (
             <p></p>
-          )}
+          )} */}
+          <StepBar />
         </div>
 
         <div className="text-iexwhite">
-          <button className="rounded-l-full rounded-r-full border border-iexwhite ml-8 px-4 py-2"
+          {/* <button className="rounded-l-full rounded-r-full border border-iexwhite ml-8 px-4 py-2"
             onClick={(e) => {
               e.preventDefault();
               console.log(bgCreator)
@@ -200,7 +202,7 @@ function Home() {
             }}
           >
             Test bg creator
-          </button>
+          </button> */}
           {/* <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
             onClick={(e) => {
               e.preventDefault();
@@ -211,7 +213,7 @@ function Home() {
             Test bg Urls
           </button> */}
         </div>
-        <div className="h-1/3 absolute right-0 bottom-0 flex flex-col text-sm font-extralight px-8">
+        <div className="absolute right-0 bottom-0 flex flex-col text-sm font-extralight px-8 mb-m">
           <div className="w-full relative flex-col justify-end">
             <div className="top-0">
               { creativeMode && (

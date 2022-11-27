@@ -9,21 +9,14 @@ import { AceContext } from "./context/context";
 import PersonnalData from "./pages/Settings/PersonnalData";
 import Params from "./pages/Settings/Params";
 import Protected from "./pages/Protected";
-//import {queryForMyInbox} from './shared/queries';
+import Footer from "./components/Footer";
 
 function App() {
-  const {
-    connectedAccount,
-    connectWallet,
-    bgUrls,
-    background,
-    creativeMode,
-    setCreativeMode,
-  } = useContext(AceContext);
+  const { connectedAccount, connectWallet, bgUrls, background, creativeMode, setCreativeMode } = useContext(AceContext);
 
   useEffect(() => {
     const connectWalletOnPageLoad = async () => {
-      if (localStorage?.getItem("isWalletConnected") === "true") {
+      if (sessionStorage?.getItem("isWalletConnected") === "true") {
         try {
           await connectWallet();
         } catch (ex) {
@@ -59,8 +52,9 @@ function App() {
     >
       <Router>
         <NavBar />
-        <div className="mx-auto">
-          <main className="mx-auto max-w-7xl text-iexwhite py-s">  
+        <div className="w-full">
+          <div className="page-container">
+          <main className="w-full text-iexwhite">  
             <Routes>
               <Route path="/" element={<Home />} />
               <Route
@@ -93,7 +87,10 @@ function App() {
               </Route>
             </Routes>
           </main>
+          </div>
+
         </div>
+        <Footer />
       </Router>
     </div>
   );
