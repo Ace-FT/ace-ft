@@ -132,7 +132,7 @@ export const AceProvider = ({ children }) => {
           }
         }
 
-        localStorage.setItem('isWalletConnected', true)
+        sessionStorage.setItem('isWalletConnected', true)
         console.log("iExec Address", await iexec.wallet.getAddress())
         //window.location.reload();
       } else {

@@ -10,21 +10,13 @@ import PersonnalData from "./pages/Settings/PersonnalData";
 import Params from "./pages/Settings/Params";
 import Protected from "./pages/Protected";
 import Footer from "./components/Footer";
-//import {queryForMyInbox} from './shared/queries';
 
 function App() {
-  const {
-    connectedAccount,
-    connectWallet,
-    bgUrls,
-    background,
-    creativeMode,
-    setCreativeMode,
-  } = useContext(AceContext);
+  const { connectedAccount, connectWallet, bgUrls, background, creativeMode, setCreativeMode } = useContext(AceContext);
 
   useEffect(() => {
     const connectWalletOnPageLoad = async () => {
-      if (localStorage?.getItem("isWalletConnected") === "true") {
+      if (sessionStorage?.getItem("isWalletConnected") === "true") {
         try {
           await connectWallet();
         } catch (ex) {
