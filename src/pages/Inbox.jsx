@@ -13,6 +13,7 @@ import downloadFile from "../utils/downloadFile";
 import {getDatasetOrders} from "./Inbox/getOrders";
 import { fromDatasetToFileJSON, fetchFromFileToDownloadableFileObject, saveFile } from "./Inbox/download";
 import {fromEnryptedFileToFile} from "../utils/fileAESEncryption";
+import formatDate from "../utils/formatDate";
 
 const configArgs = { ethProvider: window.ethereum,  chainId : 134};
 const configOptions = { smsURL: ace.SMS_URL };
@@ -42,7 +43,10 @@ function Inbox() {
   var structuredResponse = null;
   
 
-  var taskId = "";
+  setInterval(() => {
+    window.location.reload(false);
+  }, ace.TIME_BEFORE_AUTO_REFRESHING_INBOX);
+
 
   const [inboxItems, setInboxItems] = useState();
   const [taskID, setTaskID] = useState("");
@@ -215,7 +219,6 @@ function Inbox() {
             </thead>
             <tbody>
               {inboxItems.map((inboxItem, i) => {
-                console.log("INBOX ITEM", inboxItem)  ;   
                 return (
                   <tr className="text-center border-t border-gray-200" key={i}  >
                     <td className="border-r border-gray-200 p-3">
@@ -231,7 +234,10 @@ function Inbox() {
                     {
                       inboxItem.status === STATUS_OPEN_ORDER 
                       ? <p>
-                          <button className="btn h-6" onClick={async () => { await requestDataset(inboxItem.id, connectedAccount) }}>
+                          <button className="btn h-6" onClick={async () => {
+                            await requestDataset(inboxItem.id, connectedAccount)
+                            window.location.reload(false); 
+                            }}>
                             Request
                           </button>
                         </p> 
@@ -240,7 +246,7 @@ function Inbox() {
                     {
                       inboxItem.status === STATUS_ACTIVE_ORDER 
                       ? <p>
-                          Request started at {inboxItem.downloadDate.toString()}
+                          Request started on {formatDate(inboxItem.downloadDate)}
                         </p> 
                       : ""
                     }

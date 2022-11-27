@@ -89,6 +89,14 @@ const SendForm = () => {
                     e.preventDefault();
                     inputFile.current.click();
                   }}
+                  onDrop={(e)=> {
+                    e.preventDefault();
+                    handleChange(e)
+                  }}
+                  onDragOver={(e)=> {
+                    e.preventDefault();
+                    handleChange(e)
+                  }}
                 >
                   <svg viewBox="0 0 72 72" className="w-9">
                     <path
@@ -113,6 +121,14 @@ const SendForm = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     inputFile.current.click();
+                  }}
+                  onDrop={(e)=> {
+                    e.preventDefault();
+                    handleChange(e)
+                  }}
+                  onDragOver={(e)=> {
+                    e.preventDefault();
+                    handleChange(e)
                   }}
                 >
                   <svg viewBox="0 0 72 72" className="w-9">

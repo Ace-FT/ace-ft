@@ -9,6 +9,7 @@ import { AceContext } from "./context/context";
 import PersonnalData from "./pages/Settings/PersonnalData";
 import Params from "./pages/Settings/Params";
 import Protected from "./pages/Protected";
+import Footer from "./components/Footer";
 //import {queryForMyInbox} from './shared/queries';
 
 function App() {
@@ -59,8 +60,9 @@ function App() {
     >
       <Router>
         <NavBar />
-        <div className="mx-auto">
-          <main className="mx-auto max-w-7xl text-iexwhite py-s">  
+        <div className="w-full">
+          <div className="page-container">
+          <main className="w-full text-iexwhite">  
             <Routes>
               <Route path="/" element={<Home />} />
               <Route
@@ -93,7 +95,10 @@ function App() {
               </Route>
             </Routes>
           </main>
+          </div>
+
         </div>
+        <Footer />
       </Router>
     </div>
   );

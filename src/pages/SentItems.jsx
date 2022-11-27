@@ -9,6 +9,7 @@ import { inboxDatasetsQuery } from "../shared/queries.ts";
 import structureResponse from "../utils/structureResponse";
 import requestDataset from "./Inbox/requestDataset";
 import {mapSentItemsOrders} from "../shared/itemMapper";
+import formatDate from "../utils/formatDate";
 
 
 const SentItems = () => {
@@ -171,7 +172,7 @@ const SentItems = () => {
                 return (
                   <tr className="text-center border-t border-gray-200" key={i}>
                     <td className="border-r border-gray-200 p-3">
-                      {inboxItem.sendDate.toString()}
+                      {formatDate(inboxItem.sendDate)}
                     </td>
                     <td className="border-r border-gray-200 p-3">
                       {inboxItem.to}
@@ -188,21 +189,17 @@ const SentItems = () => {
                       : ""
                     }
                     {
-                      inboxItem.status === STATUS_COMPLETED_ORDER  ?  
+                      inboxItem.status === STATUS_COMPLETED_ORDER &&  
                           <p>
-                            Downloaded on {inboxItem.downloadDate.toString()}
+                            Downloaded on {formatDate(inboxItem.downloadDate)}
                           </p> 
-                      : ""
                     }     
                     {
-                      inboxItem.status === STATUS_ACTIVE_ORDER  ?  
+                      inboxItem.status === STATUS_ACTIVE_ORDER &&  
                           <p>
-                            Download started at {inboxItem.downloadDate.toString()}
+                            Download started on {formatDate(inboxItem.downloadDate)}
                           </p> 
-                      : ""
                     }     
-
-
                     </td>
                   </tr>
                 );
