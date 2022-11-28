@@ -10,6 +10,7 @@ import PersonnalData from "./pages/Settings/PersonnalData";
 import Params from "./pages/Settings/Params";
 import Protected from "./pages/Protected";
 import Footer from "./components/Footer";
+import Helmet from "react-helmet";
 
 function App() {
   const { connectedAccount, connectWallet, bgUrls, background, creativeMode, setCreativeMode } = useContext(AceContext);
@@ -50,43 +51,44 @@ function App() {
         backgroundRepeat: "no-repeat",
       }}
     >
+
       <Router>
         <NavBar />
         <div className="w-full">
           <div className="page-container">
-          <main className="w-full text-iexwhite">  
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/inbox"
-                element={
-                  <Protected isLoggedIn={isConnected}>
-                    <Inbox />
-                  </Protected>
-                }
-              />
-              <Route
-                path="/sent"
-                element={
-                  <Protected isLoggedIn={isConnected}>
-                    <SentItems />
-                  </Protected>
-                }
-              />
-              <Route
-                path="/settings"
-                element={
-                  <Protected isLoggedIn={isConnected}>
-                    <Settings />
-                  </Protected>
-                }
-              >
-                <Route index element={<PersonnalData />} />
-                <Route path="personnal-data" element={<PersonnalData />} />
-                <Route path="params" element={<Params />} />
-              </Route>
-            </Routes>
-          </main>
+            <main className="w-full text-iexwhite">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route
+                  path="/inbox"
+                  element={
+                    <Protected isLoggedIn={isConnected}>
+                      <Inbox />
+                    </Protected>
+                  }
+                />
+                <Route
+                  path="/sent"
+                  element={
+                    <Protected isLoggedIn={isConnected}>
+                      <SentItems />
+                    </Protected>
+                  }
+                />
+                <Route
+                  path="/settings"
+                  element={
+                    <Protected isLoggedIn={isConnected}>
+                      <Settings />
+                    </Protected>
+                  }
+                >
+                  <Route index element={<PersonnalData />} />
+                  <Route path="personnal-data" element={<PersonnalData />} />
+                  <Route path="params" element={<Params />} />
+                </Route>
+              </Routes>
+            </main>
           </div>
 
         </div>
