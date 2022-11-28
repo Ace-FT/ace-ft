@@ -259,8 +259,10 @@ function Inbox() {
                               const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
                               const resultFileUrl = resultFile.url;
                               const resultFileKey = resultFile.key;
+                              const resultFileName = resultFile.name;
                               console.log("resultFileUrl", resultFileUrl)
                               console.log("resultFileKey", resultFileKey);
+                              console.log("resultFileName", resultFileName);
                               var ok = false;
                               while (!ok) {
                                 console.log("Checking file availability at", resultFileUrl);
@@ -273,7 +275,7 @@ function Inbox() {
                               console.log(fileObject)
                               let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
                               let fileBlob = new Blob([decryptedFile], { type: 'application/octet-stream' });
-                              saveFile(fileBlob, "dowloaded.png");
+                              saveFile(fileBlob, resultFileName);
                             }}>
                               Download
                             </button>

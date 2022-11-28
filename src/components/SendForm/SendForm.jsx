@@ -20,7 +20,6 @@ const SendForm = () => {
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
 
-
   const BEGINNING_PROCESS = 0;
   const ENCRYPTING_FILE = 1;
   const UPLOADING_FILE = 2;
@@ -29,7 +28,6 @@ const SendForm = () => {
   const DEPLOYING_DATASET = 5;
   const PUSHING_SECRET = 6;
   const FINISHED = 7;
-
 
   const steps = [
     "BEGINNING PROCESS", // 0
@@ -50,7 +48,6 @@ const SendForm = () => {
     return (status = status + 1);
   }
 
-
   const DELAY_BEFORE_CHECKING_FILE_UPLOADED = 3;
 
   const handleChange = (event) => {
@@ -61,13 +58,12 @@ const SendForm = () => {
     }
   };
 
-
   var optimistic = false;
   const handleChecked = () => {
-    const checkbox = document.getElementById("optimistic")
-    console.log(checkbox.checked)
+    const checkbox = document.getElementById("optimistic");
+    console.log(checkbox.checked);
     optimistic = !optimistic;
-  }
+  };
 
   return (
     <>
@@ -89,13 +85,13 @@ const SendForm = () => {
                     e.preventDefault();
                     inputFile.current.click();
                   }}
-                  onDrop={(e)=> {
+                  onDrop={(e) => {
                     e.preventDefault();
-                    handleChange(e)
+                    handleChange(e);
                   }}
-                  onDragOver={(e)=> {
+                  onDragOver={(e) => {
                     e.preventDefault();
-                    handleChange(e)
+                    handleChange(e);
                   }}
                 >
                   <svg viewBox="0 0 72 72" className="w-9">
@@ -122,13 +118,13 @@ const SendForm = () => {
                     e.preventDefault();
                     inputFile.current.click();
                   }}
-                  onDrop={(e)=> {
+                  onDrop={(e) => {
                     e.preventDefault();
-                    handleChange(e)
+                    handleChange(e);
                   }}
-                  onDragOver={(e)=> {
+                  onDragOver={(e) => {
                     e.preventDefault();
-                    handleChange(e)
+                    handleChange(e);
                   }}
                 >
                   <svg viewBox="0 0 72 72" className="w-9">
@@ -147,6 +143,7 @@ const SendForm = () => {
                   className="hidden"
                   onChange={handleChange}
                   ref={inputFile}
+                  required
                 />
               </div>
             )}
@@ -187,73 +184,72 @@ const SendForm = () => {
           </div>
           <div className="formFooter mx-auto items-center p-4">
             <div className="mb-4">
-              <input type="checkbox" name="optimistic" id="optimistic" onClick={handleChecked} />
+              <input
+                type="checkbox"
+                name="optimistic"
+                id="optimistic"
+                onClick={handleChecked}
+              />
               <label htmlFor="optimistic" className="ml-2">
                 Optimistic IPFS upload
               </label>
             </div>
 
-            <div className="bg-iexblk rounded-lg mx-4">
-            <button
-              className="btn w-full font-bold h-8"
-              type="submit"
-              onClick={async (e) => {
-                e.preventDefault();
-                console.log("optimistic", optimistic)
-                console.log("Step", BEGINNING_PROCESS); //Write the different steps in order to have the workflow
-                status = nextStep(status);
-                setIsLoading(true);
-                setStep(ENCRYPTING_FILE);
-                console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
+            <div className="mx-4 rounded-lg bg-iexblk">
+              <button
+                className="btn h-8 w-full font-bold"
+                type="submit"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  console.log("optimistic", optimistic);
+                  console.log("Step", BEGINNING_PROCESS); //Write the different steps in order to have the workflow
+                  status = nextStep(status);
+                  setIsLoading(true);
+                  setStep(ENCRYPTING_FILE);
+                  console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
 
-                const encryptedFileJSON = await encryptFile(selectedFiles[0]);
-                const fileName = selectedFiles[0].name;
-                const fileSize = selectedFiles[0].size;
-                console.log(fileName);
-                console.log("Size:", fileSize);
-                status = nextStep(status);
-                setStep(UPLOADING_FILE);
-                console.log("Step", status, ": ", steps[status]); // 2
-                console.log("encryptedFile JSON:", encryptedFileJSON);
+                  const encryptedFileJSON = await encryptFile(selectedFiles[0]);
+                  const fileName = selectedFiles[0].name;
+                  const fileSize = selectedFiles[0].size;
+                  console.log(fileName);
+                  console.log("Size:", fileSize);
+                  status = nextStep(status);
+                  setStep(UPLOADING_FILE);
+                  console.log("Step", status, ": ", steps[status]); // 2
+                  console.log("encryptedFile JSON:", encryptedFileJSON);
 
                   const encryptedFile = jsonToBuffer(encryptedFileJSON);
                   console.log("encryptedFile:", encryptedFile);
 
-                var fileUrl = await uploadData(encryptedFile);
-                console.log("File uploaded at", fileUrl);
-                
-                var ok = false;
-                if(!optimistic) {
-                  await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
-                  
-                  while (!ok) {
-                    console.log("Checking file availability at", fileUrl);
-                    ok = await checkFileAvailability("", () =>
-                      console.log("checking ended...")
-                    ); //fileUrl
-                    console.log(ok);
-                  }
-                }
+                  var fileUrl = await uploadData(encryptedFile);
+                  console.log("File uploaded at", fileUrl);
 
+                  var ok = false;
+                  if (!optimistic) {
+                    await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
+
+                    while (!ok) {
+                      console.log("Checking file availability at", fileUrl);
+                      ok = await checkFileAvailability("", () =>
+                        console.log("checking ended...")
+                      ); //fileUrl
+                      console.log(ok);
+                    }
+                  }
                   nextStep(status);
                   console.log(`Step ${status}: ${steps[status]}`); // 3
                   setIsAvailable(ok);
 
-                nextStep(status);
-                setStep(ENCRYPTING_DATASET);
-                console.log(`Step ${status}: ${steps[status]}`);
-                const encryptedDataset = await encryptDataset(
-                  fileUrl,
-                  message,
-                  fileSize
-                );
+                  nextStep(status);
+                  setStep(ENCRYPTING_DATASET);
+                  console.log(`Step ${status}: ${steps[status]}`);
+                  const encryptedDataset = await encryptDataset(fileUrl, fileName, message, fileSize);
 
-                nextStep(status);
-                setStep(UPLOADING_DATASET);
-                console.log(`Step ${status}: ${steps[status]}`); // 5
-                var datasetUrl = await uploadData(encryptedDataset);
-                await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
-                
+                  nextStep(status);
+                  setStep(UPLOADING_DATASET);
+                  console.log(`Step ${status}: ${steps[status]}`); // 5
+                  var datasetUrl = await uploadData(encryptedDataset);
+                  await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
 
                   if (!optimistic) {
                     ok = false;
@@ -268,45 +264,35 @@ const SendForm = () => {
                   nextStep(status);
                   console.log(`Step ${status}: ${steps[status]}`); // 6
 
-                nextStep(status);
-                setStep(DEPLOYING_DATASET);
-                console.log(`Step ${status}: ${steps[status]}`); // 7
-                const datasetName = generateDatasetName(
-                  connectedAccount,
-                  addressTo
-                );
-                console.log("Dataset Url : ", datasetUrl);
-                const checksum = await generateEncryptedFileChecksum(
-                  encryptedDataset
-                );
-                const datasetAddress = await deployDataset(
-                  datasetName,
-                  datasetUrl,
-                  checksum
-                );
+                  nextStep(status);
+                  setStep(DEPLOYING_DATASET);
+                  console.log(`Step ${status}: ${steps[status]}`); // 7
+                  const datasetName = generateDatasetName(connectedAccount, addressTo);
+                  console.log("Dataset Url : ", datasetUrl);
+                  const checksum = await generateEncryptedFileChecksum(encryptedDataset);
+                  const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
 
-                nextStep(status);
-                setStep(PUSHING_SECRET);
-                console.log(`Step ${status}: ${steps[status]}`); //8
-                console.log("Before secret : dataset encryption key", datasetEncryptionKey);
-                await pushSecret(datasetAddress, datasetEncryptionKey);
-                nextStep(status);
-                const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
-                console.log("secret is pushed?", isSecretPushed);
+                  nextStep(status);
+                  setStep(PUSHING_SECRET);
+                  console.log(`Step ${status}: ${steps[status]}`); //8
+                  console.log("Before secret : dataset encryption key", datasetEncryptionKey);
+                  await pushSecret(datasetAddress, datasetEncryptionKey);
+                  nextStep(status);
+                  const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
+                  console.log("secret is pushed?", isSecretPushed);
 
-                nextStep(status);
-                console.log(`Step ${status}: ${steps[status]}`); //9
-                await pushOrder(datasetAddress, addressTo);
+                  nextStep(status);
+                  console.log(`Step ${status}: ${steps[status]}`); //9
+                  await pushOrder(datasetAddress, addressTo);
 
-                nextStep(status);
-                setStep(FINISHED);
-                console.log(`Step ${status}: ${steps[status]}`);
-              }}
-            >
-              Transfer
-            </button>
+                  nextStep(status);
+                  setStep(FINISHED);
+                  console.log(`Step ${status}: ${steps[status]}`);
+                }}
+              >
+                Transfer
+              </button>
             </div>
-
           </div>
         </div>
       </form>
