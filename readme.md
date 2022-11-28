@@ -37,9 +37,9 @@ Ace is an illustration that there is a better way to do business when it comes t
 ## Features
 
 - "WeTransfer-like" experience,  simply drag and drop files you want to share
-- Set the beneficiary in the form of 0x address or use a ENS
-- Cryptographic access control to the file being transfered
-- Beneficiary email notification for new shared content/file available 
+- Set the beneficiary in the form of 0x address
+- Cryptographic access control to the file being transfered powered by iExec
+- Telegram integration for notification and querying. The beneficiary can use telegram to get notified for new file transfer. Check out your new friend [Mr ACE](http://t.me/ace_ft_bot) the telgram bot!
 - No time limit for file download, other service require the recipient to download the file within x days
 - Built-in monetization! You can sell your added value content and get paid in [$RLC](https://coinmarketcap.com/currencies/rlc/)
 - Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API. 

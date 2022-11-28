@@ -8,6 +8,7 @@ import uploadData from "./upload";
 import { deployDataset, pushSecret, pushOrder } from "./deploy.js";
 import { generateDatasetName } from "../../utils/datasetNameGenerator.ts";
 import { jsonToBuffer } from "../../utils/jsonToBuffer";
+import ReactTooltip from 'react-tooltip';
 
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = { smsURL: ace.SMS_URL };
@@ -183,15 +184,14 @@ const SendForm = () => {
             </div>
           </div>
           <div className="formFooter mx-auto items-center p-4">
-            <div className="mb-4">
-              <input
-                type="checkbox"
-                name="optimistic"
-                id="optimistic"
-                onClick={handleChecked}
-              />
+          <ReactTooltip multiline="true"/>
+
+            <div className="mb-4 optimisticContainer">
+              <input type="checkbox" name="optimistic" id="optimistic" onClick={handleChecked} />
               <label htmlFor="optimistic" className="ml-2">
-                Optimistic IPFS upload
+                Optimistic IPFS upload <svg  data-tip="Activate this setting to speedup the upload process.<br/>By default, the system will ensure that the file is available on IPFS before proceeding to the next step." xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 inlineText">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+</svg>
               </label>
             </div>
 

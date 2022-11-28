@@ -180,7 +180,7 @@ const SentItems = () => {
                       {
                         inboxItem.status === STATUS_OPEN_ORDER ?
                           <p>
-                            En attente
+                            Pending
                           </p>
                           : ""
                       }
