@@ -6,16 +6,24 @@ The choice of the iExec stack was a no-brainer given that it covers the key requ
 Moreover, the iExec protocols has a built-in data monetization capability that we are leveraging in this project.
 
 ## Contents
-- [What are we fixing?](#what-are-we-fixing)
-- [Features](#features)
-- [Core principles](#principles)  
-[Modelization](#modelization)  
-[File Transfer process](#file-transfer-process)  
-- [Notification system](#notification-system)
-- [Transfer fees](#transfer-fees)
-- [Use cases](#use-cases)
-- [Future considerations](#future-considerations)
-- [Licence](#licence)  
+- [Ace](#ace)
+  - [_Web3 file transfer application powered by iExec_](#web3-file-transfer-application-powered-by-iexec)
+  - [Contents](#contents)
+  - [What are we fixing?](#what-are-we-fixing)
+  - [Features](#features)
+  - [Core principles](#core-principles)
+    - [Modelization](#modelization)
+    - [File Transfer process](#file-transfer-process)
+  - [Notification system](#notification-system)
+  - [Transfer fees](#transfer-fees)
+  - [Use cases](#use-cases)
+  - [Future considerations](#future-considerations)
+    - [Copyright protection and licensing](#copyright-protection-and-licensing)
+    - [KYC](#kyc)
+    - [Subscriptions](#subscriptions)
+    - [Task category management](#task-category-management)
+    - [Full privacy on the notification system](#full-privacy-on-the-notification-system)
+  - [License](#license)
 
 ---
 
@@ -23,7 +31,7 @@ Moreover, the iExec protocols has a built-in data monetization capability that w
 We believe that Web2 is broken and it’s time for a new paradigm shift that can restore our right to privacy and security. 
 Up until the emergence of Web3 we were forced to endure untrustworthy corporations selling our data to other corporations and centralized databases containing our personal details being hacked on a regular basis.  
   
-Ace is an illustration that there is a better way to do business when it comes to file transfer, one which doesn’t call for sacrificing our security nor our need for great level of service and user experience. There is no need longer a man in the middle when I am sending personal holiday pics to my family :-)
+Ace is an illustration that there is a better way to do business when it comes to file transfer, one which doesn’t call for sacrificing our security nor our need for great level of service and user experience. There is no longer a need for a man in the middle when I am sending personal holiday pics to my family :-)
 
 
 ## Features

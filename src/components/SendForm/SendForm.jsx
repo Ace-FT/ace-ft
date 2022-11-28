@@ -189,7 +189,7 @@ const SendForm = () => {
             <div className="mb-4">
               <input type="checkbox" name="optimistic" id="optimistic" onClick={handleChecked} />
               <label htmlFor="optimistic" className="ml-2">
-                Optimistic upload
+                Optimistic IPFS upload
               </label>
             </div>
 
@@ -216,8 +216,8 @@ const SendForm = () => {
                 console.log("Step", status, ": ", steps[status]); // 2
                 console.log("encryptedFile JSON:", encryptedFileJSON);
 
-                const encryptedFile = jsonToBuffer(encryptedFileJSON);
-                console.log("encryptedFile:", encryptedFile);
+                  const encryptedFile = jsonToBuffer(encryptedFileJSON);
+                  console.log("encryptedFile:", encryptedFile);
 
                 var fileUrl = await uploadData(encryptedFile);
                 console.log("File uploaded at", fileUrl);
@@ -234,10 +234,10 @@ const SendForm = () => {
                     console.log(ok);
                   }
                 }
-                
-                nextStep(status);
-                console.log(`Step ${status}: ${steps[status]}`); // 3
-                setIsAvailable(ok);
+
+                  nextStep(status);
+                  console.log(`Step ${status}: ${steps[status]}`); // 3
+                  setIsAvailable(ok);
 
                 nextStep(status);
                 setStep(ENCRYPTING_DATASET);
@@ -253,18 +253,20 @@ const SendForm = () => {
                 console.log(`Step ${status}: ${steps[status]}`); // 5
                 var datasetUrl = await uploadData(encryptedDataset);
                 await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
+                
 
-                ok = false;
-                while (!ok) {
-                  console.log("Checking dataset availability");
-                  ok = await checkFileAvailability(datasetUrl, () =>
-                    console.log("checking ended...")
-                  );
-                  console.log(ok);
-                }
-
-                nextStep(status);
-                console.log(`Step ${status}: ${steps[status]}`); // 6
+                  if (!optimistic) {
+                    ok = false;
+                    while (!ok) {
+                      console.log("Checking dataset availability");
+                      ok = await checkFileAvailability(datasetUrl, () =>
+                        console.log("checking ended...")
+                      );
+                      console.log(ok);
+                    }
+                  }
+                  nextStep(status);
+                  console.log(`Step ${status}: ${steps[status]}`); // 6
 
                 nextStep(status);
                 setStep(DEPLOYING_DATASET);
@@ -293,7 +295,6 @@ const SendForm = () => {
                 console.log("secret is pushed?", isSecretPushed);
 
                 nextStep(status);
-                //setState("... making order");
                 console.log(`Step ${status}: ${steps[status]}`); //9
                 await pushOrder(datasetAddress, addressTo);
 

@@ -1044,3 +1044,10 @@ table {
     display: inline !important;
     vertical-align: top !important;
 }
+
+
+.table-title
+{
+    /* font-family: 'Barlow Condensed'; */
+    font-size: 2.0rem;
+}
