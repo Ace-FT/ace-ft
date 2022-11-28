@@ -8,13 +8,13 @@ import { inboxDatasetsQuery } from "../shared/queries.ts";
 
 import structureResponse from "../utils/structureResponse";
 import requestDataset from "./Inbox/requestDataset";
-import {mapSentItemsOrders} from "../shared/itemMapper";
+import { mapSentItemsOrders } from "../shared/itemMapper";
 import formatDate from "../utils/formatDate";
 
 
 const SentItems = () => {
   const { ethereum } = window;
-  const configArgs = { ethProvider: window.ethereum,  chainId : 134};
+  const configArgs = { ethProvider: window.ethereum, chainId: 134 };
   const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
   const iexec = new IExec(configArgs, configOptions);
   const { connectedAccount } = useContext(AceContext);
@@ -27,34 +27,34 @@ const SentItems = () => {
   const STATUS_ACTIVE_ORDER = "ACTIVE";
 
 
-  const query = inboxDatasetsQuery(connectedAccount, null) ;
+  const query = inboxDatasetsQuery(connectedAccount, null);
 
 
-  console.log("QUERY", query) ; 
+  console.log("QUERY", query);
 
   const { data, loading, error } = useRequest(query);
 
   const [renders, setRendered] = useState(false);
-  
+
   const [isReadyForDownload] = useState(false)
   var structuredResponse = null;
-  
+
   const [inboxItems, setInboxItems] = useState();
 
   useEffect(() => {
 
     const doMapping = async () => {
-      setInboxItems (await mapSentItemsOrders(connectedAccount, structuredResponse)) ; 
-      console.log("INBOX ITEMS SET") ;
+      setInboxItems(await mapSentItemsOrders(connectedAccount, structuredResponse));
+      console.log("INBOX ITEMS SET");
     }
 
     if (data && !renders) {
       setRendered(true);
       structuredResponse = structureResponse(data);
-      console.log("structuredResponse", structuredResponse) ;
+      console.log("structuredResponse", structuredResponse);
 
       doMapping();
-      return ; 
+      return;
 
     }
   }, [data]);
@@ -62,21 +62,21 @@ const SentItems = () => {
 
   useEffect(() => {
     if (inboxItems) {
-      console.log("inboxItems===>", inboxItems) ;
+      console.log("inboxItems===>", inboxItems);
     }
   }, [inboxItems])
 
 
   const verifyIfReadyForDownload = (datasetOrder) => {
-      if (
-        datasetOrder.deals &&datasetOrder.deals[0] &&
-        datasetOrder.deals[0].tasks &&
-        datasetOrder.deals[0].tasks[0] &&
-        datasetOrder.deals[0].tasks[0].status
-      ) {
-        return datasetOrder.deals[0].tasks[0].status === "COMPLETED"
-      }
-      return false;
+    if (
+      datasetOrder.deals && datasetOrder.deals[0] &&
+      datasetOrder.deals[0].tasks &&
+      datasetOrder.deals[0].tasks[0] &&
+      datasetOrder.deals[0].tasks[0].status
+    ) {
+      return datasetOrder.deals[0].tasks[0].status === "COMPLETED"
+    }
+    return false;
   }
 
 
@@ -97,8 +97,8 @@ const SentItems = () => {
     const { orders } = await iexec.orderbook.fetchWorkerpoolOrderbook({
       workerpool: ace.WORKERPOOL_ADDRESS,
       category: 0,
-      minTag:"0x0000000000000000000000000000000000000000000000000000000000000001",
-      maxTag:"0x0000000000000000000000000000000000000000000000000000000000000001"
+      minTag: "0x0000000000000000000000000000000000000000000000000000000000000001",
+      maxTag: "0x0000000000000000000000000000000000000000000000000000000000000001"
     });
     console.log("Workerpool orders", orders);
     console.log("One workerpool order", orders[0]);
@@ -147,70 +147,69 @@ const SentItems = () => {
         <title>ACE-ft | Sent items</title>
       </Helmet>
       <div className="py-m mx-8">
-        {/* <button
-          className="rounded-md bg-white text-black px-6 py-2"
-          onClick={async () => {
-            getDatasetOrder();
-          }}
-        >
-          Data set orders
-        </button> */}
+        <h1 class="table-title">Sent items</h1>
 
-        {inboxItems ? (
-          <table className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black table-auto">
-            <thead>
-              <tr>
-                <th className="border-r border-gray-200 py-3">Send date</th>
-                <th className="border-r border-gray-200 py-3">To</th>
-                <th className="border-r border-gray-200 py-3">Price (in RLC)</th>
-                <th className="px-3">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {inboxItems.sort((a, b) => b.sendDate - a.sendDate).map((inboxItem, i) => {
-                console.log("INBOX ITEM", inboxItem)  ;   
+
+
+        <table className="w-full border-collapse max-w-full container table-auto">
+          <thead>
+            <tr>
+              <th className="text-center">Send date</th>
+              <th className="text-center">To</th>
+              <th className="text-center">Price (in RLC)</th>
+              <th className="text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {inboxItems ? (
+
+              inboxItems.sort((a, b) => b.sendDate - a.sendDate).map((inboxItem, i) => {
+                console.log("INBOX ITEM", inboxItem);
                 return (
-                  <tr className="text-center border-t border-gray-200" key={i}>
-                    <td className="border-r border-gray-200 p-3">
+                  <tr class="text-center" key={i}>
+                    <td>
                       {formatDate(inboxItem.sendDate)}
                     </td>
-                    <td className="border-r border-gray-200 p-3">
+                    <td>
                       {inboxItem.to}
                     </td>
-                    <td className="border-r border-gray-200 p-3">
+                    <td>
                       {inboxItem.price}
                     </td>
-                    <td className="p-3">
-                    {
-                      inboxItem.status === STATUS_OPEN_ORDER  ?  
+                    <td>
+                      {
+                        inboxItem.status === STATUS_OPEN_ORDER ?
                           <p>
                             En attente
-                          </p> 
-                      : ""
-                    }
-                    {
-                      inboxItem.status === STATUS_COMPLETED_ORDER &&  
-                          <p>
-                            Downloaded on {formatDate(inboxItem.downloadDate)}
-                          </p> 
-                    }     
-                    {
-                      inboxItem.status === STATUS_ACTIVE_ORDER &&  
-                          <p>
-                            Download started on {formatDate(inboxItem.downloadDate)}
-                          </p> 
-                    }     
+                          </p>
+                          : ""
+                      }
+                      {
+                        inboxItem.status === STATUS_COMPLETED_ORDER &&
+                        <p>
+                          Downloaded on {formatDate(inboxItem.downloadDate)}
+                        </p>
+                      }
+                      {
+                        inboxItem.status === STATUS_ACTIVE_ORDER &&
+                        <p>
+                          Download started on {formatDate(inboxItem.downloadDate)}
+                        </p>
+                      }
                     </td>
                   </tr>
                 );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          <div className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black">
-            You have no pending files in your inbox.
-          </div>
+              })
+
+            ) : (
+            
+              <tr class="text-center">
+              <td colSpan={4}>No sent item found.</td>
+              </tr>
+            
         )}
+          </tbody>
+        </table>
       </div>
     </>
 

@@ -7,15 +7,15 @@ import * as ace from "../shared/constants";
 import { inboxDatasetsQuery } from "../shared/queries.ts";
 import structureResponse from "../utils/structureResponse";
 import requestDataset from "./Inbox/requestDataset";
-import {mapInboxOrders} from "../shared/itemMapper";
+import { mapInboxOrders } from "../shared/itemMapper";
 import JSZip from "jszip";
 import downloadFile from "../utils/downloadFile";
-import {getDatasetOrders} from "./Inbox/getOrders";
+import { getDatasetOrders } from "./Inbox/getOrders";
 import { fromDatasetToFileJSON, fetchFromFileToDownloadableFileObject, saveFile } from "./Inbox/download";
-import {fromEnryptedFileToFile} from "../utils/fileAESEncryption";
+import { fromEnryptedFileToFile } from "../utils/fileAESEncryption";
 import formatDate from "../utils/formatDate";
 
-const configArgs = { ethProvider: window.ethereum,  chainId : 134};
+const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = { smsURL: ace.SMS_URL };
 const iexec = new IExec(configArgs, configOptions);
 
@@ -33,15 +33,15 @@ function Inbox() {
   const STATUS_ACTIVE_ORDER = "ACTIVE";
 
 
-  const query = inboxDatasetsQuery(null, connectedAccount) ;
-  console.log("QUERY", query) ; 
+  const query = inboxDatasetsQuery(null, connectedAccount);
+  console.log("QUERY", query);
 
   const { data, loading, error } = useRequest(query);
 
   const [renders, setRendered] = useState(false);
   const [isReadyForDownload] = useState(false)
   var structuredResponse = null;
-  
+
 
   setInterval(() => {
     window.location.reload(false);
@@ -53,24 +53,24 @@ function Inbox() {
 
   useEffect(() => {
     const doMapping = async () => {
-      setInboxItems (await mapInboxOrders(connectedAccount, structuredResponse)) ; 
-      console.log("INBOX ITEMS SET") ;
+      setInboxItems(await mapInboxOrders(connectedAccount, structuredResponse));
+      console.log("INBOX ITEMS SET");
     }
 
     if (data) {
       structuredResponse = structureResponse(data);
-      console.log("structuredResponse", structuredResponse) ;
+      console.log("structuredResponse", structuredResponse);
 
       doMapping();
       setRendered(true);
-      return ; 
+      return;
     }
   }, [data]);
 
 
   useEffect(() => {
     if (inboxItems) {
-      console.log("inboxItems===>", inboxItems) ;
+      console.log("inboxItems===>", inboxItems);
     }
   }, [inboxItems])
 
@@ -80,15 +80,15 @@ function Inbox() {
 
 
   const verifyIfReadyForDownload = (datasetOrder) => {
-      if (
-        datasetOrder.deals &&datasetOrder.deals[0] &&
-        datasetOrder.deals[0].tasks &&
-        datasetOrder.deals[0].tasks[0] &&
-        datasetOrder.deals[0].tasks[0].status
-      ) {
-        return datasetOrder.deals[0].tasks[0].status === "COMPLETED"
-      }
-      return false;
+    if (
+      datasetOrder.deals && datasetOrder.deals[0] &&
+      datasetOrder.deals[0].tasks &&
+      datasetOrder.deals[0].tasks[0] &&
+      datasetOrder.deals[0].tasks[0].status
+    ) {
+      return datasetOrder.deals[0].tasks[0].status === "COMPLETED"
+    }
+    return false;
   }
 
 
@@ -159,7 +159,8 @@ function Inbox() {
       <Helmet>
         <title>ACE-ft | Inbox</title>
       </Helmet>
-      <div className="py-m mx-8">      
+      <div className="py-m mx-8">
+        <h1 class="table-title">Inbox</h1>
         {/* <button
           className="rounded-md bg-white text-black px-6 py-2"
           onClick={async () => {
@@ -207,90 +208,93 @@ function Inbox() {
           Download file (after running task)
         </button> */}
 
-        {inboxItems ? (
-          <table className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black table-auto">
-            <thead>
-              <tr>
-                <th className="border-r border-gray-200 py-3">Received date</th>
-                <th className="border-r border-gray-200 py-3">From</th>
-                <th className="border-r border-gray-200 py-3">Price (in RLC)</th>
-                <th className="px-3">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {inboxItems.sort((a, b) => b.sendDate - a.sendDate).map((inboxItem, i) => {
+
+        <table className="w-full border-collapse max-w-full container table-auto">
+          <thead>
+            <tr>
+              <th className="text-center">Received date</th>
+              <th className="text-center">From</th>
+              <th className="text-center">Price (in RLC)</th>
+              <th className="text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {inboxItems ? (
+              inboxItems.sort((a, b) => b.sendDate - a.sendDate).map((inboxItem, i) => {
                 return (
-                  <tr className="text-center border-t border-gray-200" key={i}  >
-                    <td className="border-r border-gray-200 p-3">
+                  <tr className="text-center" key={i}  >
+                    <td>
                       {formatDate(inboxItem.sendDate)}
                     </td>
-                    <td className="border-r border-gray-200 p-3">
+                    <td>
                       {inboxItem.from}
                     </td>
-                    <td className="border-r border-gray-200 p-3">
+                    <td>
                       {inboxItem.price}
                     </td>
-                    <td className="border-gray-200 p-3">
-                    {
-                      inboxItem.status === STATUS_OPEN_ORDER 
-                      ? <p>
-                          <button className="btn h-6" onClick={async () => {
-                            await requestDataset(inboxItem.id, connectedAccount)
-                            window.location.reload(false); 
+                    <td>
+                      {
+                        inboxItem.status === STATUS_OPEN_ORDER
+                          ? <p>
+                            <button className="btn h-6" onClick={async () => {
+                              await requestDataset(inboxItem.id, connectedAccount)
+                              window.location.reload(false);
                             }}>
-                            Request
-                          </button>
-                        </p> 
-                      : ""
-                    }
-                    {
-                      inboxItem.status === STATUS_ACTIVE_ORDER 
-                      ? <p>
-                          Request started on {formatDate(inboxItem.downloadDate)}
-                        </p> 
-                      : ""
-                    }
-                    {
-                      inboxItem.status === STATUS_COMPLETED_ORDER 
-                      ? <p>
-                          <button className="btn h-6" onClick={async () => {
-                            const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
-                            const resultFileUrl = resultFile.url;
-                            const resultFileKey = resultFile.key;
-                            console.log("resultFileUrl", resultFileUrl)
-                            console.log("resultFileKey", resultFileKey);
-                            var ok = false;
-                            while (!ok) {
-                              console.log("Checking file availability at", resultFileUrl);
-                              ok = await checkFileAvailability("", () =>
-                                console.log("checking ended...")
-                              ); //fileUrl
-                              console.log(ok);
-                            }
-                            const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
-                            console.log(fileObject)
-                            let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
-                            let fileBlob = new Blob([decryptedFile], { type: 'application/octet-stream' });
-                            saveFile(fileBlob, "dowloaded.png");
-                          }}>
-                            Download
-                          </button>
-                          {/* Downloaded on {inboxItem.downloadDate.toString()} */}
-                        </p>
-                      : ""
-                    }     
+                              Request
+                            </button>
+                          </p>
+                          : ""
+                      }
+                      {
+                        inboxItem.status === STATUS_ACTIVE_ORDER
+                          ? <p>
+                            Request started on {formatDate(inboxItem.downloadDate)}
+                          </p>
+                          : ""
+                      }
+                      {
+                        inboxItem.status === STATUS_COMPLETED_ORDER
+                          ? <p>
+                            <button className="btn h-6" onClick={async () => {
+                              const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
+                              const resultFileUrl = resultFile.url;
+                              const resultFileKey = resultFile.key;
+                              console.log("resultFileUrl", resultFileUrl)
+                              console.log("resultFileKey", resultFileKey);
+                              var ok = false;
+                              while (!ok) {
+                                console.log("Checking file availability at", resultFileUrl);
+                                ok = await checkFileAvailability("", () =>
+                                  console.log("checking ended...")
+                                ); //fileUrl
+                                console.log(ok);
+                              }
+                              const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
+                              console.log(fileObject)
+                              let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
+                              let fileBlob = new Blob([decryptedFile], { type: 'application/octet-stream' });
+                              saveFile(fileBlob, "dowloaded.png");
+                            }}>
+                              Download
+                            </button>
+                            {/* Downloaded on {inboxItem.downloadDate.toString()} */}
+                          </p>
+                          : ""
+                      }
 
                     </td>
                   </tr>
                 );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          <div className="w-full border-collapse max-w-full rounded-2xl shadow-xl bg-white text-black">
-            You have no pending files in your inbox.
-          </div>
-        )}
+              })
+
+            ) : (
+              <tr class="text-center">
+                <td colSpan={4}>You have no pending files in your inbox.</td>
+              </tr>
+
+            )}
+          </tbody>
+        </table>
       </div>
     </>
 

@@ -33,7 +33,7 @@ const StepBar = () => {
         </li>
         <li className="my-4 flex list-none items-center justify-center font-semibold">
           <p class="progress two">2</p>
-          <p>Uploading file</p>
+          <p>Uploading encrypted file</p>
         </li>
         <li className="my-4 flex list-none items-center justify-center font-semibold">
           <p class="progress three">3</p>
@@ -41,7 +41,7 @@ const StepBar = () => {
         </li>
         <li className="my-4 flex list-none items-center justify-center font-semibold">
           <p class="progress four">4</p>
-          <p>Uploading dataset</p>
+          <p>Uploading encrypted dataset</p>
         </li>
         <li className="my-4 flex list-none items-center justify-center font-semibold">
           <p class="progress five">5</p>
@@ -49,7 +49,7 @@ const StepBar = () => {
         </li>
         <li className="my-4 flex list-none items-center justify-center font-semibold">
           <p class="progress six">6</p>
-          <p>Pushing secret</p>
+          <p>Pushing dataset secret</p>
         </li>
         <li className="my-4 flex list-none items-center justify-center font-semibold">
           <p class="progress seven">7</p>
