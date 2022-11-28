@@ -50,18 +50,19 @@ const encryptFile = async (selectedFile) => {
 /**
  * Encrypt the dataset containing the file encryption key, the file IPFS url and the message
  * @param {string} fileUrl the url where the encrypted file is uploaded on IPFS
+ * @param {string} fileName the name of the file
  * @param {string} message the message for benefeciary, sent with the encrypted file
  * @param {number} size the message for benefeciary, sent with the encrypted file
  * @returns The encrypted dataset buffer
  */
-const encryptDataset = async (fileUrl, message, size) => {
+const encryptDataset = async (fileUrl, fileName, message, size) => {
     datasetEncryptionKey = iexec.dataset.generateEncryptionKey();
     console.log("Dataset encryption key: " + datasetEncryptionKey);
     console.log("FILE encryption key:", fileEncKey);
     console.log("FILE encryption key tostring:", fileEncKey.toString());
     console.log("FILE encryption buffer:", Buffer.from(fileEncKey));
 
-    var datasetContent = datasetStruct(fileEncKey, fileUrl, message, size);
+    var datasetContent = datasetStruct(fileEncKey, fileUrl, fileName, message, size);
     console.log("Dataset content :", datasetContent)
     const datasetBuffer = jsonToBuffer(datasetContent);
     console.log(datasetBuffer)
