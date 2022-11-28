@@ -150,7 +150,15 @@ export const AceProvider = ({ children }) => {
         cache: "no-cache",
       });
       const ok = response.status === 200;
-      await delay(2)
+      
+      await delay(2) ;
+
+      // Too many requests
+      if ( response.status == 429 )
+      {
+        await delay(10) ;
+      }
+      
       _callback()
       return ok ; // If status is 200, then it's OK
     } catch (error) {

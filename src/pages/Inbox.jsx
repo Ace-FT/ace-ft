@@ -15,6 +15,7 @@ import { fromDatasetToFileJSON, fetchFromFileToDownloadableFileObject, saveFile 
 import { fromEnryptedFileToFile } from "../utils/fileAESEncryption";
 import formatDate from "../utils/formatDate";
 import ReactTooltip from 'react-tooltip';
+import { delay } from "../utils/delay";
 
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = { smsURL: ace.SMS_URL };
@@ -271,17 +272,23 @@ function Inbox() {
                               console.log("resultFileKey", resultFileKey);
                               console.log("resultFileName", resultFileName);
                               var ok = false;
+                              document.body.style.cursor = 'wait';
                               while (!ok) {
                                 console.log("Checking file availability at", resultFileUrl);
                                 ok = await checkFileAvailability("", () =>
                                   console.log("checking ended...")
                                 ); //fileUrl
                                 console.log(ok);
+                                if (!ok)
+                                {
+                                  await delay(5) ;
+                                }
                               }
                               const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
                               console.log(fileObject)
                               let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
                               let fileBlob = new Blob([decryptedFile], { type: 'application/octet-stream' });
+                              document.body.style.cursor = 'default'; 
                               saveFile(fileBlob, resultFileName);
                             }}>
                               Download
