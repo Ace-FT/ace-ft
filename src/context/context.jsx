@@ -52,11 +52,9 @@ export const AceProvider = ({ children }) => {
   const fetchImages = async () => {
     try {
       const response = await fetch(
-        `https://api.unsplash.com/photos/random?query=nfts&query=sustainability&query=human-rights&orientation=landscape&count=3&client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}`
+        process.env.REACT_APP_BACKEND_URL + '/background'
       );
-      const data = await response.json();
-      //console.log('success');
-      const bg = data[2];
+      const bg = await response.json();
       const creator = bg.user;
       setBackground(bg);
       setBgCreator(creator);
