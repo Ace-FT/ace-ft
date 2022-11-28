@@ -167,7 +167,7 @@ const SentItems = () => {
               </tr>
             </thead>
             <tbody>
-              {inboxItems.map((inboxItem, i) => {
+              {inboxItems.sort((a, b) => b.sendDate - a.sendDate).map((inboxItem, i) => {
                 console.log("INBOX ITEM", inboxItem)  ;   
                 return (
                   <tr className="text-center border-t border-gray-200" key={i}>

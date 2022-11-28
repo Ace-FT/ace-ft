@@ -20,7 +20,7 @@ export const AceProvider = ({ children }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [background, setBackground] = useState({});
   const [bgCreator, setBgCreator] = useState({});
-  const [creativeMode, setCreativeMode] = useState(false);
+  const [creativeMode, setCreativeMode] = useState(true);
   const [bgUrls, setBgUrls] = useState({});
   const [bgCreatorSocial, setBgCreatorSocial] = useState({});
   const [imgUrl, setImgUrl] = useState("");
