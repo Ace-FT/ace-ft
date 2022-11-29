@@ -99,18 +99,6 @@ function Inbox() {
     return orders[0];
   };
 
-  const getWorkerpoolOrder = async () => {
-    const { orders } = await iexec.orderbook.fetchWorkerpoolOrderbook({
-      workerpool: ace.WORKERPOOL_ADDRESS,
-      category: 0,
-      minTag: ace.TEE_TAG,
-      maxTag: ace.TEE_TAG,
-    });
-    console.log("Workerpool orders", orders);
-    console.log("One workerpool order", orders[0]);
-    return orders[0];
-  };
-
   /**
    * Gets the datasets from the orderbook
    * @param {string} appAddress the address of the app you want to get the orderbook from
@@ -252,22 +240,12 @@ function Inbox() {
                           </p>
                         )}
                         {inboxItem.status === STATUS_ACTIVE_ORDER &&
-                        (function() {
-                          setInterval(async () => {
-                            console.log(data);
-                            if (data) {
-                              structuredResponse = structureResponse(data);
-                            }
-                            setInboxItems(await mapInboxOrders(connectedAccount,structuredResponse));
-                          }, ace.TIME_BEFORE_AUTO_REFRESHING_INBOX)
-                          
-                          return (<p>
+                          <p>
                             Request started on {formatDate(inboxItem.downloadDate)}
-                          </p>)}
-                        )
-                      }
-                      {
-                        inboxItem.status === STATUS_COMPLETED_ORDER && (
+                          </p>
+                      
+                        }
+                        {inboxItem.status === STATUS_COMPLETED_ORDER && (
                           <p>
                             <button className="btn h-6" onClick={async () => {
                               const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
@@ -285,8 +263,7 @@ function Inbox() {
                                   console.log("checking ended...")
                                 ); //fileUrl
                                 console.log(ok);
-                                if (!ok)
-                                {
+                                if (!ok) {
                                   await delay(5) ;
                                 }
                               }
