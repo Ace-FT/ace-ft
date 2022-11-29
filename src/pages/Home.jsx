@@ -2,13 +2,12 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import SendForm from "../components/SendForm/SendForm";
 import { AceContext } from '../context/context';
-import * as ace from "../shared/constants";
 import crypto from 'crypto-browserify';
 import StepBar from '../components/StepBar';
 
 
 function Home() {
-  const { isLoading, setIsLoading, state, background, bgCreator, bgUrls, bgCreatorSocial, creativeMode, setCreativeMode, imgUrl, checkFileAvailability, selectedFiles } = useContext(AceContext);
+  const { state, background, bgCreator, bgUrls, bgCreatorSocial, creativeMode, imgUrl, checkFileAvailability } = useContext(AceContext);
 
   const [message, setMessage] = useState("")
 
@@ -22,16 +21,7 @@ function Home() {
     writeStatus(state)
   }, [state])
 
-  // useEffect(() => {
-  //   fetch("http://localhost:5001/")
-  //     .then((res) => res.json())
-  //     .then((data) => setMessage(data.message));
-  // }, []);
-
-
-
-
-  // Difining algorithm
+  // Defining algorithm
   const algorithm = 'aes-256-cbc';
 
   // Defining key

@@ -15,7 +15,7 @@ const configOptions = { smsURL: ace.SMS_URL };
 const iexec = new IExec(configArgs, configOptions);
 
 const SendForm = () => {
-  const { connectedAccount, connectWallet, bgUrls } = useContext(AceContext);
+  const { connectedAccount, connectWallet } = useContext(AceContext);
 
   const { isLoading, setIsLoading, addressTo, setAddressTo, step, setStep, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
@@ -29,20 +29,6 @@ const SendForm = () => {
   const DEPLOYING_DATASET = 5;
   const PUSHING_SECRET = 6;
   const FINISHED = 7;
-
-  const steps = [
-    "BEGINNING PROCESS", // 0
-    "ENCRYPTING FILE", // 1
-    "UPLOADING FILE", // 2
-    "FILE AVAILABLE", //3
-    "ENCRYPTING DATASET", // 4
-    "UPLOADING DATASET",
-    "DATASET AVAILABLE", //6
-    "DEPLOYING DATASET", // 7
-    "PUSHING SECRET", // 8
-    "PUSHING DATASET ORDER", //9
-    "END OF PROCESS", // 10
-  ];
 
   const DELAY_BEFORE_CHECKING_FILE_UPLOADED = 3;
 
@@ -206,7 +192,6 @@ const SendForm = () => {
                   setStep(UPLOADING_FILE);
                   const encryptedFile = jsonToBuffer(encryptedFileJSON);
                   var fileUrl = await uploadData(encryptedFile);
-                  console.log("File uploaded at", fileUrl);
                   document.body.style.cursor = 'default';
 
                   var ok = false;
@@ -255,7 +240,6 @@ const SendForm = () => {
                   setStep(PUSHING_SECRET);
                   await pushSecret(datasetAddress, datasetEncryptionKey);
                   const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
-                  console.log("secret is pushed?", isSecretPushed);
                   document.body.style.cursor = 'default';
 
                   document.body.style.cursor = 'wait';

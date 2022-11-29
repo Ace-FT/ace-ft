@@ -8,7 +8,6 @@ import { inboxDatasetsQuery } from "../shared/queries.ts";
 import structureResponse from "../utils/structureResponse";
 import requestDataset from "./Inbox/requestDataset";
 import { mapInboxOrders } from "../shared/itemMapper";
-import JSZip from "jszip";
 import downloadFile from "../utils/downloadFile";
 import { getDatasetOrders } from "./Inbox/getOrders";
 import { fromDatasetToFileJSON, fetchFromFileToDownloadableFileObject, saveFile } from "./Inbox/download";
@@ -53,7 +52,7 @@ function Inbox() {
 
   useEffect(() => {
     const doMapping = async () => {
-      await delay(2)
+      await delay(4)
       setInboxItems(await mapInboxOrders(connectedAccount, structuredResponse));
       console.log("INBOX ITEMS SET");
     };
@@ -87,39 +86,6 @@ function Inbox() {
       return datasetOrder.deals[0].tasks[0].status === "COMPLETED";
     }
     return false;
-  };
-
-  const getAppOrder = async (appAddress) => {
-    const { count, orders } = await iexec.orderbook.fetchAppOrderbook(
-      appAddress,
-      {
-        workerpool: ace.WORKERPOOL_ADDRESS,
-      }
-    );
-    console.log("total orders:", count);
-    console.log("App orders:", orders);
-    console.log("One order:", orders[0]);
-    return orders[0];
-  };
-
-  /**
-   * Gets the datasets from the orderbook
-   * @param {string} appAddress the address of the app you want to get the orderbook from
-   * @returns The first dataset order from the orderbook
-   */
-  const getDatasetOrder = async (appAddress) => {
-    const { orders } = await iexec.orderbook.fetchDatasetOrderbook(
-      "0xA102d202e7947d7F27eA0Bf618Acb2CE600841f8",
-      {
-        app: ace.APP_ADDRESS,
-        requester: "0xc340e71bbea215deb351d573fcf340bf3e01db97",
-        minTag: ace.TEE_TAG,
-        maxTag: ace.TEE_TAG,
-      }
-    );
-    console.log("dataset orders", orders);
-    console.log("One dataset order", orders[0]);
-    return orders[0];
   };
 
   const fetchMyRequestOrders = async () => {
