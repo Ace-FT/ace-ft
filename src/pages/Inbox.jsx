@@ -24,7 +24,7 @@ const iexec = new IExec(configArgs, configOptions);
 
 function Inbox() {
   const { ethereum } = window;
-  const { connectedAccount, checkFileAvailability } = useContext(AceContext);
+  const { connectedAccount, checkFileAvailability, useNextIpfsGateway } = useContext(AceContext);
 
 
   const WAITING_FOR_REQUEST = 0;
@@ -156,6 +156,22 @@ function Inbox() {
   };
 
 
+  const getNextIpfsGateway = (ipfsUrl, trycount) => {
+    var parts = ipfsUrl.split('/ipfs') ; 
+    console.log("parts", parts) ; 
+
+    const gateways = process.env.REACT_APP_IPFS_GATEWAYS.split(',') ;
+
+    let numNext = trycount % gateways.length 
+    let nextUrl = gateways[numNext] + parts[1] ;
+    console.log("gateways", gateways, "numNext", numNext, "nextUrl", nextUrl) ;
+
+
+    return nextUrl ; 
+
+  }
+
+  
   return (
     <>
       <Helmet>
@@ -265,7 +281,7 @@ function Inbox() {
                           ? <p>
                             <button className="btn h-6" onClick={async () => {
                               const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
-                              const resultFileUrl = resultFile.url;
+                              let resultFileUrl = resultFile.url;
                               const resultFileKey = resultFile.key;
                               const resultFileName = resultFile.name;
                               console.log("resultFileUrl", resultFileUrl)
@@ -273,19 +289,21 @@ function Inbox() {
                               console.log("resultFileName", resultFileName);
                               var ok = false;
                               document.body.style.cursor = 'wait';
+                              let trycount = 0 ;
+
                               while (!ok) {
-                                console.log("Checking file availability at", resultFileUrl);
-                                ok = await checkFileAvailability("", () =>
-                                  console.log("checking ended...")
-                                ); //fileUrl
+                                ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...") ); //fileUrl
                                 console.log(ok);
                                 if (!ok)
                                 {
-                                  await delay(5) ;
+                                  await delay(2) ;
+                                  ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...") ); //fileUrl
+
+                                  trycount++ ;
+                                  resultFileUrl = getNextIpfsGateway(resultFileUrl,trycount) ;// await useNextIpfsGateway(resultFileUrl, trycount); 
                                 }
                               }
                               const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
-                              console.log(fileObject)
                               let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
                               let fileBlob = new Blob([decryptedFile], { type: 'application/octet-stream' });
                               document.body.style.cursor = 'default'; 
