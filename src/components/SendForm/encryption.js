@@ -57,18 +57,18 @@ const encryptFile = async (selectedFile) => {
  */
 const encryptDataset = async (fileUrl, fileName, message, size) => {
     datasetEncryptionKey = iexec.dataset.generateEncryptionKey();
-    console.log("Dataset encryption key: " + datasetEncryptionKey);
-    console.log("FILE encryption key:", fileEncKey);
+    // console.log("Dataset encryption key: " + datasetEncryptionKey);
+    // console.log("FILE encryption key:", fileEncKey);
     console.log("FILE encryption key tostring:", fileEncKey.toString());
-    console.log("FILE encryption buffer:", Buffer.from(fileEncKey));
+    // console.log("FILE encryption buffer:", Buffer.from(fileEncKey));
 
     var datasetContent = datasetStruct(fileEncKey, fileUrl, fileName, message, size);
     console.log("Dataset content :", datasetContent)
     const datasetBuffer = jsonToBuffer(datasetContent);
-    console.log(datasetBuffer)
+    //console.log(datasetBuffer)
 
     const encryptedDataset = await iexec.dataset.encrypt(datasetBuffer, datasetEncryptionKey);
-    console.log("encrypted dataset", encryptedDataset)
+    //console.log("encrypted dataset", encryptedDataset)
     //return datasetBuffer;
     //return datasetBuffer;
     return encryptedDataset;

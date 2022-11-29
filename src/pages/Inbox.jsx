@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Helmet } from 'react-helmet'
+import { Helmet } from "react-helmet";
 import { AceContext } from "../context/context";
 import { IExec } from "iexec";
 import useRequest from "../hooks/useRequest";
@@ -14,17 +14,15 @@ import { getDatasetOrders } from "./Inbox/getOrders";
 import { fromDatasetToFileJSON, fetchFromFileToDownloadableFileObject, saveFile } from "./Inbox/download";
 import { fromEnryptedFileToFile } from "../utils/fileAESEncryption";
 import formatDate from "../utils/formatDate";
-import ReactTooltip from 'react-tooltip';
+import ReactTooltip from "react-tooltip";
 
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = { smsURL: ace.SMS_URL };
 const iexec = new IExec(configArgs, configOptions);
 
-
 function Inbox() {
   const { ethereum } = window;
   const { connectedAccount, checkFileAvailability } = useContext(AceContext);
-
 
   const WAITING_FOR_REQUEST = 0;
   const REQUESTING = 1;
@@ -33,21 +31,19 @@ function Inbox() {
   const STATUS_COMPLETED_ORDER = "COMPLETED";
   const STATUS_ACTIVE_ORDER = "ACTIVE";
 
-
   const query = inboxDatasetsQuery(null, connectedAccount);
   console.log("QUERY", query);
 
-  const { data, loading, error } = useRequest(query);
+  const { data } = useRequest(query);
 
   const [renders, setRendered] = useState(false);
-  const [isReadyForDownload] = useState(false)
-  var structuredResponse = null;
+  const [isReadyForDownload] = useState(false);
 
+  var structuredResponse = null;
 
   setInterval(() => {
     window.location.reload(false);
   }, ace.TIME_BEFORE_AUTO_REFRESHING_INBOX);
-
 
   const [inboxItems, setInboxItems] = useState();
   const [taskID, setTaskID] = useState("");
@@ -56,7 +52,7 @@ function Inbox() {
     const doMapping = async () => {
       setInboxItems(await mapInboxOrders(connectedAccount, structuredResponse));
       console.log("INBOX ITEMS SET");
-    }
+    };
 
     if (data) {
       structuredResponse = structureResponse(data);
@@ -68,39 +64,35 @@ function Inbox() {
     }
   }, [data]);
 
-
   useEffect(() => {
     if (inboxItems) {
       console.log("inboxItems===>", inboxItems);
     }
-  }, [inboxItems])
+  }, [inboxItems]);
 
-  useEffect(() => {
-
-  }, [taskID])
-
+  useEffect(() => {}, [taskID]);
 
   const verifyIfReadyForDownload = (datasetOrder) => {
     if (
-      datasetOrder.deals && datasetOrder.deals[0] &&
+      datasetOrder.deals &&
+      datasetOrder.deals[0] &&
       datasetOrder.deals[0].tasks &&
       datasetOrder.deals[0].tasks[0] &&
       datasetOrder.deals[0].tasks[0].status
     ) {
-      return datasetOrder.deals[0].tasks[0].status === "COMPLETED"
+      return datasetOrder.deals[0].tasks[0].status === "COMPLETED";
     }
     return false;
-  }
-
+  };
 
   const getAppOrder = async (appAddress) => {
     const { count, orders } = await iexec.orderbook.fetchAppOrderbook(
       appAddress,
       {
-        workerpool: ace.WORKERPOOL_ADDRESS
+        workerpool: ace.WORKERPOOL_ADDRESS,
       }
     );
-    console.log('total orders:', count);
+    console.log("total orders:", count);
     console.log("App orders:", orders);
     console.log("One order:", orders[0]);
     return orders[0];
@@ -111,7 +103,7 @@ function Inbox() {
       workerpool: ace.WORKERPOOL_ADDRESS,
       category: 0,
       minTag: ace.TEE_TAG,
-      maxTag: ace.TEE_TAG
+      maxTag: ace.TEE_TAG,
     });
     console.log("Workerpool orders", orders);
     console.log("One workerpool order", orders[0]);
@@ -130,14 +122,13 @@ function Inbox() {
         app: ace.APP_ADDRESS,
         requester: "0xc340e71bbea215deb351d573fcf340bf3e01db97",
         minTag: ace.TEE_TAG,
-        maxTag: ace.TEE_TAG
+        maxTag: ace.TEE_TAG,
       }
     );
     console.log("dataset orders", orders);
     console.log("One dataset order", orders[0]);
     return orders[0];
   };
-
 
   const fetchMyRequestOrders = async () => {
     // const { app } = await iexec.app.showApp(
@@ -147,20 +138,19 @@ function Inbox() {
     const { myRequestOrders } = await iexec.orderbook.fetchRequestOrderbook({
       app: ace.APP_ADDRESS,
       requester: connectedAccount,
-      workerpool: ace.WORKERPOOL_ADDRESS
+      workerpool: ace.WORKERPOOL_ADDRESS,
     });
     // console.log("app\n", app);
     console.log("My request orders", myRequestOrders);
     return myRequestOrders;
   };
 
-
   return (
     <>
       <Helmet>
         <title>ACE-ft | Inbox</title>
       </Helmet>
-      <div className="py-m mx-8">
+      <div className="mx-8 py-m">
         <h1 class="table-title">Inbox</h1>
         {/* <button
           className="rounded-md bg-white text-black px-6 py-2"
@@ -209,14 +199,25 @@ function Inbox() {
           Download file (after running task)
         </button> */}
 
-<ReactTooltip />
+        <ReactTooltip />
 
-<svg data-tip="hello world" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-</svg>
+        <svg
+          data-tip="hello world"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="h-6 w-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"
+          />
+        </svg>
 
-
-        <table className="w-full border-collapse max-w-full container table-auto">
+        <table className="container w-full max-w-full table-auto border-collapse">
           <thead>
             <tr>
               <th className="text-center">Received date</th>
@@ -227,87 +228,118 @@ function Inbox() {
           </thead>
           <tbody>
             {inboxItems ? (
-              inboxItems.sort((a, b) => b.sendDate - a.sendDate).map((inboxItem, i) => {
-                return (
-                  <tr className="text-center" key={i}  >
-                    <td>
-                      {formatDate(inboxItem.sendDate)}
-                    </td>
-                    <td>
-                      {inboxItem.from}
-                    </td>
-                    <td>
-                      {inboxItem.price}
-                    </td>
-                    <td>
-                      {
-                        inboxItem.status === STATUS_OPEN_ORDER
-                          ? <p>
-                            <button className="btn h-6" onClick={async () => {
-                              await requestDataset(inboxItem.id, connectedAccount)
-                              window.location.reload(false);
-                            }}>
+              inboxItems
+                .sort((a, b) => b.sendDate - a.sendDate)
+                .map((inboxItem, i) => {
+                  return (
+                    <tr className="text-center" key={i}>
+                      <td>{formatDate(inboxItem.sendDate)}</td>
+                      <td>{inboxItem.from}</td>
+                      <td>{inboxItem.price}</td>
+                      <td>
+                        {inboxItem.status === STATUS_OPEN_ORDER ? (
+                          <p>
+                            <button
+                              className="btn h-6"
+                              onClick={async () => {
+                                await requestDataset(inboxItem.id, connectedAccount);
+                                // setInterval(async () => {
+                                //   console.log(data);
+                                //   if (data) {
+                                //     structuredResponse = structureResponse(data);
+                                //   }
+                                //   setInboxItems(
+                                //     await mapInboxOrders(connectedAccount,structuredResponse)
+                                //   );
+                                // }, ace.TIME_BEFORE_AUTO_REFRESHING_INBOX);
+
+                                window.location.reload(false);
+                              }}
+                            >
                               Request
                             </button>
                           </p>
-                          : ""
-                      }
-                      {
-                        inboxItem.status === STATUS_ACTIVE_ORDER
-                          ? <p>
+                        ) : (
+                          ""
+                        )}
+                        {inboxItem.status === STATUS_ACTIVE_ORDER &&
+                        (function() {
+                          setInterval(async () => {
+                            console.log(data);
+                            if (data) {
+                              structuredResponse = structureResponse(data);
+                            }
+                            setInboxItems(await mapInboxOrders(connectedAccount,structuredResponse));
+                          }, ace.TIME_BEFORE_AUTO_REFRESHING_INBOX)
+                          
+                          return (<p>
                             Request started on {formatDate(inboxItem.downloadDate)}
                           </p>
-                          : ""
-                      }
-                      {
-                        inboxItem.status === STATUS_COMPLETED_ORDER
-                          ? <p>
-                            <button className="btn h-6" onClick={async () => {
-                              const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
-                              const resultFileUrl = resultFile.url;
-                              const resultFileKey = resultFile.key;
-                              const resultFileName = resultFile.name;
-                              console.log("resultFileUrl", resultFileUrl)
-                              console.log("resultFileKey", resultFileKey);
-                              console.log("resultFileName", resultFileName);
-                              var ok = false;
-                              while (!ok) {
-                                console.log("Checking file availability at", resultFileUrl);
-                                ok = await checkFileAvailability("", () =>
-                                  console.log("checking ended...")
-                                ); //fileUrl
-                                console.log(ok);
-                              }
-                              const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
-                              console.log(fileObject)
-                              let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
-                              let fileBlob = new Blob([decryptedFile], { type: 'application/octet-stream' });
-                              saveFile(fileBlob, resultFileName);
-                            }}>
+
+                          )
+                        })
+
+                          // (setInterval(async () => {
+                          //   console.log(data);
+                          //   if (data) {
+                          //     structuredResponse = structureResponse(data);
+                          //   }
+                          //   setInboxItems(await mapInboxOrders(connectedAccount,structuredResponse));
+                          // }, ace.TIME_BEFORE_AUTO_REFRESHING_INBOX))
+                          // (
+                          //   <p>
+                          //     Request started on {formatDate(inboxItem.downloadDate)}
+                          //   </p>
+                          // )
+                        }
+                        {inboxItem.status === STATUS_COMPLETED_ORDER ? (
+                          <p>
+                            <button
+                              className="btn h-6"
+                              onClick={async () => {
+                                const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
+                                const resultFileUrl = resultFile.url;
+                                const resultFileKey = resultFile.key;
+                                const resultFileName = resultFile.name;
+                                console.log("resultFileUrl", resultFileUrl);
+                                console.log("resultFileKey", resultFileKey);
+                                console.log("resultFileName", resultFileName);
+                                var ok = false;
+                                while (!ok) {
+                                  console.log("Checking file availability at", resultFileUrl);
+                                  ok = await checkFileAvailability(resultFileUrl, () =>
+                                    console.log("checking ended...")
+                                  );
+                                  console.log(ok);
+                                }
+                                const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
+                                console.log(fileObject);
+                                let decryptedFile = fromEnryptedFileToFile(fileObject,resultFileKey);
+                                let fileBlob = new Blob([decryptedFile], {type: "application/octet-stream"});
+                                saveFile(fileBlob, resultFileName);
+                              }}
+                            >
                               Download
                             </button>
                             {/* Downloaded on {inboxItem.downloadDate.toString()} */}
                           </p>
-                          : ""
-                      }
-
-                    </td>
-                  </tr>
-                );
-              })
-
+                        ) : (
+                          ""
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
             ) : (
               <tr class="text-center">
                 <td colSpan={4}>You have no pending files in your inbox.</td>
               </tr>
-
             )}
           </tbody>
         </table>
       </div>
     </>
-
   );
-};
+}
 
 export default Inbox;

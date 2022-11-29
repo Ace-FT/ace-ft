@@ -15,6 +15,7 @@ const StepBar = () => {
   const seven = document.querySelector(".seven");
 
   useEffect(() => {
+    console.log("Step", step)
     if (step === 1) one.classList.add("inprogr")
     if (step === 2) two.classList.add("inprogr")
     if (step === 3) three.classList.add("inprogr")

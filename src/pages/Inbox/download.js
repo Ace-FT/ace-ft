@@ -39,7 +39,7 @@ const fromDatasetToFileJSON = async (taskId) => {
  * @returns the file from the url in a UInt8Array object
  */
 const fetchFromFileToDownloadableFileObject = async (fileUrl) => {
-  let responseArray = await fetch(fileUrl, { method: "GET" }).then(
+  let responseArray = await fetch(fileUrl).then(
     (response) => {
       //return new Uint8Array(response.arrayBuffer()); //to convert to UintArray8
       return response.arrayBuffer();
