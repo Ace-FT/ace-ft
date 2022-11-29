@@ -238,30 +238,18 @@ function Inbox() {
                       <td>{inboxItem.from}</td>
                       <td>{inboxItem.price}</td>
                       <td>
-                        {inboxItem.status === STATUS_OPEN_ORDER ? (
+                        {inboxItem.status === STATUS_OPEN_ORDER && (
                           <p>
                             <button
                               className="btn h-6"
                               onClick={async () => {
                                 await requestDataset(inboxItem.id, connectedAccount);
-                                // setInterval(async () => {
-                                //   console.log(data);
-                                //   if (data) {
-                                //     structuredResponse = structureResponse(data);
-                                //   }
-                                //   setInboxItems(
-                                //     await mapInboxOrders(connectedAccount,structuredResponse)
-                                //   );
-                                // }, ace.TIME_BEFORE_AUTO_REFRESHING_INBOX);
-
                                 window.location.reload(false);
                               }}
                             >
                               Request
                             </button>
                           </p>
-                        ) : (
-                          ""
                         )}
                         {inboxItem.status === STATUS_ACTIVE_ORDER &&
                         (function() {
@@ -275,12 +263,12 @@ function Inbox() {
                           
                           return (<p>
                             Request started on {formatDate(inboxItem.downloadDate)}
-                          </p>
-                          : ""
+                          </p>)}
+                        )
                       }
                       {
-                        inboxItem.status === STATUS_COMPLETED_ORDER
-                          ? <p>
+                        inboxItem.status === STATUS_COMPLETED_ORDER && (
+                          <p>
                             <button className="btn h-6" onClick={async () => {
                               const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
                               const resultFileUrl = resultFile.url;
@@ -311,10 +299,7 @@ function Inbox() {
                             }}>
                               Download
                             </button>
-                            {/* Downloaded on {inboxItem.downloadDate.toString()} */}
                           </p>
-                        ) : (
-                          ""
                         )}
                       </td>
                     </tr>

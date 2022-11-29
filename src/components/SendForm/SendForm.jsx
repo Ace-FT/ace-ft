@@ -196,7 +196,6 @@ const SendForm = () => {
                 type="submit"
                 onClick={async (e) => {
                   e.preventDefault();
-                  status = nextStep(status);
                   setIsLoading(true);
                   setStep(ENCRYPTING_FILE);
 
@@ -204,7 +203,6 @@ const SendForm = () => {
                   const encryptedFileJSON = await encryptFile(selectedFiles[0]);
                   const fileName = selectedFiles[0].name;
                   const fileSize = selectedFiles[0].size;
-                  status = nextStep(status);
                   setStep(UPLOADING_FILE);
                   const encryptedFile = jsonToBuffer(encryptedFileJSON);
                   var fileUrl = await uploadData(encryptedFile);
@@ -225,8 +223,6 @@ const SendForm = () => {
                     }
                   }
                   document.body.style.cursor = 'default';
-                  nextStep(status);
-                  console.log(`Step ${status}: ${steps[status]}`); // 3
                   setIsAvailable(ok);
 
                   setStep(ENCRYPTING_DATASET);
@@ -246,12 +242,9 @@ const SendForm = () => {
                       console.log(ok);
                     }
                   }
-                  nextStep(status);
-                  console.log(`Step ${status}: ${steps[status]}`); // 6
                   document.body.style.cursor = 'default';
 
                   document.body.style.cursor = 'wait';
-                  nextStep(status);
                   setStep(DEPLOYING_DATASET);
                   await delay(1)
                   const datasetName = generateDatasetName(connectedAccount, addressTo);
@@ -266,9 +259,6 @@ const SendForm = () => {
                   document.body.style.cursor = 'default';
 
                   document.body.style.cursor = 'wait';
-
-                  nextStep(status);
-                  console.log(`Step ${status}: ${steps[status]}`); //9
                   await pushOrder(datasetAddress, addressTo);
 
                   setStep(FINISHED);
