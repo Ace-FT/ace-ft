@@ -36,7 +36,7 @@ Ace is an illustration that there is a better way to do business when it comes t
 
 ## Features
 
-- "WeTransfer-like" experience,  simply drag and drop files you want to share
+- "WeTransfer-like" experience,  simply chose the file you want to share
 - Set the beneficiary in the form of 0x address
 - Cryptographic access control to the file being transfered powered by iExec
 - Telegram integration for notification and querying. The beneficiary can use telegram to get notified for new file transfer. Check out your new friend [Mr ACE](http://t.me/ace_ft_bot) the telgram bot!
@@ -50,11 +50,21 @@ Ace's system design is making use of all three types of computing assets that ar
 
 ### Modelization
 
+**_Encrypted File_**
+The file being transferred is encrypted (AES 256) and uploaded to IPFS. The IPFS URL and the encryption key are secrets :-)  . See next paragraph
+
 **_Datasets_**  
-Files that are being transferred are represented as iExec encrypted datasets
+iExec encrypted datasets are used to store secret metadata associated with the file being transferred. The iExec encrypted dataset contains : 
+- The file encryption key
+- The URL on IPFS of the encrypted file
+- The file name
+- The file length
+- A message from the sender
+
+
 
 **_Application_**  
-Our application is trivial as it consists of simply downloading the transferred file. In fact, the iExec protocol is taking care the authorization by ensuring that only the selected requester can trigger the download application for the given dataset (i.e transferred files)
+Our application is trivial as it consists of simply downloading the transferred file. In fact, the iExec protocol is taking care the authorization by ensuring that only the selected requester can trigger the download application for the given dataset (i.e secret metadata of the files being transferred)
 
 **_Processing power (CPU)_**  
 The processing capacity required to execute the application is provided by workers in the iExec network. The execution relies on Intel SGX compatible workers only.

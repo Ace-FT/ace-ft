@@ -14,7 +14,8 @@ import { getDatasetOrders } from "./Inbox/getOrders";
 import { fromDatasetToFileJSON, fetchFromFileToDownloadableFileObject, saveFile } from "./Inbox/download";
 import { fromEnryptedFileToFile } from "../utils/fileAESEncryption";
 import formatDate from "../utils/formatDate";
-import ReactTooltip from "react-tooltip";
+import ReactTooltip from 'react-tooltip';
+import { delay } from "../utils/delay";
 
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = { smsURL: ace.SMS_URL };
@@ -275,50 +276,39 @@ function Inbox() {
                           return (<p>
                             Request started on {formatDate(inboxItem.downloadDate)}
                           </p>
-
-                          )
-                        })
-
-                          // (setInterval(async () => {
-                          //   console.log(data);
-                          //   if (data) {
-                          //     structuredResponse = structureResponse(data);
-                          //   }
-                          //   setInboxItems(await mapInboxOrders(connectedAccount,structuredResponse));
-                          // }, ace.TIME_BEFORE_AUTO_REFRESHING_INBOX))
-                          // (
-                          //   <p>
-                          //     Request started on {formatDate(inboxItem.downloadDate)}
-                          //   </p>
-                          // )
-                        }
-                        {inboxItem.status === STATUS_COMPLETED_ORDER ? (
-                          <p>
-                            <button
-                              className="btn h-6"
-                              onClick={async () => {
-                                const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
-                                const resultFileUrl = resultFile.url;
-                                const resultFileKey = resultFile.key;
-                                const resultFileName = resultFile.name;
-                                console.log("resultFileUrl", resultFileUrl);
-                                console.log("resultFileKey", resultFileKey);
-                                console.log("resultFileName", resultFileName);
-                                var ok = false;
-                                while (!ok) {
-                                  console.log("Checking file availability at", resultFileUrl);
-                                  ok = await checkFileAvailability(resultFileUrl, () =>
-                                    console.log("checking ended...")
-                                  );
-                                  console.log(ok);
+                          : ""
+                      }
+                      {
+                        inboxItem.status === STATUS_COMPLETED_ORDER
+                          ? <p>
+                            <button className="btn h-6" onClick={async () => {
+                              const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
+                              const resultFileUrl = resultFile.url;
+                              const resultFileKey = resultFile.key;
+                              const resultFileName = resultFile.name;
+                              console.log("resultFileUrl", resultFileUrl)
+                              console.log("resultFileKey", resultFileKey);
+                              console.log("resultFileName", resultFileName);
+                              var ok = false;
+                              document.body.style.cursor = 'wait';
+                              while (!ok) {
+                                console.log("Checking file availability at", resultFileUrl);
+                                ok = await checkFileAvailability("", () =>
+                                  console.log("checking ended...")
+                                ); //fileUrl
+                                console.log(ok);
+                                if (!ok)
+                                {
+                                  await delay(5) ;
                                 }
-                                const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
-                                console.log(fileObject);
-                                let decryptedFile = fromEnryptedFileToFile(fileObject,resultFileKey);
-                                let fileBlob = new Blob([decryptedFile], {type: "application/octet-stream"});
-                                saveFile(fileBlob, resultFileName);
-                              }}
-                            >
+                              }
+                              const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
+                              console.log(fileObject)
+                              let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
+                              let fileBlob = new Blob([decryptedFile], { type: 'application/octet-stream' });
+                              document.body.style.cursor = 'default'; 
+                              saveFile(fileBlob, resultFileName);
+                            }}>
                               Download
                             </button>
                             {/* Downloaded on {inboxItem.downloadDate.toString()} */}

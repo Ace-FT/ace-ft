@@ -196,24 +196,23 @@ const SendForm = () => {
                 type="submit"
                 onClick={async (e) => {
                   e.preventDefault();
-                  console.log("optimistic", optimistic);
-                  console.log("Step", BEGINNING_PROCESS); //Write the different steps in order to have the workflow
+                  status = nextStep(status);
                   setIsLoading(true);
                   setStep(ENCRYPTING_FILE);
 
+                  document.body.style.cursor = 'wait';
                   const encryptedFileJSON = await encryptFile(selectedFiles[0]);
                   const fileName = selectedFiles[0].name;
                   const fileSize = selectedFiles[0].size;
-                  console.log(fileName);
-                  console.log("Size:", fileSize);
+                  status = nextStep(status);
                   setStep(UPLOADING_FILE);
                   const encryptedFile = jsonToBuffer(encryptedFileJSON);
-                  console.log("encryptedFile:", encryptedFile);
-
                   var fileUrl = await uploadData(encryptedFile);
                   console.log("File uploaded at", fileUrl);
+                  document.body.style.cursor = 'default';
 
                   var ok = false;
+                  document.body.style.cursor = 'wait';
                   if (!optimistic) {
                     await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
 
@@ -225,6 +224,9 @@ const SendForm = () => {
                       console.log(ok);
                     }
                   }
+                  document.body.style.cursor = 'default';
+                  nextStep(status);
+                  console.log(`Step ${status}: ${steps[status]}`); // 3
                   setIsAvailable(ok);
 
                   setStep(ENCRYPTING_DATASET);
@@ -234,29 +236,39 @@ const SendForm = () => {
                   setStep(UPLOADING_DATASET);
                   var datasetUrl = await uploadData(encryptedDataset);
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
+                  if (!optimistic) {
+                    ok = false;
+                    while (!ok) {
+                      console.log("Checking dataset availability");
+                      ok = await checkFileAvailability(datasetUrl, () =>
+                        console.log("checking ended...")
+                      );
+                      console.log(ok);
+                    }
+                  }
+                  nextStep(status);
+                  console.log(`Step ${status}: ${steps[status]}`); // 6
+                  document.body.style.cursor = 'default';
 
-                  // if (!optimistic) {
-                  //   ok = false;
-                  //   while (!ok) {
-                  //     console.log("Checking dataset availability");
-                  //     ok = await checkFileAvailability(datasetUrl, () =>
-                  //       console.log("checking ended...")
-                  //     );
-                  //     console.log(ok);
-                  //   }
-                  // }
-
+                  document.body.style.cursor = 'wait';
+                  nextStep(status);
                   setStep(DEPLOYING_DATASET);
                   await delay(1)
                   const datasetName = generateDatasetName(connectedAccount, addressTo);
                   const checksum = await generateEncryptedFileChecksum(encryptedDataset);
                   const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
+                  document.body.style.cursor = 'default';
 
                   setStep(PUSHING_SECRET);
                   await pushSecret(datasetAddress, datasetEncryptionKey);
                   const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
                   console.log("secret is pushed?", isSecretPushed);
+                  document.body.style.cursor = 'default';
 
+                  document.body.style.cursor = 'wait';
+
+                  nextStep(status);
+                  console.log(`Step ${status}: ${steps[status]}`); //9
                   await pushOrder(datasetAddress, addressTo);
 
                   setStep(FINISHED);
