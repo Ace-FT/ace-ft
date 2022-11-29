@@ -182,14 +182,6 @@ function Home() {
       <div className="relative flex mx-m py-m">
         <div className="flex">
           <SendForm />
-          {/* {isLoading ? (
-            <div className="flex">
-              { state !== ace.STEP_COMPLETED && <div className="w-7 h-7 border-4 border-gray-400 rounded-full border-t-iexyellow animate-spin mr-4 pr-4"></div> }
-              {writeStatus(state)}
-            </div>
-          ) : (
-            <p></p>
-          )} */}
           <StepBar />
         </div>
 

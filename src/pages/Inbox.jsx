@@ -31,8 +31,8 @@ function Inbox() {
   const STATUS_OPEN_ORDER = "open";
   const STATUS_COMPLETED_ORDER = "COMPLETED";
   const STATUS_ACTIVE_ORDER = "ACTIVE";
-
   const query = inboxDatasetsQuery(null, connectedAccount);
+
   console.log("QUERY", query);
 
   const { data } = useRequest(query);
@@ -49,8 +49,11 @@ function Inbox() {
   const [inboxItems, setInboxItems] = useState();
   const [taskID, setTaskID] = useState("");
 
+  useEffect(() => {}, [connectedAccount])
+
   useEffect(() => {
     const doMapping = async () => {
+      await delay(2)
       setInboxItems(await mapInboxOrders(connectedAccount, structuredResponse));
       console.log("INBOX ITEMS SET");
     };
@@ -145,9 +148,7 @@ function Inbox() {
     let nextUrl = gateways[numNext] + parts[1] ;
     console.log("gateways", gateways, "numNext", numNext, "nextUrl", nextUrl) ;
 
-
     return nextUrl ; 
-
   }
 
   
