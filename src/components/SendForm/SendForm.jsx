@@ -44,11 +44,6 @@ const SendForm = () => {
     "END OF PROCESS", // 10
   ];
 
-  var status = BEGINNING_PROCESS;
-  function nextStep() {
-    return (status = status + 1);
-  }
-
   const DELAY_BEFORE_CHECKING_FILE_UPLOADED = 3;
 
   const handleChange = (event) => {
@@ -201,16 +196,13 @@ const SendForm = () => {
                 type="submit"
                 onClick={async (e) => {
                   e.preventDefault();
-                  status = nextStep(status);
                   setIsLoading(true);
                   setStep(ENCRYPTING_FILE);
-                  console.log("Step", status, ": ", steps[status]); //Write the different steps in order to have the workflow
 
                   document.body.style.cursor = 'wait';
                   const encryptedFileJSON = await encryptFile(selectedFiles[0]);
                   const fileName = selectedFiles[0].name;
                   const fileSize = selectedFiles[0].size;
-                  status = nextStep(status);
                   setStep(UPLOADING_FILE);
                   const encryptedFile = jsonToBuffer(encryptedFileJSON);
                   var fileUrl = await uploadData(encryptedFile);
@@ -231,19 +223,13 @@ const SendForm = () => {
                     }
                   }
                   document.body.style.cursor = 'default';
-                  nextStep(status);
-                  console.log(`Step ${status}: ${steps[status]}`); // 3
                   setIsAvailable(ok);
 
-                  nextStep(status);
                   setStep(ENCRYPTING_DATASET);
-                  console.log(`Step ${status}: ${steps[status]}`);
+                  await delay(1)
                   const encryptedDataset = await encryptDataset(fileUrl, fileName, message, fileSize);
 
-                  nextStep(status);
                   setStep(UPLOADING_DATASET);
-                  console.log(`Step ${status}: ${steps[status]}`); // 5
-                  document.body.style.cursor = 'wait';
                   var datasetUrl = await uploadData(encryptedDataset);
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
                   if (!optimistic) {
@@ -256,42 +242,26 @@ const SendForm = () => {
                       console.log(ok);
                     }
                   }
-                  nextStep(status);
-                  console.log(`Step ${status}: ${steps[status]}`); // 6
                   document.body.style.cursor = 'default';
 
                   document.body.style.cursor = 'wait';
-                  nextStep(status);
                   setStep(DEPLOYING_DATASET);
-                  console.log(`Step ${status}: ${steps[status]}`); // 7
+                  await delay(1)
                   const datasetName = generateDatasetName(connectedAccount, addressTo);
-                  console.log("Dataset Url : ", datasetUrl);
                   const checksum = await generateEncryptedFileChecksum(encryptedDataset);
                   const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
                   document.body.style.cursor = 'default';
 
-                  document.body.style.cursor = 'wait';
-                  nextStep(status);
                   setStep(PUSHING_SECRET);
-                  console.log(`Step ${status}: ${steps[status]}`); //8
-                  console.log("Before secret : dataset encryption key", datasetEncryptionKey);
                   await pushSecret(datasetAddress, datasetEncryptionKey);
-                  nextStep(status);
                   const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
                   console.log("secret is pushed?", isSecretPushed);
                   document.body.style.cursor = 'default';
 
                   document.body.style.cursor = 'wait';
-
-                  nextStep(status);
-                  console.log(`Step ${status}: ${steps[status]}`); //9
                   await pushOrder(datasetAddress, addressTo);
 
-                  nextStep(status);
                   setStep(FINISHED);
-                  console.log(`Step ${status}: ${steps[status]}`);
-                  document.body.style.cursor = 'default';
-
                 }}
               >
                 Transfer

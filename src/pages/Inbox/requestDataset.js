@@ -21,10 +21,7 @@ const requestDataset = async(datasetAddress, datasetRequester) => {
 
     const appOrders = await getAppOrders(); // order on my app
     const workerpoolOrders = await getWorkerpoolOrders();
-    const datasetOrders = await getDatasetOrders(
-        datasetAddress,
-        datasetRequester
-    );
+    const datasetOrders = await getDatasetOrders(datasetAddress,datasetRequester);
 
     var appOrderToMatch = null;
     if (appOrders && appOrders[0]) {
