@@ -244,7 +244,7 @@ const SendForm = () => {
 
                   document.body.style.cursor = 'wait';
                   await pushOrder(datasetAddress, addressTo);
-
+                  document.body.style.cursor = 'default';
                   setStep(FINISHED);
                 }}
               >
