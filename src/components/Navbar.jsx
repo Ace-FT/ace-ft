@@ -41,11 +41,11 @@ const NavBar = () => {
           <div>
             <OnOffToggleButton />
           </div>
-          <div>
-            <NavLink to="/settings" relative="path">
+          <div className="cursor-pointer" onClick={() => window.open("https://t.me/ace_ft_bot")}>
+            {/* <NavLink to="/settings" relative="path"> */}
               <img src="/tg.png" className="tg-logo" />
               &nbsp;Notification bot
-            </NavLink>
+            {/* </NavLink> */}
           </div>
           <div className="flex max-w-2/10 basis-1/5">
             {connectedAccount ? (

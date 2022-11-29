@@ -93,17 +93,6 @@ const SentItems = () => {
     return orders[0];
   };
 
-  const getWorkerpoolOrder = async () => {
-    const { orders } = await iexec.orderbook.fetchWorkerpoolOrderbook({
-      workerpool: ace.WORKERPOOL_ADDRESS,
-      category: 0,
-      minTag: "0x0000000000000000000000000000000000000000000000000000000000000001",
-      maxTag: "0x0000000000000000000000000000000000000000000000000000000000000001"
-    });
-    console.log("Workerpool orders", orders);
-    console.log("One workerpool order", orders[0]);
-    return orders[0];
-  };
 
   /**
    * Gets the datasets from the orderbook
@@ -148,8 +137,6 @@ const SentItems = () => {
       </Helmet>
       <div className="py-m mx-8">
         <h1 class="table-title">Sent items</h1>
-
-
 
         <table className="w-full border-collapse max-w-full container table-auto">
           <thead>

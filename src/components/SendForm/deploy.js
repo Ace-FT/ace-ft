@@ -19,7 +19,6 @@ const deployDataset = async(name, multiaddr, checksum) => {
     try {
         const owner = await iexec.wallet.getAddress();
         console.log("Owner", owner);
-        //console.log(imgUrl);
         const { address, txHash } = await iexec.dataset.deployDataset({
             owner,
             name,
@@ -27,7 +26,6 @@ const deployDataset = async(name, multiaddr, checksum) => {
             checksum,
         });
         console.log("Dataset deployed at", address);
-        console.log("Transaction hash", txHash);
 
         // VERIFICATION DATASET DEPLOYMENT
         await delay(2);
@@ -47,7 +45,6 @@ const deployDataset = async(name, multiaddr, checksum) => {
 const pushSecret = async(datasetAddress, datasetEncryptionKey) => {
     try {
         const pushed = await iexec.dataset.pushDatasetSecret(datasetAddress, datasetEncryptionKey);
-        console.log("Encryption key pushed ", datasetEncryptionKey);
         console.log("Secret pushed ", pushed);
     } catch (err) {
         console.log(err);
@@ -68,13 +65,10 @@ const pushOrder = async(datasetAddress, requesterrestrict) => {
             apprestrict: ace.APP_ADDRESS,
             requesterrestrict: requesterrestrict
         })
-        console.log("Unsigned order", orderTemplate)
         const signedOrder = await iexec.order.signDatasetorder(orderTemplate)
         console.log("Signed order", signedOrder)
         const pushedOrder = await iexec.order.publishDatasetorder(signedOrder)
         console.log(pushedOrder);
-
-
 
         const foundorders = await iexec.orderbook.fetchDatasetOrderbook(
             datasetAddress, {
@@ -86,7 +80,6 @@ const pushOrder = async(datasetAddress, requesterrestrict) => {
             }
         );
         console.log("dataset foundorders", foundorders);
-
 
     } catch (err) {
         console.log(err)
