@@ -158,53 +158,7 @@ function Inbox() {
       </Helmet>
       <div className="mx-8 py-m">
         <h1 class="table-title">Inbox</h1>
-        {/* <button
-          className="rounded-md bg-white text-black px-6 py-2"
-          onClick={async () => {
-            getDatasetOrder();
-          }}
-        >
-          Data set orders
-        </button> */}
-
-        {/* <button
-          className="rounded-r-md bg-white text-black px-6 py-2"
-          onClick={async () => {
-            //const deal = await iexec.deal.show(dealId)
-          
-            const resp = await iexec.task.fetchResults("0x33af944de7330aadf4b49b2f89d0200e3d4f63104f55a8495a714186d9fd70e7") // fetch task id from table here
-            console.log(resp);
-            const url = await resp.url;
-            console.log(url);
-            const binary = await resp.blob();
-            console.log("Response binary", binary);
-            var zipInstance = new JSZip();
-            var resultFile = await zipInstance.loadAsync(binary).then((zip) => {
-              return zip.file("result.json").async("string")
-            })
-            
-            resultFile = JSON.parse(resultFile)
-            console.log("resultFile", resultFile)
-            const resultFileUrl = resultFile.url
-            const resultFileKey = resultFile.key
-
-            console.log(resultFileUrl)
-            console.log("resultFileKey", resultFileKey)
-            const responseArray = await fetch(
-              resultFileUrl, {method: 'GET'}
-            ).then(response => {
-              return response.arrayBuffer(); //to convert to UintArray8
-            })
-            console.log("The encrypted received file is\n", responseArray)
-            // let fileName = task.taskid;
-            // fileName = fileName.substring(0, 22)
-            // console.log("filename", fileName);
-            // downloadFile(responseArray, fileName);
-          }}
-        >
-          Download file (after running task)
-        </button> */}
-
+        
         <ReactTooltip />
 
         <svg
