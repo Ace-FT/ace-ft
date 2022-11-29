@@ -6,16 +6,24 @@ The choice of the iExec stack was a no-brainer given that it covers the key requ
 Moreover, the iExec protocols has a built-in data monetization capability that we are leveraging in this project.
 
 ## Contents
-- [What are we fixing?](#what-are-we-fixing)
-- [Features](#features)
-- [Core principles](#principles)  
-[Modelization](#modelization)  
-[File Transfer process](#file-transfer-process)  
-- [Notification system](#notification-system)
-- [Transfer fees](#transfer-fees)
-- [Use cases](#use-cases)
-- [Future considerations](#future-considerations)
-- [Licence](#licence)  
+- [Ace](#ace)
+  - [_Web3 file transfer application powered by iExec_](#web3-file-transfer-application-powered-by-iexec)
+  - [Contents](#contents)
+  - [What are we fixing?](#what-are-we-fixing)
+  - [Features](#features)
+  - [Core principles](#core-principles)
+    - [Modelization](#modelization)
+    - [File Transfer process](#file-transfer-process)
+  - [Notification system](#notification-system)
+  - [Transfer fees](#transfer-fees)
+  - [Use cases](#use-cases)
+  - [Future considerations](#future-considerations)
+    - [Copyright protection and licensing](#copyright-protection-and-licensing)
+    - [KYC](#kyc)
+    - [Subscriptions](#subscriptions)
+    - [Task category management](#task-category-management)
+    - [Full privacy on the notification system](#full-privacy-on-the-notification-system)
+  - [License](#license)
 
 ---
 
@@ -23,15 +31,15 @@ Moreover, the iExec protocols has a built-in data monetization capability that w
 We believe that Web2 is broken and it’s time for a new paradigm shift that can restore our right to privacy and security. 
 Up until the emergence of Web3 we were forced to endure untrustworthy corporations selling our data to other corporations and centralized databases containing our personal details being hacked on a regular basis.  
   
-Ace is an illustration that there is a better way to do business when it comes to file transfer, one which doesn’t call for sacrificing our security nor our need for great level of service and user experience. There is no need longer a man in the middle when I am sending personal holiday pics to my family :-)
+Ace is an illustration that there is a better way to do business when it comes to file transfer, one which doesn’t call for sacrificing our security nor our need for great level of service and user experience. There is no longer a need for a man in the middle when I am sending personal holiday pics to my family :-)
 
 
 ## Features
 
-- "WeTransfer-like" experience,  simply drag and drop files you want to share
-- Set the beneficiary in the form of 0x address or use a ENS
-- Cryptographic access control to the file being transfered
-- Beneficiary email notification for new shared content/file available 
+- "WeTransfer-like" experience,  simply chose the file you want to share
+- Set the beneficiary in the form of 0x address
+- Cryptographic access control to the file being transfered powered by iExec
+- Telegram integration for notification and querying. The beneficiary can use telegram to get notified for new file transfer. Check out your new friend [Mr ACE](http://t.me/ace_ft_bot) the telgram bot!
 - No time limit for file download, other service require the recipient to download the file within x days
 - Built-in monetization! You can sell your added value content and get paid in [$RLC](https://coinmarketcap.com/currencies/rlc/)
 - Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API. 
@@ -42,11 +50,21 @@ Ace's system design is making use of all three types of computing assets that ar
 
 ### Modelization
 
+**_Encrypted File_**
+The file being transferred is encrypted (AES 256) and uploaded to IPFS. The IPFS URL and the encryption key are secrets :-)  . See next paragraph
+
 **_Datasets_**  
-Files that are being transferred are represented as iExec encrypted datasets
+iExec encrypted datasets are used to store secret metadata associated with the file being transferred. The iExec encrypted dataset contains : 
+- The file encryption key
+- The URL on IPFS of the encrypted file
+- The file name
+- The file length
+- A message from the sender
+
+
 
 **_Application_**  
-Our application is trivial as it consists of simply downloading the transferred file. In fact, the iExec protocol is taking care the authorization by ensuring that only the selected requester can trigger the download application for the given dataset (i.e transferred files)
+Our application is trivial as it consists of simply downloading the transferred file. In fact, the iExec protocol is taking care the authorization by ensuring that only the selected requester can trigger the download application for the given dataset (i.e secret metadata of the files being transferred)
 
 **_Processing power (CPU)_**  
 The processing capacity required to execute the application is provided by workers in the iExec network. The execution relies on Intel SGX compatible workers only.

@@ -1,56 +1,72 @@
-import React, {useContext} from 'react';
-import { NavLink } from 'react-router-dom';
-import { AceContext } from '../context/context';
-import { shortenAddress } from '../utils/shortenAddress';
+import { disconnect } from "process";
+import React, { useContext } from "react";
+import { NavLink } from "react-router-dom";
+import { AceContext } from "../context/context";
+import { shortenAddress } from "../utils/shortenAddress";
+import OnOffToggleButton from "../components/OnOffToggleButton";
 
 const NavBar = () => {
-    const {connectWallet, connectedAccount } = useContext(AceContext);
-    //console.log(connectedAccount);
+  const { connectWallet, connectedAccount } = useContext(AceContext);
+  //console.log(connectedAccount);
 
-    return (
-      <div className="text-white">
-        <nav className="flex justify-between p-8">
-          <div>
-            <h1 className="text-4xl font-bold">
-              <NavLink to="/">ACE</NavLink>
-            </h1>
-          </div>
-          {connectedAccount ? (
-            <div className="flex items-center">
-              <NavLink
-                className="rounded-l-md border-r border-gray-200 bg-white text-black px-6 py-2"
-                activeclassname="is-active"
-                to="/inbox"
-              >
-                My inbox
-              </NavLink>
-              <NavLink
-                className="border-r border-gray-200 bg-white text-black px-6 py-2"
-                activeclassname="is-active"
-                to="/sent"
-              >
-                Sent items
-              </NavLink>
-              <NavLink
-                className="rounded-r-md bg-white text-black px-6 py-2"
-                activeclassname="is-active"
-                to="/settings"
-              >
-                Settings
-              </NavLink>
-              <p className="mx-8">Hello! {shortenAddress(connectedAccount)} 👋 </p>
+  return (
+    <>
+      <div className="flex w-full items-center justify-center bg-iexblk">
+        <div className="top-container">
+          <div className="flex items-center">
+            <div className="logo-container h-6 flex-none text-left font-logo text-xl not-italic">
+              Ace File Transfer
             </div>
-          ) : (
-            <button
-              className="rounded-md bg-white text-black px-6 py-2"
-              onClick={connectWallet}
-            >
-              Connect Wallet
-            </button>
-          )}
-        </nav>
+            <nav className="top-navigation">
+              <ul className="flex list-none">
+                <li>
+                  <NavLink to="/" relative="path">
+                    Home
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/inbox" relative="path">
+                    Inbox
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/sent" relative="path">
+                    Sent
+                  </NavLink>
+                </li>
+                <li></li>
+              </ul>
+            </nav>
+          </div>
+          <div>
+            <OnOffToggleButton />
+          </div>
+          <div>
+            <NavLink to="/settings" relative="path">
+              <img src="/tg.png" className="tg-logo" />
+              &nbsp;Notification bot
+            </NavLink>
+          </div>
+          <div className="flex max-w-2/10 basis-1/5">
+            {connectedAccount ? (
+              <div className="ml-auto items-center">
+                <p className="ml-8 text-right">
+                  Hello! {shortenAddress(connectedAccount)} 👋
+                </p>
+              </div>
+            ) : (
+              <button
+                className="btn ml-auto h-8 text-l font-bold"
+                onClick={connectWallet}
+              >
+                Connect Wallet
+              </button>
+            )}
+          </div>
+        </div>
       </div>
-    );
-}
+    </>
+  );
+};
 
 export default NavBar;
