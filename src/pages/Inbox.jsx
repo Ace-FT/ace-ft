@@ -180,23 +180,33 @@ function Inbox() {
                               document.body.style.cursor = 'wait';
                               let trycount = 0 ;
 
-                              while (!ok) {
+                              while (!ok && trycount<50) {
                                 ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...") ); //fileUrl
-                                console.log(ok);
+                                console.log("ok 1", ok, resultFileUrl);
                                 if (!ok)
                                 {
                                   await delay(2) ;
                                   ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...") ); //fileUrl
+                                  console.log("ok 2", ok, resultFileUrl);
 
                                   trycount++ ;
                                   resultFileUrl = getNextIpfsGateway(resultFileUrl,trycount) ;// await useNextIpfsGateway(resultFileUrl, trycount); 
+                                  console.log("next  resultFileUrl", resultFileUrl, "trycount", trycount);
                                 }
                               }
-                              const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
-                              let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
-                              let fileBlob = new Blob([decryptedFile], { type: 'application/octet-stream' });
+                              if (ok)
+                              {
+                                const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
+                                let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
+                                let fileBlob = new Blob([decryptedFile], { type: 'application/octet-stream' });
+                                saveFile(fileBlob, resultFileName);
+                              }
+                              else
+                              {
+                                  alert("Could not download file. Please try again") ;
+                              }
                               document.body.style.cursor = 'default'; 
-                              saveFile(fileBlob, resultFileName);
+                              
                             }}>
                               Download
                             </button>
