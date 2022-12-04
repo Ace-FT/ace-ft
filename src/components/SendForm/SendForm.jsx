@@ -44,7 +44,7 @@ const SendForm = () => {
   const handleChecked = () => {
     const checkbox = document.getElementById("optimistic");
     console.log(checkbox.checked);
-    optimistic = !optimistic;
+    optimistic = checkbox.checked; 
   };
 
   return (
