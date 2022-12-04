@@ -2,6 +2,7 @@ import { IExec } from "iexec";
 import * as ace from "../../shared/constants";
 import JSZip from "jszip";
 import { bufferToJson } from "../../utils/bufferToJson";
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = { smsURL: ace.SMS_URL };

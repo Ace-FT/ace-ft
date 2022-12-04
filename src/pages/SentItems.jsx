@@ -10,7 +10,7 @@ import structureResponse from "../utils/structureResponse";
 import requestDataset from "./Inbox/requestDataset";
 import { mapSentItemsOrders } from "../shared/itemMapper";
 import formatDate from "../utils/formatDate";
-
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 const SentItems = () => {
   const { ethereum } = window;

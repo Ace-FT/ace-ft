@@ -5,7 +5,7 @@ import inboxItemStruct from "../utils/inboxItemStruct.ts";
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = {smsURL: ace.SMS_URL};
 const iexec = new IExec(configArgs, configOptions);
-
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 export const mapInboxOrders = async (connectedAccount, structuredResponseItems) =>
 {
