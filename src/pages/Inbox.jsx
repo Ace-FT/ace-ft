@@ -52,7 +52,6 @@ function Inbox() {
 
   useEffect(() => {
     const doMapping = async () => {
-      await delay(4)
       setInboxItems(await mapInboxOrders(connectedAccount, structuredResponse));
       console.log("INBOX ITEMS SET");
     };
@@ -154,7 +153,7 @@ function Inbox() {
                               className="btn h-6"
                               onClick={async () => {
                                 await requestDataset(inboxItem.id, connectedAccount);
-                                window.location.reload(false);
+                                //window.location.reload(false);
                               }}
                             >
                               Request
