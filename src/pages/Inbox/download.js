@@ -15,7 +15,7 @@ const iexec = new IExec(configArgs, configOptions);
  */
 const fromDatasetToFileJSON = async (taskId) => {
   const task = await iexec.task.show(taskId);
-  console.log("task show:\n", task);
+  if (IS_DEBUG) console.log("task show:\n", task);
   const dealId = task.dealid;
   console.log(task.taskid)
 
