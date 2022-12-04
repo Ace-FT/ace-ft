@@ -148,14 +148,20 @@ export const AceProvider = ({ children }) => {
   const checkFileAvailability = async (url, _callback) => {
 
     // HACK 
+    let options =  {
+      method: "HEAD",
+      cache: "no-cache",
+      mode:"no-cors"
+    } ;
+
+
+    if (url.indexOf('cloudflare') ==-1 && url.indexOf('pinata') ==-1)
+    {
+        options.headers =  {"Access-Control-Allow-Origin": ["*"] }
+    }
 
     try {
-      const response = await fetch(url, {
-        method: "HEAD",
-        cache: "no-cache",
-        "Access-Control-Allow-Origin": ["*"],
-        headers: {"Access-Control-Allow-Origin": ["*"] }
-      });
+      const response = await fetch(url,);
       
       const ok = response.status === 200;
 
@@ -164,7 +170,7 @@ export const AceProvider = ({ children }) => {
       _callback()
       console.log("response.status", response.status , "response.statusText", response.statusText, "ok", ok) ; 
 
-      
+
       return ok ; // If status is 200, then it's OK
     } catch (error) {
       console.log(error);
