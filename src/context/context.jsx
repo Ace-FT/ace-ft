@@ -156,8 +156,10 @@ export const AceProvider = ({ children }) => {
         "Access-Control-Allow-Origin": ["*"],
         headers: {"Access-Control-Allow-Origin": ["*"] }
       });
-      const ok = response.status === 200;
       
+      const ok = response.status === 200;
+      console.log("response.status", "response.status" , "response.statusText", response.statusText, "ok", ok) ; 
+
       await delay(2) ;
       
       _callback()
