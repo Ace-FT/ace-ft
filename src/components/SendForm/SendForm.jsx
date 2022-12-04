@@ -183,6 +183,8 @@ const SendForm = () => {
                 type="submit"
                 onClick={async (e) => {
                   e.preventDefault();
+                  console.log("optimistic", optimistic)
+
                   setIsLoading(true);
                   setStep(ENCRYPTING_FILE);
 
@@ -202,7 +204,7 @@ const SendForm = () => {
 
                     while (!ok) {
                       if (IS_DEBUG) console.log("Checking file availability at", fileUrl);
-                      ok = await checkFileAvailability("", () =>
+                      ok = await checkFileAvailability("fileUrl", () =>
                         {if (IS_DEBUG) console.log("checking ended...")}
                       ); //fileUrl
                       if (IS_DEBUG) console.log(ok);
