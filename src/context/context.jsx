@@ -148,8 +148,6 @@ export const AceProvider = ({ children }) => {
   const checkFileAvailability = async (url, _callback) => {
 
     // HACK 
-    if (url.indexOf(""))
-
 
     try {
       const response = await fetch(url, {
