@@ -158,11 +158,13 @@ export const AceProvider = ({ children }) => {
       });
       
       const ok = response.status === 200;
-      console.log("response.status", "response.status" , "response.statusText", response.statusText, "ok", ok) ; 
 
       // await delay(2) ;
       
       _callback()
+      console.log("response.status", response.status , "response.statusText", response.statusText, "ok", ok) ; 
+
+      
       return ok ; // If status is 200, then it's OK
     } catch (error) {
       console.log(error);
