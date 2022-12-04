@@ -5,6 +5,7 @@ import { jsonToBuffer } from "../../utils/jsonToBuffer";
 import * as ace from "../../shared/constants";
 import crypto from 'crypto-browserify';
 import {fileEncKey, fromFileToEncryptedFile} from "../../utils/fileAESEncryption";
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 const { ethereum } = window;
 const configArgs = { ethProvider: window.ethereum, chainId : 134};

@@ -1,6 +1,7 @@
 import { IExec } from "iexec";
 import * as ace from "../../shared/constants";
 import { getAppOrders, getWorkerpoolOrders, getDatasetOrders } from "./getOrders";
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = {smsURL: ace.SMS_URL};

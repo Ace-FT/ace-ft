@@ -3,6 +3,7 @@ import { Buffer } from "buffer";
 import { delay } from "../../utils/delay";
 import { datasetStruct } from "../../utils/datasetStruct.ts";
 import * as ace from "../../shared/constants";
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };

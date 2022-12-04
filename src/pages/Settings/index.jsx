@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Routes, Route, Link, NavLink, Outlet,} from "react-router-dom";
 import SettingsForm from "../../components/PersonnalDataForm";
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 function Settings() {
   return (
