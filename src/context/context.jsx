@@ -150,6 +150,9 @@ export const AceProvider = ({ children }) => {
       const response = await fetch(url, {
         method: "HEAD",
         cache: "no-cache",
+        headers: {
+          "Access-Control-Allow-Origin": ["*"],
+        }
       });
       const ok = response.status === 200;
       
