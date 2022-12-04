@@ -10,7 +10,7 @@ import requestDataset from "./Inbox/requestDataset";
 import { mapInboxOrders } from "../shared/itemMapper";
 import downloadFile from "../utils/downloadFile";
 import { getDatasetOrders } from "./Inbox/getOrders";
-import { fromDatasetToFileJSON, fetchFromFileToDownloadableFileObject, saveFile } from "./Inbox/download";
+import { fromDatasetToFileJSON, fetchFromFileToDownloadableFileObject, saveFile } from "./Inbox/download.js";
 import { fromEnryptedFileToFile } from "../utils/fileAESEncryption";
 import formatDate from "../utils/formatDate";
 import ReactTooltip from 'react-tooltip';
@@ -41,9 +41,9 @@ function Inbox() {
 
   var structuredResponse = null;
 
-  setInterval(() => {
-    window.location.reload(false);
-  }, ace.TIME_BEFORE_AUTO_REFRESHING_INBOX);
+  // setInterval(() => {
+  //   window.location.reload(false);
+  // }, ace.TIME_BEFORE_AUTO_REFRESHING_INBOX);
 
   const [inboxItems, setInboxItems] = useState();
   const [taskID, setTaskID] = useState("");

@@ -16,8 +16,9 @@ const fromDatasetToFileJSON = async (taskId) => {
   const task = await iexec.task.show(taskId);
   console.log("task show:\n", task);
   const dealId = task.dealid;
+  console.log(task.taskid)
 
-  const taskResult = await iexec.task.fetchResults(taskId); // fetch task id from table here
+  const taskResult = await iexec.task.fetchResults(task.taskid); // fetch task id from table here
   console.log(taskResult);
   const url = await taskResult.url;
   console.log(url);
