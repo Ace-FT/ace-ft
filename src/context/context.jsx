@@ -146,13 +146,17 @@ export const AceProvider = ({ children }) => {
 
 
   const checkFileAvailability = async (url, _callback) => {
+
+    // HACK 
+    if (url.indexOf(""))
+
+
     try {
       const response = await fetch(url, {
         method: "HEAD",
         cache: "no-cache",
-        headers: {
-          "Access-Control-Allow-Origin": ["*"],
-        }
+        "Access-Control-Allow-Origin": ["*"],
+        headers: {"Access-Control-Allow-Origin": ["*"] }
       });
       const ok = response.status === 200;
       
