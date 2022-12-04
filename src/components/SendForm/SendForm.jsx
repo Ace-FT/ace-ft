@@ -9,6 +9,7 @@ import { deployDataset, pushSecret, pushOrder } from "./deploy.js";
 import { generateDatasetName } from "../../utils/datasetNameGenerator.ts";
 import { jsonToBuffer } from "../../utils/jsonToBuffer";
 import ReactTooltip from 'react-tooltip';
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = { smsURL: ace.SMS_URL };
@@ -36,14 +37,14 @@ const SendForm = () => {
     setSelectedFiles([...selectedFiles, event.target.files[0]]);
     setIsAFile(true);
     for (var i = 0; i < selectedFiles.length; i += 1) {
-      console.log(selectedFiles[i]);
+      if (IS_DEBUG) console.log(selectedFiles[i]);
     }
   };
 
   var optimistic = false;
   const handleChecked = () => {
     const checkbox = document.getElementById("optimistic");
-    console.log(checkbox.checked);
+    if (IS_DEBUG) console.log(checkbox.checked);
     optimistic = checkbox.checked; 
   };
 
@@ -200,11 +201,11 @@ const SendForm = () => {
                     await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
 
                     while (!ok) {
-                      console.log("Checking file availability at", fileUrl);
+                      if (IS_DEBUG) console.log("Checking file availability at", fileUrl);
                       ok = await checkFileAvailability("", () =>
-                        console.log("checking ended...")
+                        {if (IS_DEBUG) console.log("checking ended...")}
                       ); //fileUrl
-                      console.log(ok);
+                      if (IS_DEBUG) console.log(ok);
                     }
                   }
                   document.body.style.cursor = 'default';
@@ -220,11 +221,11 @@ const SendForm = () => {
                   if (!optimistic) {
                     ok = false;
                     while (!ok) {
-                      console.log("Checking dataset availability");
+                      if (IS_DEBUG) console.log("Checking dataset availability");
                       ok = await checkFileAvailability(datasetUrl, () =>
-                        console.log("checking ended...")
+                        { if (IS_DEBUG)  console.log("checking ended...") }
                       );
-                      console.log(ok);
+                      if (IS_DEBUG) console.log(ok);
                     }
                   }
                   document.body.style.cursor = 'default';
