@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { IExec } from "iexec";
+import axios from "axios";
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import { delay } from "../utils/delay";
@@ -148,24 +149,39 @@ export const AceProvider = ({ children }) => {
   const checkFileAvailability = async (url, _callback) => {
 
     // HACK 
-
+    //url = url +"/"
     try {
-      const response = await fetch(url, {
-        method: "HEAD",
-        cache: "no-cache",
-        "Access-Control-Allow-Origin": ["*"],
-        headers: {"Access-Control-Allow-Origin": ["*"] }
-      });
-      
-      const ok = response.status === 200;
+      const isOk = axios.head(url, {
+        headers: {
+          "Access-Control-Allow-Origin": "*"
+         
+        }
+      }).then((response) => {
+        console.log(response)
+        console.log("status", response.status)
+        return response;
+      }).catch((err) => {
+        console.error(err);
+      })
 
-      // await delay(2) ;
+
+      // const response = await fetch(url, {
+      //   method: "HEAD",
+      //   cache: "no-cache",
+      //   //"Access-Control-Allow-Origin": ["*"],
+      //   headers: {"Access-Control-Allow-Origin": ["*"] }
+      // });
+      
+      // const ok = response.status === 200;
+
+      // // await delay(2) ;
       
       _callback()
-      console.log("response.status", response.status , "response.statusText", response.statusText, "ok", ok) ; 
+      // console.log("response.status", response.status , "response.statusText", response.statusText, "ok", ok) ; 
 
       
-      return ok ; // If status is 200, then it's OK
+      // return ok ; // If status is 200, then it's OK
+      return isOk;
     } catch (error) {
       console.log(error);
       return false;

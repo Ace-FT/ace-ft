@@ -204,7 +204,7 @@ const SendForm = () => {
 
                     while (!ok) {
                       if (IS_DEBUG) console.log("Checking file availability at", fileUrl);
-                      ok = await checkFileAvailability("fileUrl", () =>
+                      ok = await checkFileAvailability(fileUrl, () =>
                         {if (IS_DEBUG) console.log("checking ended...")}
                       ); //fileUrl
                       if (IS_DEBUG) console.log(ok);
