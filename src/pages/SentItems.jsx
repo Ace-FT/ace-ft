@@ -147,7 +147,7 @@ const SentItems = () => {
             </tr>
           </thead>
           <tbody>
-            {inboxItems ? (
+            {inboxItems && inboxItems.length > 0 ? (
 
               inboxItems.sort((a, b) => b.sendDate - a.sendDate).map((inboxItem, i) => {
                 console.log("INBOX ITEM", inboxItem);
