@@ -1116,3 +1116,16 @@ table {
 {
     margin-bottom:1rem;
 }
+
+.invisible-element
+{
+    display: none;
+}
+
+
+.btn-inverted
+{
+    background-color: #f1f2f0;
+    border: solid 1px  var(--iexec-yellow) !important;
+     
+}

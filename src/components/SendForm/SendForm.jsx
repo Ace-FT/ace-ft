@@ -48,6 +48,19 @@ const SendForm = () => {
     optimistic = checkbox.checked; 
   };
 
+
+  var setInprogress = () => {
+      document.getElementById("btn-transfer").classList.add("btn-inverted") ; 
+      document.getElementById("btn-transfer").innerText="In progress..." ;
+      document.getElementById("btn-transfer").disabled = true;
+  }
+
+  var setReady = () => {
+    document.getElementById("btn-transfer").classList.remove("btn-inverted") ; 
+    document.getElementById("btn-transfer").innerText="Tranfer" ;
+    document.getElementById("btn-transfer").disabled = true;
+}
+
   return (
     <>
       <form>
@@ -152,7 +165,7 @@ const SendForm = () => {
                 placeholder="Message"
               />
             </div>
-            <div>
+            <div className="invisible-element">
               <input
                 className="w-full border-b border-gray-500 bg-iexwhite pb-2 focus:outline-none"
                 type="number"
@@ -181,9 +194,13 @@ const SendForm = () => {
               <button
                 className="btn h-8 w-full font-bold"
                 type="submit"
+                id="btn-transfer"
                 onClick={async (e) => {
+
+                  setInprogress() ;
+                  
                   e.preventDefault();
-                  console.log("optimistic", optimistic)
+                  if (IS_DEBUG) console.log("optimistic", optimistic)
 
                   setIsLoading(true);
                   setStep(ENCRYPTING_FILE);
@@ -215,7 +232,7 @@ const SendForm = () => {
                   }
 
                   document.body.style.cursor = 'default';
-                  if (!ok) {alert("The file is not found on IPFS. Please try again later.") ; return ; }
+                  if (!ok) {alert("The file is not found on IPFS. Please try again later.") ; setReady(); return ; }
                 
                   setIsAvailable(ok);
 
@@ -242,7 +259,7 @@ const SendForm = () => {
 
 
                   document.body.style.cursor = 'default';
-                  if (!ok) {alert("The file is not found on IPFS. Please try again later.") ; return ; }
+                  if (!ok) {alert("The file is not found on IPFS. Please try again later.") ; setReady(); return ; }
 
 
                   document.body.style.cursor = 'wait';
@@ -262,10 +279,13 @@ const SendForm = () => {
                   await pushOrder(datasetAddress, addressTo);
                   document.body.style.cursor = 'default';
                   setStep(FINISHED);
+                  setReady();
                 }}
               >
                 Transfer
               </button>
+              
+
             </div>
           </div>
         </div>
