@@ -14,6 +14,7 @@ import Helmet from "react-helmet";
 
 function App() {
   const { connectedAccount, connectWallet, bgUrls, background, darkMode, setDarkMode } = useContext(AceContext);
+  const { ethereum } = window;
 
   useEffect(() => {
     const connectWalletOnPageLoad = async () => {
@@ -37,7 +38,19 @@ function App() {
     console.log(darkMode);
   }, [darkMode]);
 
+  useEffect(() => {
+    refreshOnWalletChange()
+  }, [])
+
   const isConnected = connectedAccount !== "";
+
+  const refreshOnWalletChange = () => {
+    if(ethereum) {
+      ethereum.on('accountsChanged', function() {
+        window.location.reload()
+      })
+    }
+  }
 
   return (
     <div

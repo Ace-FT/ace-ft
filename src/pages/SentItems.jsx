@@ -33,7 +33,6 @@ const SentItems = () => {
   console.log("QUERY", query);
 
   const { data, loading, error } = useRequest(query);
-
   const [renders, setRendered] = useState(false);
 
   const [isReadyForDownload] = useState(false)
