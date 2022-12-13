@@ -179,6 +179,7 @@ export const AceProvider = ({ children }) => {
 
       return ok ; // If status is 200, then it's OK
     } catch (error) {
+      console.error("url",url, "response.status", response.status , "response.statusText", response.statusText, "ok", ok) ; 
       console.log(error);
       return false;
     }

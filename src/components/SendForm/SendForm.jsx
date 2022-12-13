@@ -221,7 +221,8 @@ const SendForm = () => {
 
                   setStep(UPLOADING_DATASET);
                   var datasetUrl = await uploadData(encryptedDataset);
-                  await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
+                  // await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED );
+                  await delay(10);
                   if (!optimistic) {
                     let max_try = 20 ; 
                     ok = false;
