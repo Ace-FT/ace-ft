@@ -162,7 +162,6 @@ export const AceProvider = ({ children }) => {
 
   const checkFileAvailability = async (url, _callback) => {
 
-
     // HACK 
     let options = {
       method: "HEAD",
@@ -170,7 +169,6 @@ export const AceProvider = ({ children }) => {
       //mode: "no-cors", 
       //redirect: "follow"
     };
-
 
     if (url.indexOf('cloudflare') == -1 && url.indexOf('pinata') == -1) {
       //options.headers =  {"Access-Control-Allow-Origin": ["*"] }
@@ -188,8 +186,6 @@ export const AceProvider = ({ children }) => {
       if (IS_DEBUG) console.log("response", response) ; 
       if (IS_DEBUG) console.log("url", url, "response.status", response.status, "response.statusText", response.statusText, "ok", ok);
       _callback()
-
-
 
       return ok; // If status is 200, then it's OK
     } catch (error) {
@@ -211,7 +207,6 @@ export const AceProvider = ({ children }) => {
       console.log(err)
     }
   }
-
 
 
 
