@@ -226,9 +226,9 @@ const SendForm = () => {
                     let max_try = 20 ; 
                     ok = false;
                     while (!ok && max_try>0) {
-                      if (IS_DEBUG) console.log("Checking dataset availability");
+                      if (IS_DEBUG) console.log("Checking dataset availability", datasetUrl);
                       ok = await checkFileAvailability(datasetUrl, () =>
-                        { if (IS_DEBUG)  console.log("checking ended...") }
+                        { if (IS_DEBUG)  console.log("checking ended...", max_try) }
                       );
                       max_try--;
                       if (IS_DEBUG) console.log(ok);

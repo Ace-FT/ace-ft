@@ -147,6 +147,7 @@ export const AceProvider = ({ children }) => {
 
   const checkFileAvailability = async (url, _callback) => {
 
+
     // HACK 
     let options =  {
       method: "HEAD",
