@@ -9,7 +9,7 @@ const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 export const mapInboxOrders = async (connectedAccount, structuredResponseItems) =>
 {
-    console.log("structuredResponseItems", structuredResponseItems);
+    if (IS_DEBUG) console.log("structuredResponseItems", structuredResponseItems);
 
     let mapped = await Promise.all(structuredResponseItems.map(async(item) => {
         var inboxItem = inboxItemStruct(item.id, item.name, item.owner.id);
@@ -25,7 +25,7 @@ export const mapInboxOrders = async (connectedAccount, structuredResponseItems) 
 
         if (orderBook && orderBook.orders.length > 0 )
         {
-            console.log("ORDER BOOK", orderBook) ;
+            if (IS_DEBUG) console.log("ORDER BOOK", orderBook) ;
             inboxItem.status = orderBook.orders[0].status;
             inboxItem.to = orderBook.orders[0].order.requesterrestrict;
             inboxItem.orderHash = orderBook.orders[0].orderHash;
@@ -41,7 +41,7 @@ export const mapInboxOrders = async (connectedAccount, structuredResponseItems) 
                 )
             {
                 inboxItem.dealid = item.orders[0].deals[0].id;
-                console.log("item.orders[0].deals[0].startTime", Number(item.orders[0].deals[0].startTime)) ; 
+                if (IS_DEBUG) console.log("item.orders[0].deals[0].startTime", Number(item.orders[0].deals[0].startTime)) ; 
                 inboxItem.downloadDate = new Date(Number(item.orders[0].deals[0].startTime)*1000);
                 inboxItem.status = "ACTIVE"; 
 
@@ -60,19 +60,19 @@ export const mapInboxOrders = async (connectedAccount, structuredResponseItems) 
         return null != item && item.to && item.to.toLowerCase() === connectedAccount ; 
     })
 
-    console.log("mapped", mapped) ;
+    if (IS_DEBUG) console.log("mapped", mapped) ;
 
     return mapped; 
 }
 
 export const mapSentItemsOrders = async (connectedAccount, structuredResponseItems) =>
 {
-    console.log("structuredResponseItems", structuredResponseItems) ;
+    if (IS_DEBUG) console.log("structuredResponseItems", structuredResponseItems) ;
     let mapped =  await Promise.all( structuredResponseItems.map(async(item) => {
 
         var inboxItem = inboxItemStruct(item.id, item.name, item.owner.id) ;
 
-        console.log("DATASET ID", item.id) ; 
+        if (IS_DEBUG) console.log("DATASET ID", item.id) ; 
         let ds = await iexec.dataset.showDataset(item.id) ;
 
         console.log("SHOWN DATASET", ds, item.id, item.name) ;
@@ -86,13 +86,13 @@ export const mapSentItemsOrders = async (connectedAccount, structuredResponseIte
             
 
             let regExMatch = foundRequest.match(/(\b0x[a-f0-9]{40}\b)/g)
-            console.log("GRRRRR", item.name, foundRequest, regExMatch )  ;
+            if (IS_DEBUG) console.log("GRRRRR", item.name, foundRequest, regExMatch )  ;
 
             if (regExMatch && regExMatch.length>0)
             {
                 requester = regExMatch[0] ;
             }
-            console.log("requster", requester)  ;
+            if (IS_DEBUG) console.log("requster", requester)  ;
         }
 
         let options = {
@@ -102,11 +102,11 @@ export const mapSentItemsOrders = async (connectedAccount, structuredResponseIte
             maxTag: ace.TEE_TAG
           };
 
-          console.log("OPTIONS", options) ; 
+        if (IS_DEBUG) console.log("OPTIONS", options) ; 
 
         var orderBook = await iexec.orderbook.fetchDatasetOrderbook( item.id, options );
 
-        console.log("ORDER BOOK", orderBook) ;
+        if (IS_DEBUG) console.log("ORDER BOOK", orderBook) ;
 
         if (orderBook && orderBook.orders.length > 0 )
         {
@@ -128,7 +128,7 @@ export const mapSentItemsOrders = async (connectedAccount, structuredResponseIte
             {
 
                 inboxItem.dealid = item.orders[0].deals[0].id;
-                console.log("item.orders[0].deals[0].startTime", Number(item.orders[0].deals[0].startTime)) ; 
+                if (IS_DEBUG) console.log("item.orders[0].deals[0].startTime", Number(item.orders[0].deals[0].startTime)) ; 
                 inboxItem.downloadDate = new Date(Number(item.orders[0].deals[0].startTime)*1000);
                 inboxItem.status = "ACTIVE"; 
 
@@ -147,7 +147,7 @@ export const mapSentItemsOrders = async (connectedAccount, structuredResponseIte
         return null != item && item.from && item.from.toLowerCase() === connectedAccount ; 
     })
 
-    console.log("mapped", mapped) ;
+    if (IS_DEBUG) console.log("mapped", mapped) ;
 
     return mapped ; 
 }
