@@ -202,11 +202,13 @@ const SendForm = () => {
                   if (!optimistic) {
                     await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
 
-                    while (!ok) {
+                    let max_try = 20 ; 
+                    while (!ok && max_try >0) {
                       if (IS_DEBUG) console.log("Checking file availability at", fileUrl);
                       ok = await checkFileAvailability("fileUrl", () =>
                         {if (IS_DEBUG) console.log("checking ended...")}
                       ); //fileUrl
+                      max_try--;
                       if (IS_DEBUG) console.log(ok);
                     }
                   }
@@ -221,12 +223,14 @@ const SendForm = () => {
                   var datasetUrl = await uploadData(encryptedDataset);
                   await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
                   if (!optimistic) {
+                    let max_try = 20 ; 
                     ok = false;
-                    while (!ok) {
+                    while (!ok && max_try>0) {
                       if (IS_DEBUG) console.log("Checking dataset availability");
                       ok = await checkFileAvailability(datasetUrl, () =>
                         { if (IS_DEBUG)  console.log("checking ended...") }
                       );
+                      max_try--;
                       if (IS_DEBUG) console.log(ok);
                     }
                   }
