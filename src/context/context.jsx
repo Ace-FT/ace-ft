@@ -10,7 +10,6 @@ export const AceContext = createContext();
 const { ethereum } = window;
 const iexec = new IExec({ ethProvider: window.ethereum });
 
-
 export const AceProvider = ({ children }) => {
   const [connectedAccount, setConnectedAccount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +47,21 @@ export const AceProvider = ({ children }) => {
   useEffect(() => {
     fetchImages()
   }, []);
+
+
+
+  const getNextIpfsGateway = (ipfsUrl, trycount) => {
+    var parts = ipfsUrl.split('/ipfs') ; 
+    console.log("parts", parts) ; 
+
+    const gateways = process.env.REACT_APP_IPFS_GATEWAYS.split(',') ;
+
+    let numNext = trycount % gateways.length 
+    let nextUrl = gateways[numNext] + parts[1] ;
+    console.log("gateways", gateways, "numNext", numNext, "nextUrl", nextUrl) ;
+
+    return nextUrl ; 
+  }
 
 
   const fetchImages = async () => {
@@ -153,7 +167,8 @@ export const AceProvider = ({ children }) => {
     let options = {
       method: "HEAD",
       cache: "no-cache",
-      mode: "cors"
+      //mode: "no-cors", 
+      //redirect: "follow"
     };
 
 
@@ -163,13 +178,14 @@ export const AceProvider = ({ children }) => {
 
     try {
 
-      if (IS_DEBUG) console.log("fetching url", url, "options");
+      if (IS_DEBUG) console.log("fetching url", url, "options", options);
 
       const response = await fetch(url, options);
       const ok = response.status === 200;
 
       // await delay(2) ;
 
+      if (IS_DEBUG) console.log("response", response) ; 
       if (IS_DEBUG) console.log("url", url, "response.status", response.status, "response.statusText", response.statusText, "ok", ok);
       _callback()
 
@@ -186,11 +202,11 @@ export const AceProvider = ({ children }) => {
   const pushOrder = async (address, requesterrestrict) => {
     try {
       const order = await iexec.order.createDatasetorder({ dataset: address, volume: 100, apprestrict: ace.APP_ADDRESS, requesterrestrict: requesterrestrict })
-      console.log("Unsigned order", order)
+      if (IS_DEBUG) console.log("Unsigned order", order)
       const signedOrder = await iexec.order.signDatasetorder(order)
-      console.log("Signed order", signedOrder)
+      if (IS_DEBUG) console.log("Signed order", signedOrder)
       const pushedOrder = await iexec.order.publishDatasetorder(signedOrder)
-      console.log(pushedOrder);
+      if (IS_DEBUG) console.log(pushedOrder);
     } catch (err) {
       console.log(err)
     }
@@ -232,6 +248,7 @@ export const AceProvider = ({ children }) => {
         isAvailable,
         setIsAvailable,
         pushOrder,
+        getNextIpfsGateway
       }}
     >
       {children}

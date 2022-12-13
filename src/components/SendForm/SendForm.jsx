@@ -16,7 +16,7 @@ const configOptions = { smsURL: ace.SMS_URL };
 const iexec = new IExec(configArgs, configOptions);
 
 const SendForm = () => {
-  const { connectedAccount, connectWallet } = useContext(AceContext);
+  const { connectedAccount, connectWallet, getNextIpfsGateway } = useContext(AceContext);
 
   const { isLoading, setIsLoading, addressTo, setAddressTo, step, setStep, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
@@ -202,17 +202,21 @@ const SendForm = () => {
                   if (!optimistic) {
                     await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
 
-                    let max_try = 20 ; 
-                    while (!ok && max_try >0) {
-                      if (IS_DEBUG) console.log("Checking file availability at", fileUrl);
-                      ok = await checkFileAvailability("fileUrl", () =>
+                    let trycount = 0 ; 
+                    while (!ok && trycount <50) {
+                      let ipfsUrl = getNextIpfsGateway(fileUrl,trycount) ;
+                      if (IS_DEBUG) console.log("Checking file availability at", ipfsUrl);
+                      ok = await checkFileAvailability(ipfsUrl, () =>
                         {if (IS_DEBUG) console.log("checking ended...")}
                       ); //fileUrl
-                      max_try--;
+                      trycount++;
                       if (IS_DEBUG) console.log(ok);
                     }
                   }
+
                   document.body.style.cursor = 'default';
+                  if (!ok) {alert("The file is not found on IPFS. Please try again later.") ; return ; }
+                
                   setIsAvailable(ok);
 
                   setStep(ENCRYPTING_DATASET);
@@ -222,20 +226,24 @@ const SendForm = () => {
                   setStep(UPLOADING_DATASET);
                   var datasetUrl = await uploadData(encryptedDataset);
                   // await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED );
-                  await delay(10);
                   if (!optimistic) {
-                    let max_try = 20 ; 
+                    let trycount = 1 ; 
                     ok = false;
-                    while (!ok && max_try>0) {
-                      if (IS_DEBUG) console.log("Checking dataset availability", datasetUrl);
-                      ok = await checkFileAvailability(datasetUrl, () =>
-                        { if (IS_DEBUG)  console.log("checking ended...", max_try) }
+                    while (!ok && trycount<50) {
+                      let ipfsUrl = getNextIpfsGateway(datasetUrl,trycount) ;
+                      if (IS_DEBUG) console.log("Checking dataset availability", ipfsUrl);
+                      ok = await checkFileAvailability(ipfsUrl, () =>
+                        { if (IS_DEBUG)  console.log("checking ended...", trycount) }
                       );
-                      max_try--;
+                      trycount++;
                       if (IS_DEBUG) console.log(ok);
                     }
                   }
+
+
                   document.body.style.cursor = 'default';
+                  if (!ok) {alert("The file is not found on IPFS. Please try again later.") ; return ; }
+
 
                   document.body.style.cursor = 'wait';
                   setStep(DEPLOYING_DATASET);
