@@ -22,7 +22,7 @@ const iexec = new IExec(configArgs, configOptions);
 
 function Inbox() {
   const { ethereum } = window;
-  const { connectedAccount, checkFileAvailability } = useContext(AceContext);
+  const { connectedAccount, checkFileAvailability, getNextIpfsGateway } = useContext(AceContext);
 
   const WAITING_FOR_REQUEST = 0;
   const REQUESTING = 1;
@@ -101,20 +101,6 @@ function Inbox() {
     console.log("My request orders", myRequestOrders);
     return myRequestOrders;
   };
-
-
-  const getNextIpfsGateway = (ipfsUrl, trycount) => {
-    var parts = ipfsUrl.split('/ipfs') ; 
-    console.log("parts", parts) ; 
-
-    const gateways = process.env.REACT_APP_IPFS_GATEWAYS.split(',') ;
-
-    let numNext = trycount % gateways.length 
-    let nextUrl = gateways[numNext] + parts[1] ;
-    console.log("gateways", gateways, "numNext", numNext, "nextUrl", nextUrl) ;
-
-    return nextUrl ; 
-  }
 
   
   return (
