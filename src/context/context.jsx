@@ -27,6 +27,7 @@ export const AceProvider = ({ children }) => {
   const [step, setStep] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
   const [datasetUrl, setDatasetUrl] = useState("");
+  const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
   const auth = "Basic " + Buffer.from(
     process.env.REACT_APP_INFURA_ID +
@@ -151,25 +152,29 @@ export const AceProvider = ({ children }) => {
     // HACK 
     let options =  {
       method: "HEAD",
-      cache: "no-cache",
-      mode:"no-cors"
+      cache: "no-cache"
+      //, mode:"no-cors"
     } ;
 
 
     if (url.indexOf('cloudflare') ==-1 && url.indexOf('pinata') ==-1)
     {
-        options.headers =  {"Access-Control-Allow-Origin": ["*"] }
+        //options.headers =  {"Access-Control-Allow-Origin": ["*"] }
     }
 
     try {
-      const response = await fetch(url,);
+
+      if (IS_DEBUG) console.log("fetching url", url, "options") ; 
+
+      const response = await fetch(url,options);
       
       const ok = response.status === 200;
 
       // await delay(2) ;
       
+      if (IS_DEBUG)  console.log("url",url, "response.status", response.status , "response.statusText", response.statusText, "ok", ok) ; 
       _callback()
-      console.log("response.status", response.status , "response.statusText", response.statusText, "ok", ok) ; 
+      
 
 
       return ok ; // If status is 200, then it's OK
