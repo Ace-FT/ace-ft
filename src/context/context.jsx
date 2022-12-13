@@ -44,7 +44,7 @@ export const AceProvider = ({ children }) => {
       "Access-Control-Allow-Origin": ["*"],
     },
   });
-  
+
   useEffect(() => {
     fetchImages()
   }, []);
@@ -98,12 +98,12 @@ export const AceProvider = ({ children }) => {
         try {
           await ethereum.request({
             method: "wallet_switchEthereumChain",
-            params: [{chainId: '0x86'}]
+            params: [{ chainId: '0x86' }]
           })
         } catch (switchNetworkError) {
           console.log(switchNetworkError.code)
           // This error code indicates that the chain has not been added to MetaMask.
-          if(switchNetworkError.code === 4902) {
+          if (switchNetworkError.code === 4902) {
             // add Bellecour iExec network
             try {
               console.log("Adding")
@@ -150,46 +150,43 @@ export const AceProvider = ({ children }) => {
 
 
     // HACK 
-    let options =  {
+    let options = {
       method: "HEAD",
-      cache: "no-cache"
-      //, mode:"no-cors"
-    } ;
+      cache: "no-cache",
+      mode: "cors"
+    };
 
 
-    if (url.indexOf('cloudflare') ==-1 && url.indexOf('pinata') ==-1)
-    {
-        //options.headers =  {"Access-Control-Allow-Origin": ["*"] }
+    if (url.indexOf('cloudflare') == -1 && url.indexOf('pinata') == -1) {
+      //options.headers =  {"Access-Control-Allow-Origin": ["*"] }
     }
 
     try {
 
-      if (IS_DEBUG) console.log("fetching url", url, "options") ; 
+      if (IS_DEBUG) console.log("fetching url", url, "options");
 
-      const response = await fetch(url,options);
-      
+      const response = await fetch(url, options);
       const ok = response.status === 200;
 
       // await delay(2) ;
-      
-      if (IS_DEBUG)  console.log("url",url, "response.status", response.status , "response.statusText", response.statusText, "ok", ok) ; 
+
+      if (IS_DEBUG) console.log("url", url, "response.status", response.status, "response.statusText", response.statusText, "ok", ok);
       _callback()
-      
 
 
-      return ok ; // If status is 200, then it's OK
+
+      return ok; // If status is 200, then it's OK
     } catch (error) {
-      console.error("url",url, "response.status", response.status , "response.statusText", response.statusText, "ok", ok) ; 
       console.log(error);
       return false;
     }
   };
 
 
-  const pushOrder = async(address, requesterrestrict) => {
+  const pushOrder = async (address, requesterrestrict) => {
     try {
-      const order = await iexec.order.createDatasetorder({ dataset: address, volume: 100, apprestrict: ace.APP_ADDRESS, requesterrestrict: requesterrestrict})
-      console.log("Unsigned order",order)
+      const order = await iexec.order.createDatasetorder({ dataset: address, volume: 100, apprestrict: ace.APP_ADDRESS, requesterrestrict: requesterrestrict })
+      console.log("Unsigned order", order)
       const signedOrder = await iexec.order.signDatasetorder(order)
       console.log("Signed order", signedOrder)
       const pushedOrder = await iexec.order.publishDatasetorder(signedOrder)
