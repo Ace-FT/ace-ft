@@ -16,7 +16,7 @@ const configOptions = { smsURL: ace.SMS_URL };
 const iexec = new IExec(configArgs, configOptions);
 
 const SendForm = () => {
-  const { connectedAccount, connectWallet } = useContext(AceContext);
+  const { connectedAccount, connectWallet, getNextIpfsGateway } = useContext(AceContext);
 
   const { isLoading, setIsLoading, addressTo, setAddressTo, step, setStep, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
@@ -47,6 +47,19 @@ const SendForm = () => {
     if (IS_DEBUG) console.log(checkbox.checked);
     optimistic = checkbox.checked; 
   };
+
+
+  var setInprogress = () => {
+      document.getElementById("btn-transfer").classList.add("btn-inverted") ; 
+      document.getElementById("btn-transfer").innerText="In progress..." ;
+      document.getElementById("btn-transfer").disabled = true;
+  }
+
+  var setReady = () => {
+    document.getElementById("btn-transfer").classList.remove("btn-inverted") ; 
+    document.getElementById("btn-transfer").innerText="Tranfer" ;
+    document.getElementById("btn-transfer").disabled = true;
+}
 
   return (
     <>
@@ -152,7 +165,7 @@ const SendForm = () => {
                 placeholder="Message"
               />
             </div>
-            <div>
+            <div className="invisible-element">
               <input
                 className="w-full border-b border-gray-500 bg-iexwhite pb-2 focus:outline-none"
                 type="number"
@@ -181,9 +194,13 @@ const SendForm = () => {
               <button
                 className="btn h-8 w-full font-bold"
                 type="submit"
+                id="btn-transfer"
                 onClick={async (e) => {
+
+                  setInprogress() ;
+                  
                   e.preventDefault();
-                  console.log("optimistic", optimistic)
+                  if (IS_DEBUG) console.log("optimistic", optimistic)
 
                   setIsLoading(true);
                   setStep(ENCRYPTING_FILE);
@@ -202,15 +219,21 @@ const SendForm = () => {
                   if (!optimistic) {
                     await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
 
-                    while (!ok) {
-                      if (IS_DEBUG) console.log("Checking file availability at", fileUrl);
-                      ok = await checkFileAvailability(fileUrl, () =>
+                    let trycount = 0 ; 
+                    while (!ok && trycount <50) {
+                      let ipfsUrl = getNextIpfsGateway(fileUrl,trycount) ;
+                      if (IS_DEBUG) console.log("Checking file availability at", ipfsUrl);
+                      ok = await checkFileAvailability(ipfsUrl, () =>
                         {if (IS_DEBUG) console.log("checking ended...")}
                       ); //fileUrl
+                      trycount++;
                       if (IS_DEBUG) console.log(ok);
                     }
                   }
+
                   document.body.style.cursor = 'default';
+                  if (!ok) {alert("The file is not found on IPFS. Please try again later.") ; setReady(); return ; }
+                
                   setIsAvailable(ok);
 
                   setStep(ENCRYPTING_DATASET);
@@ -219,18 +242,25 @@ const SendForm = () => {
 
                   setStep(UPLOADING_DATASET);
                   var datasetUrl = await uploadData(encryptedDataset);
-                  await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
+                  // await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED );
                   if (!optimistic) {
+                    let trycount = 1 ; 
                     ok = false;
-                    while (!ok) {
-                      if (IS_DEBUG) console.log("Checking dataset availability");
-                      ok = await checkFileAvailability(datasetUrl, () =>
-                        { if (IS_DEBUG)  console.log("checking ended...") }
+                    while (!ok && trycount<50) {
+                      let ipfsUrl = getNextIpfsGateway(datasetUrl,trycount) ;
+                      if (IS_DEBUG) console.log("Checking dataset availability", ipfsUrl);
+                      ok = await checkFileAvailability(ipfsUrl, () =>
+                        { if (IS_DEBUG)  console.log("checking ended...", trycount) }
                       );
+                      trycount++;
                       if (IS_DEBUG) console.log(ok);
                     }
                   }
+
+
                   document.body.style.cursor = 'default';
+                  if (!ok) {alert("The file is not found on IPFS. Please try again later.") ; setReady(); return ; }
+
 
                   document.body.style.cursor = 'wait';
                   setStep(DEPLOYING_DATASET);
@@ -249,10 +279,13 @@ const SendForm = () => {
                   await pushOrder(datasetAddress, addressTo);
                   document.body.style.cursor = 'default';
                   setStep(FINISHED);
+                  setReady();
                 }}
               >
                 Transfer
               </button>
+              
+
             </div>
           </div>
         </div>

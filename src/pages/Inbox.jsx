@@ -22,7 +22,7 @@ const iexec = new IExec(configArgs, configOptions);
 
 function Inbox() {
   const { ethereum } = window;
-  const { connectedAccount, checkFileAvailability } = useContext(AceContext);
+  const { connectedAccount, checkFileAvailability, getNextIpfsGateway } = useContext(AceContext);
 
   const WAITING_FOR_REQUEST = 0;
   const REQUESTING = 1;
@@ -102,20 +102,6 @@ function Inbox() {
     return myRequestOrders;
   };
 
-
-  const getNextIpfsGateway = (ipfsUrl, trycount) => {
-    var parts = ipfsUrl.split('/ipfs') ; 
-    console.log("parts", parts) ; 
-
-    const gateways = process.env.REACT_APP_IPFS_GATEWAYS.split(',') ;
-
-    let numNext = trycount % gateways.length 
-    let nextUrl = gateways[numNext] + parts[1] ;
-    console.log("gateways", gateways, "numNext", numNext, "nextUrl", nextUrl) ;
-
-    return nextUrl ; 
-  }
-
   
   return (
     <>
@@ -132,12 +118,12 @@ function Inbox() {
             <tr>
               <th className="text-center">Received date</th>
               <th className="text-center">From</th>
-              <th className="text-center">Price (in RLC)</th>
+              <th className="text-center invisible-element">Price (in RLC)</th>
               <th className="text-center">Status</th>
             </tr>
           </thead>
           <tbody>
-            {inboxItems ? (
+            {inboxItems && inboxItems.length > 0 ? (
               inboxItems
                 .sort((a, b) => b.sendDate - a.sendDate)
                 .map((inboxItem, i) => {
@@ -145,7 +131,7 @@ function Inbox() {
                     <tr className="text-center" key={i}>
                       <td>{formatDate(inboxItem.sendDate)}</td>
                       <td>{inboxItem.from}</td>
-                      <td>{inboxItem.price}</td>
+                      <td className="invisible-element">{inboxItem.price}</td>
                       <td>
                         {inboxItem.status === STATUS_OPEN_ORDER && (
                           <p>
@@ -218,7 +204,7 @@ function Inbox() {
                 })
             ) : (
               <tr class="text-center">
-                <td colSpan={4}>You have no pending files in your inbox.</td>
+                <td colSpan={3}>You have no pending files in your inbox.</td>
               </tr>
             )}
           </tbody>

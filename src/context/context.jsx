@@ -11,7 +11,6 @@ export const AceContext = createContext();
 const { ethereum } = window;
 const iexec = new IExec({ ethProvider: window.ethereum });
 
-
 export const AceProvider = ({ children }) => {
   const [connectedAccount, setConnectedAccount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -21,13 +20,14 @@ export const AceProvider = ({ children }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [background, setBackground] = useState({});
   const [bgCreator, setBgCreator] = useState({});
-  const [creativeMode, setCreativeMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(true);
   const [bgUrls, setBgUrls] = useState({});
   const [bgCreatorSocial, setBgCreatorSocial] = useState({});
   const [imgUrl, setImgUrl] = useState("");
   const [step, setStep] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
   const [datasetUrl, setDatasetUrl] = useState("");
+  const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
   const auth = "Basic " + Buffer.from(
     process.env.REACT_APP_INFURA_ID +
@@ -44,10 +44,25 @@ export const AceProvider = ({ children }) => {
       "Access-Control-Allow-Origin": ["*"],
     },
   });
-  
+
   useEffect(() => {
     fetchImages()
   }, []);
+
+
+
+  const getNextIpfsGateway = (ipfsUrl, trycount) => {
+    var parts = ipfsUrl.split('/ipfs') ; 
+    console.log("parts", parts) ; 
+
+    const gateways = process.env.REACT_APP_IPFS_GATEWAYS.split(',') ;
+
+    let numNext = trycount % gateways.length 
+    let nextUrl = gateways[numNext] + parts[1] ;
+    console.log("gateways", gateways, "numNext", numNext, "nextUrl", nextUrl) ;
+
+    return nextUrl ; 
+  }
 
 
   const fetchImages = async () => {
@@ -98,12 +113,12 @@ export const AceProvider = ({ children }) => {
         try {
           await ethereum.request({
             method: "wallet_switchEthereumChain",
-            params: [{chainId: '0x86'}]
+            params: [{ chainId: '0x86' }]
           })
         } catch (switchNetworkError) {
           console.log(switchNetworkError.code)
           // This error code indicates that the chain has not been added to MetaMask.
-          if(switchNetworkError.code === 4902) {
+          if (switchNetworkError.code === 4902) {
             // add Bellecour iExec network
             try {
               console.log("Adding")
@@ -149,39 +164,30 @@ export const AceProvider = ({ children }) => {
   const checkFileAvailability = async (url, _callback) => {
 
     // HACK 
-    //url = url +"/"
+    let options = {
+      method: "HEAD",
+      cache: "no-cache",
+      //mode: "no-cors", 
+      //redirect: "follow"
+    };
+
+    if (url.indexOf('cloudflare') == -1 && url.indexOf('pinata') == -1) {
+      //options.headers =  {"Access-Control-Allow-Origin": ["*"] }
+    }
     try {
-      const isOk = axios.head(url, {
-        headers: {
-          "Access-Control-Allow-Origin": "*"
-         
-        }
-      }).then((response) => {
-        console.log(response)
-        console.log("status", response.status)
-        return response;
-      }).catch((err) => {
-        console.error(err);
-      })
+      if (IS_DEBUG) console.log("fetching url", url, "options", options);
+
+      const response = await fetch(url, options);
+      const ok = response.status === 200;
 
 
-      // const response = await fetch(url, {
-      //   method: "HEAD",
-      //   cache: "no-cache",
-      //   //"Access-Control-Allow-Origin": ["*"],
-      //   headers: {"Access-Control-Allow-Origin": ["*"] }
-      // });
-      
-      // const ok = response.status === 200;
+      // await delay(2) ;
 
-      // // await delay(2) ;
-      
+      if (IS_DEBUG) console.log("response", response) ; 
+      if (IS_DEBUG) console.log("url", url, "response.status", response.status, "response.statusText", response.statusText, "ok", ok);
       _callback()
-      // console.log("response.status", response.status , "response.statusText", response.statusText, "ok", ok) ; 
 
-      
-      // return ok ; // If status is 200, then it's OK
-      return isOk;
+      return ok; // If status is 200, then it's OK
     } catch (error) {
       console.log(error);
       return false;
@@ -189,19 +195,18 @@ export const AceProvider = ({ children }) => {
   };
 
 
-  const pushOrder = async(address, requesterrestrict) => {
+  const pushOrder = async (address, requesterrestrict) => {
     try {
-      const order = await iexec.order.createDatasetorder({ dataset: address, volume: 100, apprestrict: ace.APP_ADDRESS, requesterrestrict: requesterrestrict})
-      console.log("Unsigned order",order)
+      const order = await iexec.order.createDatasetorder({ dataset: address, volume: 100, apprestrict: ace.APP_ADDRESS, requesterrestrict: requesterrestrict })
+      if (IS_DEBUG) console.log("Unsigned order", order)
       const signedOrder = await iexec.order.signDatasetorder(order)
-      console.log("Signed order", signedOrder)
+      if (IS_DEBUG) console.log("Signed order", signedOrder)
       const pushedOrder = await iexec.order.publishDatasetorder(signedOrder)
-      console.log(pushedOrder);
+      if (IS_DEBUG) console.log(pushedOrder);
     } catch (err) {
       console.log(err)
     }
   }
-
 
 
 
@@ -228,8 +233,8 @@ export const AceProvider = ({ children }) => {
         setBgUrls,
         bgCreatorSocial,
         setBgCreatorSocial,
-        creativeMode,
-        setCreativeMode,
+        darkMode,
+        setDarkMode,
         imgUrl,
         setImgUrl,
         step,
@@ -238,6 +243,7 @@ export const AceProvider = ({ children }) => {
         isAvailable,
         setIsAvailable,
         pushOrder,
+        getNextIpfsGateway
       }}
     >
       {children}

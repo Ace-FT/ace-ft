@@ -27,24 +27,17 @@ const client = create({
  */
 const uploadData = async(encrypted) => {
     //UPLOADING
-    console.log(encrypted)
+    console.log("encrypted", encrypted) ;
 
-    try {
-        const uploaded = await client.add(encrypted, {
-            progress: (prog) => console.log(`received: ${prog}`),
-        });
-    
-        console.log(uploaded);
-        console.log(`https://infura-ipfs.io/ipfs/${uploaded.path}`);
-    
-        const url = `https://infura-ipfs.io/ipfs/${uploaded.path}`;
-        return url;
-    }
-    catch (err) {
-        console.log(err);
-        return err;
-    }
-   
+    const uploaded = await client.add(encrypted, {
+        progress: (prog) => console.log(`received: ${prog}`),
+    });
+
+    const url = `https://infura-ipfs.io/ipfs/${uploaded.path}`;
+
+    console.log("uploaded", uploaded, "url", url);
+
+    return url;
 };
 
 export default uploadData;

@@ -33,7 +33,6 @@ const SentItems = () => {
   console.log("QUERY", query);
 
   const { data, loading, error } = useRequest(query);
-
   const [renders, setRendered] = useState(false);
 
   const [isReadyForDownload] = useState(false)
@@ -143,12 +142,12 @@ const SentItems = () => {
             <tr>
               <th className="text-center">Send date</th>
               <th className="text-center">To</th>
-              <th className="text-center">Price (in RLC)</th>
+              <th className="text-center invisible-element">Price (in RLC)</th>
               <th className="text-center">Status</th>
             </tr>
           </thead>
           <tbody>
-            {inboxItems ? (
+            {inboxItems && inboxItems.length > 0 ? (
 
               inboxItems.sort((a, b) => b.sendDate - a.sendDate).map((inboxItem, i) => {
                 console.log("INBOX ITEM", inboxItem);
@@ -160,7 +159,7 @@ const SentItems = () => {
                     <td>
                       {inboxItem.to}
                     </td>
-                    <td>
+                    <td className="invisible-element">
                       {inboxItem.price}
                     </td>
                     <td>
@@ -191,7 +190,7 @@ const SentItems = () => {
             ) : (
             
               <tr class="text-center">
-              <td colSpan={4}>No sent item found.</td>
+              <td colSpan={3}>No sent item found.</td>
               </tr>
             
         )}

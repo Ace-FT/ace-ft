@@ -13,7 +13,7 @@ import Footer from "./components/Footer";
 import Helmet from "react-helmet";
 
 function App() {
-  const { connectedAccount, connectWallet, bgUrls, background, creativeMode, setCreativeMode } = useContext(AceContext);
+  const { connectedAccount, connectWallet, bgUrls, background, darkMode, setDarkMode } = useContext(AceContext);
   const { ethereum } = window;
 
   useEffect(() => {
@@ -35,8 +35,8 @@ function App() {
     // app.backgroundImage = "";
     // app.backgroundColor = "#ffffff";
     // console.log(backgroundImage)
-    console.log(creativeMode);
-  }, [creativeMode]);
+    console.log(darkMode);
+  }, [darkMode]);
 
   useEffect(() => {
     refreshOnWalletChange()
@@ -57,8 +57,8 @@ function App() {
       className="min-h-screen bg-contain bg-center text-iexwhite"
       id="app"
       style={{
-        backgroundImage: creativeMode ? `url(${bgUrls.full})` : "",
-        backgroundColor: creativeMode ? "" : "#0d0d12",
+        backgroundImage: darkMode ? `url(${bgUrls.full})` : "",
+        backgroundColor: darkMode ? "" : "#0d0d12",
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",

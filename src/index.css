@@ -132,7 +132,7 @@ a {
     align-items: center;
     justify-content:space-between;
     margin: auto;
-    height: calc(100vh - 105px);
+    min-height: calc(100vh - 105px);
 }
 
 .footer-container {
@@ -1115,4 +1115,17 @@ table {
 .optimisticContainer
 {
     margin-bottom:1rem;
+}
+
+.invisible-element
+{
+    display: none;
+}
+
+
+.btn-inverted
+{
+    background-color: #f1f2f0;
+    border: solid 1px  var(--iexec-yellow) !important;
+     
 }

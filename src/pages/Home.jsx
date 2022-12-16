@@ -7,7 +7,7 @@ import StepBar from '../components/StepBar';
 
 
 function Home() {
-  const { state, background, bgCreator, bgUrls, bgCreatorSocial, creativeMode, imgUrl, checkFileAvailability } = useContext(AceContext);
+  const { state, background, bgCreator, bgUrls, bgCreatorSocial, darkMode, imgUrl, checkFileAvailability } = useContext(AceContext);
 
   const [message, setMessage] = useState("")
 
@@ -198,7 +198,7 @@ function Home() {
         <div className="absolute right-0 bottom-0 flex flex-col text-sm font-extralight px-8 mb-m">
           <div className="w-full relative flex-col justify-end">
             <div className="top-0">
-              { creativeMode && (
+              { darkMode && (
                 <>
                   <h4>Credits</h4>
                   <p>{bgCreator.id}</p>
