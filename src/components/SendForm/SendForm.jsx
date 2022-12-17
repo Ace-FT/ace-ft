@@ -45,21 +45,21 @@ const SendForm = () => {
   const handleChecked = () => {
     const checkbox = document.getElementById("optimistic");
     if (IS_DEBUG) console.log(checkbox.checked);
-    optimistic = checkbox.checked; 
+    optimistic = checkbox.checked;
   };
 
 
   var setInprogress = () => {
-      document.getElementById("btn-transfer").classList.add("btn-inverted") ; 
-      document.getElementById("btn-transfer").innerText="In progress..." ;
-      document.getElementById("btn-transfer").disabled = true;
+    document.getElementById("btn-transfer").classList.add("btn-inverted");
+    document.getElementById("btn-transfer").innerText = "In progress...";
+    document.getElementById("btn-transfer").disabled = true;
   }
 
   var setReady = () => {
-    document.getElementById("btn-transfer").classList.remove("btn-inverted") ; 
-    document.getElementById("btn-transfer").innerText="Tranfer" ;
+    document.getElementById("btn-transfer").classList.remove("btn-inverted");
+    document.getElementById("btn-transfer").innerText = "Tranfer";
     document.getElementById("btn-transfer").disabled = true;
-}
+  }
 
   return (
     <>
@@ -179,14 +179,14 @@ const SendForm = () => {
             </div>
           </div>
           <div className="formFooter mx-auto items-center p-4">
-          <ReactTooltip multiline="true"/>
+            <ReactTooltip multiline="true" />
 
             <div className="mb-4 optimisticContainer">
               <input type="checkbox" name="optimistic" id="optimistic" onClick={handleChecked} />
               <label htmlFor="optimistic" className="ml-2">
-                Optimistic IPFS upload <svg  data-tip="Activate this setting to speedup the upload process.<br/>By default, the system will ensure that the file is available on IPFS before proceeding to the next step." xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 inlineText">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
-</svg>
+                Optimistic IPFS upload <svg data-tip="Activate this setting to speedup the upload process.<br/>By default, the system will ensure that the file is available on IPFS before proceeding to the next step." xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 inlineText">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                </svg>
               </label>
             </div>
 
@@ -197,8 +197,8 @@ const SendForm = () => {
                 id="btn-transfer"
                 onClick={async (e) => {
 
-                  setInprogress() ;
-                  
+                  setInprogress();
+
                   e.preventDefault();
                   if (IS_DEBUG) console.log("optimistic", optimistic)
 
@@ -219,21 +219,23 @@ const SendForm = () => {
                   if (!optimistic) {
                     await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED);
 
-                    let trycount = 0 ; 
-                    while (!ok && trycount <50) {
-                      let ipfsUrl = getNextIpfsGateway(fileUrl,trycount) ;
+                    let trycount = 0;
+                    while (!ok && trycount < 50) {
+                      let ipfsUrl = getNextIpfsGateway(fileUrl, trycount);
                       if (IS_DEBUG) console.log("Checking file availability at", ipfsUrl);
-                      ok = await checkFileAvailability(ipfsUrl, () =>
-                        {if (IS_DEBUG) console.log("checking ended...")}
+                      ok = await checkFileAvailability(ipfsUrl, () => { if (IS_DEBUG) console.log("checking ended...") }
                       ); //fileUrl
                       trycount++;
                       if (IS_DEBUG) console.log(ok);
                     }
                   }
+                  else {
+                    ok = true;
+                  }
 
                   document.body.style.cursor = 'default';
-                  if (!ok) {alert("The file is not found on IPFS. Please try again later.") ; setReady(); return ; }
-                
+                  if (!ok) { alert("The file is not found on IPFS. Please try again later."); setReady(); return; }
+
                   setIsAvailable(ok);
 
                   setStep(ENCRYPTING_DATASET);
@@ -243,23 +245,25 @@ const SendForm = () => {
                   setStep(UPLOADING_DATASET);
                   var datasetUrl = await uploadData(encryptedDataset);
                   // await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED );
+                  ok = false;
                   if (!optimistic) {
-                    let trycount = 1 ; 
-                    ok = false;
-                    while (!ok && trycount<50) {
-                      let ipfsUrl = getNextIpfsGateway(datasetUrl,trycount) ;
+                    let trycount = 1;
+                    while (!ok && trycount < 50) {
+                      let ipfsUrl = getNextIpfsGateway(datasetUrl, trycount);
                       if (IS_DEBUG) console.log("Checking dataset availability", ipfsUrl);
-                      ok = await checkFileAvailability(ipfsUrl, () =>
-                        { if (IS_DEBUG)  console.log("checking ended...", trycount) }
+                      ok = await checkFileAvailability(ipfsUrl, () => { if (IS_DEBUG) console.log("checking ended...", trycount) }
                       );
                       trycount++;
                       if (IS_DEBUG) console.log(ok);
                     }
                   }
+                  else {
+                    ok = true;
+                  }
 
 
                   document.body.style.cursor = 'default';
-                  if (!ok) {alert("The file is not found on IPFS. Please try again later.") ; setReady(); return ; }
+                  if (!ok) { alert("The file is not found on IPFS. Please try again later."); setReady(); return; }
 
 
                   document.body.style.cursor = 'wait';
@@ -284,7 +288,7 @@ const SendForm = () => {
               >
                 Transfer
               </button>
-              
+
 
             </div>
           </div>
