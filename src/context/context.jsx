@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { IExec } from "iexec";
+import axios from "axios";
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import { delay } from "../utils/delay";
@@ -81,22 +82,6 @@ export const AceProvider = ({ children }) => {
     }
   };
 
-  // const checkIsWalletConnected = async () => {
-  //     try {
-  //         if (!ethereum) {
-  //             alert("Please install Metamask plugin");
-  //         }
-  //         const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-  //         if (accounts.length) {
-  //             setConnectedAccount(accounts[0]);
-  //         } else {
-  //             console.log("No accounts found");
-  //         }
-
-  //     } catch (e) {
-  //         console.log(e);
-  //     }
-  // }
 
   const connectWallet = async () => {
     try {
@@ -173,9 +158,7 @@ export const AceProvider = ({ children }) => {
     if (url.indexOf('cloudflare') == -1 && url.indexOf('pinata') == -1) {
       //options.headers =  {"Access-Control-Allow-Origin": ["*"] }
     }
-
     try {
-
       if (IS_DEBUG) console.log("fetching url", url, "options", options);
 
       const response = await fetch(url, options);
@@ -207,7 +190,6 @@ export const AceProvider = ({ children }) => {
       console.log(err)
     }
   }
-
 
 
   return (

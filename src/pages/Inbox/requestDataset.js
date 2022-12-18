@@ -39,12 +39,23 @@ const requestDataset = async(datasetAddress, datasetRequester) => {
 
     console.log("START createRequestorder");
 
+
+    let secretExists = await iexec.secrets.checkRequesterSecretExists(datasetRequester, "my-address");
+    if (!secretExists) await iexec.secrets.pushRequesterSecret("my-address", datasetRequester);
+
+    
+    let secrets = {
+        1: "my-address"
+    }
     const requestOrderTemplate = await iexec.order.createRequestorder({
         app: ace.APP_ADDRESS,
         category: 0,
         dataset: datasetAddress,
         workerpool: ace.WORKERPOOL_ADDRESS,
-        tag: "tee"
+        tag: "tee",
+        params: {
+            iexec_secrets: secrets
+        }
             //params: { iexec_developer_logger: true },
     });
     console.log("Request order", requestOrderTemplate);

@@ -2,7 +2,7 @@ import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import * as ace from "../../shared/constants";
 import { jsonToBuffer } from "../../utils/jsonToBuffer";
-const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
 const auth = "Basic " + Buffer.from(
     process.env.REACT_APP_INFURA_ID +
@@ -16,7 +16,7 @@ const client = create({
     //apiPath: "/api/v0",
     headers: {
         authorization: auth,
-        "Access-Control-Allow-Origin": ["*"],
+        "Access-Control-Allow-Origin": ["*"]
     },
 });
 
