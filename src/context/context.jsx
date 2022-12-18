@@ -82,22 +82,6 @@ export const AceProvider = ({ children }) => {
     }
   };
 
-  // const checkIsWalletConnected = async () => {
-  //     try {
-  //         if (!ethereum) {
-  //             alert("Please install Metamask plugin");
-  //         }
-  //         const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-  //         if (accounts.length) {
-  //             setConnectedAccount(accounts[0]);
-  //         } else {
-  //             console.log("No accounts found");
-  //         }
-
-  //     } catch (e) {
-  //         console.log(e);
-  //     }
-  // }
 
   const connectWallet = async () => {
     try {
@@ -180,7 +164,6 @@ export const AceProvider = ({ children }) => {
       const response = await fetch(url, options);
       const ok = response.status === 200;
 
-
       // await delay(2) ;
 
       if (IS_DEBUG) console.log("response", response) ; 
@@ -207,7 +190,6 @@ export const AceProvider = ({ children }) => {
       console.log(err)
     }
   }
-
 
 
   return (
