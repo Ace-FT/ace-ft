@@ -4,10 +4,21 @@ import { NavLink } from "react-router-dom";
 import { AceContext } from "../context/context";
 import { shortenAddress } from "../utils/shortenAddress";
 import OnOffToggleButton from "../components/OnOffToggleButton";
+import { copyTextToClipboard } from "../utils/copyToClipboard";
+import ReactTooltip from 'react-tooltip';
 
 const NavBar = () => {
   const { connectWallet, connectedAccount } = useContext(AceContext);
-  //console.log(connectedAccount);
+
+  const copyAddressToClipboard = ()=>{
+    document.getElementById("walletAddressContainer").innerHTML = `Copied! ${shortenAddress(connectedAccount)} 👋` ;
+    
+    setTimeout(()=>{
+      document.getElementById("walletAddressContainer").innerHTML = `Hello! ${shortenAddress(connectedAccount)} 👋` ;
+    }, 1000)
+
+    copyTextToClipboard(connectedAccount) ;
+  }
 
   return (
     <>
@@ -49,8 +60,13 @@ const NavBar = () => {
           </div>
           <div className="flex max-w-2/10 basis-1/5">
             {connectedAccount ? (
-              <div className="ml-auto items-center">
-                <p className="ml-8 text-right">
+
+              <div className="ml-auto items-center" >
+
+              <ReactTooltip multiline="true" />
+                <p className="ml-8 text-right" data-tip="Click to copy" id="walletAddressContainer"
+                   onClick={copyAddressToClipboard}  
+                >
                   Hello! {shortenAddress(connectedAccount)} 👋
                 </p>
               </div>
