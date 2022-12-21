@@ -4,10 +4,12 @@ import SendForm from "../components/SendForm/SendForm";
 import { AceContext } from '../context/context';
 import crypto from 'crypto-browserify';
 import StepBar from '../components/StepBar';
-
+const APP_NAME = process.env.REACT_APP_NAME
 
 function Home() {
   const { state, background, bgCreator, bgUrls, bgCreatorSocial, darkMode, imgUrl, checkFileAvailability } = useContext(AceContext);
+
+  
 
   const [message, setMessage] = useState("")
 
@@ -167,7 +169,7 @@ function Home() {
   return (
     <>
       <Helmet>
-        <title>ACE-ft | Home</title>
+        <title>{APP_NAME} | Home</title>
       </Helmet>
       <div className="relative flex mx-m py-m">
         <div className="flex">
@@ -195,15 +197,15 @@ function Home() {
             Test bg Urls
           </button> */}
         </div>
-        <div className="absolute right-0 bottom-0 flex flex-col text-sm font-extralight px-8 mb-m">
-          <div className="w-full relative flex-col justify-end">
-            <div className="top-0">
+       
+          
+            <div className="bottomright">
               { darkMode && (
                 <>
-                  <h4>Credits</h4>
-                  <p>{bgCreator.id}</p>
-                  <p>{bgCreator.name}</p>
-                  <p>{bgCreator.username}</p>
+                  <h4><u>Credits</u></h4>
+                  <p>Author: {bgCreator.name} ({bgCreator.username})</p>
+                  <p>ImageId: {bgCreator.id}</p>
+                  <p>Source: Unsplash</p>
                   {bgCreatorSocial ? (
                     <p>Instagram : {bgCreatorSocial.instagram_username}</p>
                   ) : (
@@ -215,8 +217,8 @@ function Home() {
             </div>
             
           </div>
-        </div>
-      </div>
+        
+      
     </>
   )
 }

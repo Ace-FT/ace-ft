@@ -25,8 +25,8 @@ const NavBar = () => {
       <div className="flex w-full items-center justify-center bg-iexblk">
         <div className="top-container">
           <div className="flex items-center">
-            <div className="logo-container h-6 flex-none text-left font-logo text-xl not-italic">
-              Ace File Transfer
+          <img src="/logo512.png" className="app-logo" /><div className="logo-container h-6 flex-none text-left font-logo text-xl not-italic">
+             Ace File Transfer
             </div>
             <nav className="top-navigation">
               <ul className="flex list-none">
@@ -64,7 +64,7 @@ const NavBar = () => {
               <div className="ml-auto items-center" >
 
               <ReactTooltip multiline="true" />
-                <p className="ml-8 text-right" data-tip="Click to copy" id="walletAddressContainer"
+                <p className="ml-8 text-right clickable" data-tip="Click to copy" id="walletAddressContainer"
                    onClick={copyAddressToClipboard}  
                 >
                   Hello! {shortenAddress(connectedAccount)} 👋
