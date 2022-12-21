@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from "react";
 import { IExec } from "iexec";
-import axios from "axios";
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import { delay } from "../utils/delay";
