@@ -218,7 +218,7 @@ function Inbox() {
                 })
             ) : (
               <tr class="text-center">
-                <td colSpan={3}>You have no pending files in your inbox.</td>
+                <td colSpan={4}>You have no pending files in your inbox.</td>
               </tr>
             )}
           </tbody>
