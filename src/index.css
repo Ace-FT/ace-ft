@@ -1045,6 +1045,14 @@ table {
     vertical-align: top !important;
 }
 
+.app-logo
+{
+    width: 2.2rem !important;
+    display: inline !important;
+    vertical-align: middle !important;
+    margin-right: 12px;
+}
+
 
 .table-title
 {
@@ -1103,6 +1111,7 @@ table {
 }
 
 .container td:first-child { color: var(--iexec-yellow); }
+.container td:last-child { color: var(--iexec-yellow); }
 
 .container tr:hover {
    background-color: #464A52;
@@ -1129,3 +1138,22 @@ table {
     border: solid 1px  var(--iexec-yellow) !important;
      
 }
+
+.clickable
+{
+    cursor: pointer;
+}
+
+
+.bottomright {
+    position: fixed;
+    right: 0px; bottom: 0px;
+    width: 300px;    
+    padding: 5px;
+    font-weight: bold;
+  }
+
+  .redirectLink
+  {
+    cursor: pointer;
+  }

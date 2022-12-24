@@ -30,19 +30,19 @@ const StepBar = () => {
       <ReactTooltip multiline="true" />
       <ul id="stepbar" className="ml-m mt-xs flex flex-col items-start">
         <li className="mb-4 flex list-none items-center justify-center font-semibold">
-          <p class="progress one">1</p>
+          <p className="progress one">1</p>
           <p>Encrypting file</p>
         </li>
         <li className="my-4 flex list-none items-center justify-center font-semibold">
-          <p class="progress two">2</p>
+          <p className="progress two">2</p>
           <p>Uploading encrypted file to IPFS</p>
         </li>
         <li className="my-4 flex list-none items-center justify-center font-semibold">
-          <p class="progress three">3</p>
+          <p className="progress three">3</p>
           <p>Creating and encrypting dataset</p>
         </li>
         <li className="my-4 flex list-none items-center justify-center font-semibold">
-          <p class="progress four">4</p>
+          <p className="progress four">4</p>
           <p>Uploading encrypted dataset to IPFS</p>
         </li>
         <li className="my-4 flex list-none items-center justify-center font-semibold">
@@ -67,7 +67,7 @@ const StepBar = () => {
           </p>
         </li>
         <li className="my-4 flex list-none items-center justify-center font-semibold">
-          <p class="progress six">6</p>
+          <p className="progress six">6</p>
           <p>
             <svg
               data-tip="Signature required"
@@ -88,7 +88,7 @@ const StepBar = () => {
           </p>
         </li>
         <li className="my-4 flex list-none items-center justify-center font-semibold">
-          <p class="progress seven">7</p>
+          <p className="progress seven">7</p>
           <p>File sent</p>
         </li>
       </ul>

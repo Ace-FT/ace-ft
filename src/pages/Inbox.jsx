@@ -15,6 +15,8 @@ import { fromEnryptedFileToFile } from "../utils/fileAESEncryption";
 import formatDate from "../utils/formatDate";
 import ReactTooltip from 'react-tooltip';
 import { delay } from "../utils/delay";
+import { openExplorer } from "../utils/openExplorer";
+
 
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
 const configOptions = { smsURL: ace.SMS_URL };
@@ -48,7 +50,7 @@ function Inbox() {
   const [inboxItems, setInboxItems] = useState();
   const [taskID, setTaskID] = useState("");
 
-  useEffect(() => {}, [connectedAccount])
+  useEffect(() => { }, [connectedAccount])
 
   useEffect(() => {
     const doMapping = async () => {
@@ -72,7 +74,7 @@ function Inbox() {
     }
   }, [inboxItems]);
 
-  useEffect(() => {}, [taskID]);
+  useEffect(() => { }, [taskID]);
 
   const verifyIfReadyForDownload = (datasetOrder) => {
     if (
@@ -102,15 +104,15 @@ function Inbox() {
     return myRequestOrders;
   };
 
-  
+
   return (
     <>
       <Helmet>
         <title>ACE-ft | Inbox</title>
       </Helmet>
       <div className="mx-8 py-m">
-        <h1 class="table-title">Inbox</h1>
-        
+        <h1 className="table-title">Inbox</h1>
+
         <ReactTooltip />
 
         <table className="container w-full max-w-full table-auto border-collapse">
@@ -120,6 +122,7 @@ function Inbox() {
               <th className="text-center">From</th>
               <th className="text-center invisible-element">Price (in RLC)</th>
               <th className="text-center">Status</th>
+              <th className="text-center px-8">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -150,7 +153,7 @@ function Inbox() {
                           <p>
                             Request started on {formatDate(inboxItem.downloadDate)}
                           </p>
-                      
+
                         }
                         {inboxItem.status === STATUS_COMPLETED_ORDER && (
                           <p>
@@ -164,47 +167,58 @@ function Inbox() {
                               console.log("resultFileName", resultFileName);
                               var ok = false;
                               document.body.style.cursor = 'wait';
-                              let trycount = 0 ;
+                              let trycount = 0;
 
-                              while (!ok && trycount<50) {
-                                ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...") ); //fileUrl
+                              while (!ok && trycount < 50) {
+                                ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...")); //fileUrl
                                 console.log("ok 1", ok, resultFileUrl);
-                                if (!ok)
-                                {
-                                  await delay(2) ;
-                                  ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...") ); //fileUrl
+                                if (!ok) {
+                                  await delay(2);
+                                  ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...")); //fileUrl
                                   console.log("ok 2", ok, resultFileUrl);
 
-                                  trycount++ ;
-                                  resultFileUrl = getNextIpfsGateway(resultFileUrl,trycount) ;// await useNextIpfsGateway(resultFileUrl, trycount); 
+                                  trycount++;
+                                  resultFileUrl = getNextIpfsGateway(resultFileUrl, trycount);// await useNextIpfsGateway(resultFileUrl, trycount); 
                                   console.log("next  resultFileUrl", resultFileUrl, "trycount", trycount);
                                 }
                               }
-                              if (ok)
-                              {
+                              if (ok) {
                                 const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
                                 let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
                                 let fileBlob = new Blob([decryptedFile], { type: 'application/octet-stream' });
                                 saveFile(fileBlob, resultFileName);
                               }
-                              else
-                              {
-                                  alert("Could not download file. Please try again") ;
+                              else {
+                                alert("Could not download file. Please try again");
                               }
-                              document.body.style.cursor = 'default'; 
-                              
+                              document.body.style.cursor = 'default';
+
                             }}>
                               Download
                             </button>
                           </p>
                         )}
                       </td>
+                      <td className="text-center">
+                        <ReactTooltip/>
+                        <svg  xmlns="http://www.w3.org/2000/svg"
+                              data-tip="View in iExec explorer"
+                              fill="none" viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              className="w-5 h-5 redirectLink"
+                              onClick={async () => {
+                                openExplorer(inboxItem);
+                              }}>
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                        </svg>
+                      </td>
                     </tr>
                   );
                 })
             ) : (
               <tr class="text-center">
-                <td colSpan={3}>You have no pending files in your inbox.</td>
+                <td colSpan={4}>You have no pending files in your inbox.</td>
               </tr>
             )}
           </tbody>
