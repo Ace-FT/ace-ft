@@ -3,6 +3,8 @@ import { IExec } from "iexec";
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import { delay } from "../utils/delay";
+import { isLightColor } from "../utils/isLightColor";
+
 import * as ace from "../shared/constants";
 
 export const AceContext = createContext();
@@ -19,7 +21,8 @@ export const AceProvider = ({ children }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [background, setBackground] = useState({});
   const [bgCreator, setBgCreator] = useState({});
-  const [darkMode, setDarkMode] = useState(true);
+  const [creativeMode, setCreativeMode] = useState(true);
+  const [backgroundIsLight, setBackgroundIsLight] = useState(true);
   const [bgUrls, setBgUrls] = useState({});
   const [bgCreatorSocial, setBgCreatorSocial] = useState({});
   const [imgUrl, setImgUrl] = useState("");
@@ -33,16 +36,6 @@ export const AceProvider = ({ children }) => {
     ":" + process.env.REACT_APP_INFURA_SECRET_KEY
   ).toString("base64");
 
-  const client = create({
-    host: "ipfs.infura.io",
-    port: 5001,
-    protocol: "https",
-    //apiPath: "/api/v0",
-    headers: {
-      authorization: auth,
-      "Access-Control-Allow-Origin": ["*"],
-    },
-  });
 
   useEffect(() => {
     fetchImages()
@@ -75,7 +68,8 @@ export const AceProvider = ({ children }) => {
       setBgCreator(creator);
       setBgUrls(bg.urls);
       setBgCreatorSocial(creator.social);
-
+      setBackgroundIsLight(  isLightColor(bg.color)  ) ;
+    
     } catch (e) {
       console.log(e);
     }
@@ -214,8 +208,8 @@ export const AceProvider = ({ children }) => {
         setBgUrls,
         bgCreatorSocial,
         setBgCreatorSocial,
-        darkMode,
-        setDarkMode,
+        creativeMode,
+        setCreativeMode,
         imgUrl,
         setImgUrl,
         step,
@@ -224,7 +218,9 @@ export const AceProvider = ({ children }) => {
         isAvailable,
         setIsAvailable,
         pushOrder,
-        getNextIpfsGateway
+        getNextIpfsGateway,
+        backgroundIsLight,
+        setBackgroundIsLight
       }}
     >
       {children}

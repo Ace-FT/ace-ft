@@ -3,21 +3,21 @@ import { AceContext } from "../context/context";
 import "tw-elements";
 
 const OnOffToggleButton = () => {
-  const { darkMode, setDarkMode: setDarkMode } = useContext(AceContext);
+  const { creativeMode, setCreativeMode: setCreativeMode } = useContext(AceContext);
 
   const handleOnClick = () => {
-    setDarkMode((darkMode) => !darkMode);
+    setCreativeMode((creativeMode) => !creativeMode);
   };
 
   return (
     <>
       <div className="my-12 flex w-full items-center justify-center">
-        <label htmlFor="darkMode" className="flex cursor-pointer items-center text-iexwhite">
+        <label htmlFor="creativeMode" className="flex cursor-pointer items-center text-iexwhite">
           <div className="relative mr-4">
-            {darkMode ? (
+            {creativeMode ? (
               <input
                 type="checkbox"
-                id="darkMode"
+                id="creativeMode"
                 className="sr-only"
                 checked={false}
                 onClick={() => handleOnClick()}
@@ -25,7 +25,7 @@ const OnOffToggleButton = () => {
             ) : (
               <input
                 type="checkbox"
-                id="darkMode"
+                id="creativeMode"
                 className="sr-only"
                 checked
                 onClick={() => handleOnClick()}

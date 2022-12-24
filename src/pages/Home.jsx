@@ -7,7 +7,7 @@ import StepBar from '../components/StepBar';
 const APP_NAME = process.env.REACT_APP_NAME
 
 function Home() {
-  const { state, background, bgCreator, bgUrls, bgCreatorSocial, darkMode, imgUrl, checkFileAvailability } = useContext(AceContext);
+  const { state, background, bgCreator, bgUrls, bgCreatorSocial, creativeMode, imgUrl, checkFileAvailability, backgroundIsLight } = useContext(AceContext);
 
   
 
@@ -29,142 +29,18 @@ function Home() {
   // Defining key
   const key = crypto.randomBytes(32);
 
-  // An encrypt function
-  function fr7encrypt(text) {
 
-    // Defining iv
-    const iv = crypto.randomBytes(16);
+  function getCreditClassName()
+  {
+    console.log("creativeMode", creativeMode,"backgroundIsLight",  backgroundIsLight  ) ; 
 
+    if (!creativeMode) return "credits-darkbg" ;
 
-    // Creating Cipheriv with its parameter
-    let cipher =
-      crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
-
-    // Updating text
-    let encrypted = cipher.update(text);
-
-    // Using concatenation
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
-
-    // Returning iv and encrypted data
-    return {
-      iv: iv.toString('hex')
-      ,
-      //encryptedData: encrypted.toString('hex')
-      encryptedData: encrypted
-    };
+    if ( backgroundIsLight ) return "credits-lightbg"; 
+    
+    return "credits-darkbg"; 
   }
 
-  // A decrypt function
-  function fr7decrypt(enckey, text) {
-
-    let iv = Buffer.from(text.iv, 'hex');
-    //let encryptedText =
-    //  Buffer.from(text.encryptedData, 'hex');
-
-    let encryptedText =
-      Buffer.from(text.encryptedData);
-
-    // Creating Decipher
-    let decipher = crypto.createDecipheriv(
-      'aes-256-cbc', Buffer.from(enckey), iv);
-
-    // Updating encrypted text
-    let decrypted = decipher.update(encryptedText);
-    decrypted = Buffer.concat([decrypted, decipher.final()]);
-
-    // returns data after decryption
-    return decrypted;
-  }
-
-
-  var saveData = (function () {
-    var a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
-    return function (blobdata, fileName) {
-      console.log("blobdata", blobdata);
-
-      var url = window.URL.createObjectURL(blobdata);
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    };
-  }());
-
-
-
-
-  const testEncrypt = async () => {
-
-    let fileUrl = 'https://infura-ipfs.io/ipfs/QmQDUxQRv8LBm4nTPG37V2Av44UKg2L3o543YKMJhcjydr';
-    let enckey = 'qehKhvP7XAxNLilwF4qm75bIu+322SZ2Gu6mge+jOCg=';
-
-    let responseArray = await fetch(
-      fileUrl, { method: 'GET' }
-    ).then((response) => {
-      //return new Uint8Array(response.arrayBuffer()); //to convert to UintArray8
-      return response.arrayBuffer()
-    })
-
-
-    let buff = Buffer.from(responseArray)
-    let output = JSON.parse(buff.toString());
-
-    console.log("output", output);
-
-    let lacle =
-    {
-      "type": "Buffer",
-      "data": [
-        215,
-        145,
-        156,
-        250,
-        250,
-        127,
-        27,
-        85,
-        51,
-        12,
-        130,
-        21,
-        53,
-        238,
-        22,
-        40,
-        40,
-        136,
-        146,
-        252,
-        181,
-        179,
-        19,
-        25,
-        196,
-        181,
-        227,
-        170,
-        6,
-        48,
-        145,
-        236
-      ]
-    };
-
-    let bytesView = new Uint8Array(lacle);
-
-    let strk = new TextDecoder().decode(bytesView);
-
-    // Decrypts output
-    let decrypted = fr7decrypt(lacle, output);
-    console.log("decrypted", decrypted);
-
-    let blob = new Blob([decrypted], { type: 'application/octet-stream' });
-    saveData(blob, "poly.png");
-
-  }
 
   return (
     <>
@@ -199,15 +75,19 @@ function Home() {
         </div>
        
           
-            <div className="bottomright">
-              { darkMode && (
+            <div className="credits-container">
+              { creativeMode && (
                 <>
-                  <h4><u>Credits</u></h4>
-                  <p>Author: {bgCreator.name} ({bgCreator.username})</p>
-                  <p>ImageId: {bgCreator.id}</p>
-                  <p>Source: Unsplash</p>
-                  {bgCreatorSocial ? (
-                    <p>Instagram : {bgCreatorSocial.instagram_username}</p>
+                  <h4 className={getCreditClassName()}><u>Credits</u></h4>
+               
+                  {bgCreator && bgCreator.links ? (
+                      <><p className={getCreditClassName()}>Author: <a className={getCreditClassName()} href={bgCreator.links.html} target="_blank">{bgCreator.name} ({bgCreator.username})</a></p>
+                      <p className={getCreditClassName()}>ImageId:  <a className={getCreditClassName()} href={background.links.html} target="_blank">{background.id}</a></p></>
+                    ) : (<p></p>)}
+
+                  <p className={getCreditClassName()}>Source: Unsplash</p>
+                  {bgCreatorSocial && bgCreatorSocial.instagram_username && bgCreatorSocial.instagram_username.length > 0 ? (
+                    <p className={getCreditClassName()}>Instagram : <a className={getCreditClassName()} href={"https://instagram.com/" + bgCreatorSocial.instagram_username} target="_blank">{bgCreatorSocial.instagram_username}</a></p>
                   ) : (
                     <div>
                     </div>

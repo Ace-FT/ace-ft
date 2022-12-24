@@ -169,6 +169,7 @@ a {
     color:#f3f4f2
 }
 
+
 .progress {
     width: 30px;
     height: 30px;
@@ -179,10 +180,8 @@ a {
     line-height: 30px;
     vertical-align: top;
     text-align: center;
-    color: #a2b5d2;
     border: 1px;
     z-index: 10;
-    background-color: #d4dcea;
     position: relative;
 }
 .progress::after {
@@ -1145,15 +1144,32 @@ table {
 }
 
 
-.bottomright {
+.credits-container {
     position: fixed;
     right: 0px; bottom: 0px;
     width: 300px;    
     padding: 5px;
     font-weight: bold;
-  }
+}
 
-  .redirectLink
-  {
-    cursor: pointer;
-  }
+.credits-darkbg {
+    color: #f3f4f2 !important;
+}
+
+.credits-lightbg{
+    color: #0d0d12 !important;
+}
+
+
+.progress-lightbg
+{
+    color: #a2b5d2;
+    background-color: #0d0d12;    
+}
+
+.progress-darkbg
+{
+    color: #a2b5d2;
+    background-color: #d4dcea;
+    
+}
