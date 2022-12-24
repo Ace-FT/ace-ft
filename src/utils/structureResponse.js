@@ -1,8 +1,8 @@
 const structureResponse = (data) => {
     
-    if(data && data.data.datasets) {
-        data.data.datasets.map((e)=> console.log("ds-------->",  e));
-        return data.data.datasets;
+    if(data && data.datasets) {
+        data.datasets.map((e)=> console.log("ds-------->",  e));
+        return data.datasets;
     }
     return null;
 }

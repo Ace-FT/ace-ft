@@ -2571,6 +2571,11 @@
     "expect" "^29.0.0"
     "pretty-format" "^29.0.0"
 
+"@types/js-cookie@^2.x.x":
+  "integrity" "sha512-aLkWa0C0vO5b4Sr798E26QgOkss68Un0bLjs7u9qxzPT5CG+8DuNTffWES58YzJs3hrVAOs1wonycqEBqNJubA=="
+  "resolved" "https://registry.npmjs.org/@types/js-cookie/-/js-cookie-2.2.7.tgz"
+  "version" "2.2.7"
+
 "@types/json-schema@*", "@types/json-schema@^7.0.4", "@types/json-schema@^7.0.5", "@types/json-schema@^7.0.8", "@types/json-schema@^7.0.9":
   "integrity" "sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ=="
   "resolved" "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.11.tgz"
@@ -3083,6 +3088,25 @@
   "version" "6.0.2"
   dependencies:
     "debug" "4"
+
+"ahooks-v3-count@^1.0.0":
+  "integrity" "sha512-V7uUvAwnimu6eh/PED4mCDjE7tokeZQLKlxg9lCTMPhN+NjsSbtdacByVlR1oluXQzD3MOw55wylDmQo4+S9ZQ=="
+  "resolved" "https://registry.npmjs.org/ahooks-v3-count/-/ahooks-v3-count-1.0.0.tgz"
+  "version" "1.0.0"
+
+"ahooks@^3.7.3":
+  "integrity" "sha512-HzHD5xhI94xqWfij9rimfFtkbGm+TR/t86drdYrYHgAMth0rqLtHxlVOTCjgXqmXUt9xz0EbkBfrWZBl4lc2YQ=="
+  "resolved" "https://registry.npmjs.org/ahooks/-/ahooks-3.7.3.tgz"
+  "version" "3.7.3"
+  dependencies:
+    "@types/js-cookie" "^2.x.x"
+    "ahooks-v3-count" "^1.0.0"
+    "dayjs" "^1.9.1"
+    "intersection-observer" "^0.12.0"
+    "js-cookie" "^2.x.x"
+    "lodash" "^4.17.21"
+    "resize-observer-polyfill" "^1.5.1"
+    "screenfull" "^5.0.0"
 
 "ajv-formats@^2.1.1":
   "integrity" "sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA=="
@@ -4555,6 +4579,11 @@
     "abab" "^2.0.3"
     "whatwg-mimetype" "^2.3.0"
     "whatwg-url" "^8.0.0"
+
+"dayjs@^1.9.1":
+  "integrity" "sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ=="
+  "resolved" "https://registry.npmjs.org/dayjs/-/dayjs-1.11.7.tgz"
+  "version" "1.11.7"
 
 "debug@^2.6.0":
   "integrity" "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA=="
@@ -6372,6 +6401,11 @@
     "has" "^1.0.3"
     "side-channel" "^1.0.4"
 
+"intersection-observer@^0.12.0":
+  "integrity" "sha512-7m1vEcPCxXYI8HqnL8CKI6siDyD+eIWSwgB3DZA+ZTogxk9I4CDnj4wilt9x/+/QbHI4YG5YZNmC6458/e9Ktg=="
+  "resolved" "https://registry.npmjs.org/intersection-observer/-/intersection-observer-0.12.2.tgz"
+  "version" "0.12.2"
+
 "ip-regex@^4.0.0":
   "integrity" "sha512-B9ZWJxHHOHUhUjCPrMpLD4xEq35bUTClHM1S6CBU5ixQnkZmwipwgc96vAd7AAGM9TGHvJR+Uss+/Ak6UphK+Q=="
   "resolved" "https://registry.npmjs.org/ip-regex/-/ip-regex-4.3.0.tgz"
@@ -7394,6 +7428,11 @@
     "@jest/core" "^27.5.1"
     "import-local" "^3.0.2"
     "jest-cli" "^27.5.1"
+
+"js-cookie@^2.x.x":
+  "integrity" "sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ=="
+  "resolved" "https://registry.npmjs.org/js-cookie/-/js-cookie-2.2.1.tgz"
+  "version" "2.2.1"
 
 "js-sdsl@^4.1.4":
   "integrity" "sha512-08bOAKweV2NUC1wqTtf3qZlnpOX/R2DU9ikpjOHs0H+ibQv3zpncVQg6um4uYtRtrwIX8M4Nh3ytK4HGlYAq7Q=="
@@ -9663,6 +9702,11 @@
   "resolved" "https://registry.npmjs.org/requires-port/-/requires-port-1.0.0.tgz"
   "version" "1.0.0"
 
+"resize-observer-polyfill@^1.5.1":
+  "integrity" "sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg=="
+  "resolved" "https://registry.npmjs.org/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz"
+  "version" "1.5.1"
+
 "resolve-cwd@^3.0.0":
   "integrity" "sha512-OrZaX2Mb+rJCpH/6CpSqt9xFVpN++x01XnN2ie9g6P5/3xelLAkXWVADpdz1IHD/KFfEXyE6V0U01OQ3UO2rEg=="
   "resolved" "https://registry.npmjs.org/resolve-cwd/-/resolve-cwd-3.0.0.tgz"
@@ -9900,6 +9944,11 @@
     "@types/json-schema" "^7.0.4"
     "ajv" "^6.12.2"
     "ajv-keywords" "^3.4.1"
+
+"screenfull@^5.0.0":
+  "integrity" "sha512-9BakfsO2aUQN2K9Fdbj87RJIEZ82Q9IGim7FqM5OsebfoFC6ZHXgDq/KvniuLTPdeM8wY2o6Dj3WQ7KeQCj3cA=="
+  "resolved" "https://registry.npmjs.org/screenfull/-/screenfull-5.2.0.tgz"
+  "version" "5.2.0"
 
 "scrypt-js@3.0.1":
   "integrity" "sha512-cdwTTnqPu0Hyvf5in5asVdZocVDTNRmR7XEcJuIzMjJeSHybHl7vpB66AzwTaIg6CLSbtjcxc8fqcySfnTkccA=="

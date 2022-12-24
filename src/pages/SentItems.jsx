@@ -2,17 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { AceContext } from "../context/context";
 import { IExec } from "iexec";
-import useRequest from "../hooks/useRequest";
 import * as ace from "../shared/constants";
 import { inboxDatasetsQuery } from "../shared/queries.ts";
-
+import { useRequest } from 'ahooks';
 import structureResponse from "../utils/structureResponse";
-import requestDataset from "./Inbox/requestDataset";
 import { mapSentItemsOrders } from "../shared/itemMapper";
 import formatDate from "../utils/formatDate";
 import ReactTooltip from 'react-tooltip';
 import { openExplorer } from "../utils/openExplorer";
-
+import fetchData from "../shared//fetchData";
+const APP_NAME = process.env.REACT_APP_NAME;
 const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 const SentItems = () => {
@@ -32,84 +31,55 @@ const SentItems = () => {
 
   const query = inboxDatasetsQuery(connectedAccount, null);
 
+  const [data, setData] = useState(false);
 
-  console.log("QUERY", query);
+  useRequest(
+    ( async ()=>{
+      let ret = await fetchData(query) ;
+      if (IS_DEBUG) console.log("Calling fectdata", ret) ; 
+      setData(ret.data) ;
+    }), 
+    
+    { pollingInterval: ace.POLLING_INTERVAL }
+  );
 
-  const { data, loading, error } = useRequest(query);
-  const [renders, setRendered] = useState(false);
-
+  
+  
   const [isReadyForDownload] = useState(false)
   var structuredResponse = null;
 
   const [inboxItems, setInboxItems] = useState();
 
   useEffect(() => {
-
+    console.log("sentitems user effects ! ", data) ; 
     const doMapping = async () => {
-      setInboxItems(await mapSentItemsOrders(connectedAccount, structuredResponse));
-      console.log("INBOX ITEMS SET");
+      let foundItems = await mapSentItemsOrders(connectedAccount, structuredResponse)
+      if (IS_DEBUG) console.log("INBOX ITEMS SET", foundItems);
+      setInboxItems(foundItems);
     }
 
-    if (data && !renders) {
-      setRendered(true);
-      structuredResponse = structureResponse(data);
-      console.log("structuredResponse", structuredResponse);
+    if (data) {
 
+      if (IS_DEBUG) console.log("useEffect data", data) ; 
+      structuredResponse = structureResponse(data);
+      if (IS_DEBUG) console.log("structuredResponse", structuredResponse);
       doMapping();
       return;
-
     }
   }, [data]);
 
 
   useEffect(() => {
     if (inboxItems) {
-      console.log("inboxItems===>", inboxItems);
+      if (IS_DEBUG) console.log("inboxItems===>", inboxItems);
     }
   }, [inboxItems])
-
-
-
-  /**
-   * Gets the datasets from the orderbook
-   * @param {string} appAddress the address of the app you want to get the orderbook from
-   * @returns The first dataset order from the orderbook
-   */
-  const getDatasetOrder = async (appAddress) => {
-    const { orders } = await iexec.orderbook.fetchDatasetOrderbook(
-      "0xA102d202e7947d7F27eA0Bf618Acb2CE600841f8",
-      {
-        app: ace.APP_ADDRESS,
-        requester: "0xc340e71bbea215deb351d573fcf340bf3e01db97",
-        minTag: ace.TEE_TAG,
-        maxTag: ace.TEE_TAG
-      }
-    );
-    console.log("dataset orders", orders);
-    console.log("One dataset order", orders[0]);
-    return orders[0];
-  };
-
-  const fetchMyRequestOrders = async () => {
-    // const { app } = await iexec.app.showApp(
-    //   ace.APP_ADDRESS
-    // );
-
-    const { myRequestOrders } = await iexec.orderbook.fetchRequestOrderbook({
-      app: ace.APP_ADDRESS,
-      requester: connectedAccount,
-      workerpool: ace.WORKERPOOL_ADDRESS
-    });
-    // console.log("app\n", app);
-    console.log("My request orders", myRequestOrders);
-    return myRequestOrders;
-  };
 
 
   return (
     <>
       <Helmet>
-        <title>ACE-ft | Sent items</title>
+        <title>{APP_NAME} | Sent items</title>
       </Helmet>
       <div className="py-m mx-8">
         <h1 class="table-title">Sent items</h1>
@@ -128,7 +98,6 @@ const SentItems = () => {
             {inboxItems && inboxItems.length > 0 ? (
 
               inboxItems.sort((a, b) => b.sendDate - a.sendDate).map((inboxItem, i) => {
-                console.log("INBOX ITEM", inboxItem);
                 return (
                   <tr class="text-center" key={i}>
                     <td>

@@ -4,7 +4,7 @@ import SendForm from "../components/SendForm/SendForm";
 import { AceContext } from '../context/context';
 import crypto from 'crypto-browserify';
 import StepBar from '../components/StepBar';
-const APP_NAME = process.env.REACT_APP_NAME
+const APP_NAME = process.env.REACT_APP_NAME;
 
 function Home() {
   const { state, background, bgCreator, bgUrls, bgCreatorSocial, creativeMode, imgUrl, checkFileAvailability, backgroundIsLight } = useContext(AceContext);
