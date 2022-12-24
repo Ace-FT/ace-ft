@@ -183,6 +183,9 @@ a {
     border: 1px;
     z-index: 10;
     position: relative;
+    color: #a2b5d2;
+    background-color: #d4dcea;
+
 }
 .progress::after {
     content: "";
@@ -1160,16 +1163,3 @@ table {
     color: #0d0d12 !important;
 }
 
-
-.progress-lightbg
-{
-    color: #a2b5d2;
-    background-color: #0d0d12;    
-}
-
-.progress-darkbg
-{
-    color: #a2b5d2;
-    background-color: #d4dcea;
-    
-}

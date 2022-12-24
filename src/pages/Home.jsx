@@ -32,8 +32,6 @@ function Home() {
 
   function getCreditClassName()
   {
-    console.log("creativeMode", creativeMode,"backgroundIsLight",  backgroundIsLight  ) ; 
-
     if (!creativeMode) return "credits-darkbg" ;
 
     if ( backgroundIsLight ) return "credits-lightbg"; 
