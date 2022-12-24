@@ -69,32 +69,6 @@ const SentItems = () => {
   }, [inboxItems])
 
 
-  const verifyIfReadyForDownload = (datasetOrder) => {
-    if (
-      datasetOrder.deals && datasetOrder.deals[0] &&
-      datasetOrder.deals[0].tasks &&
-      datasetOrder.deals[0].tasks[0] &&
-      datasetOrder.deals[0].tasks[0].status
-    ) {
-      return datasetOrder.deals[0].tasks[0].status === "COMPLETED"
-    }
-    return false;
-  }
-
-
-  const getAppOrder = async (appAddress) => {
-    const { count, orders } = await iexec.orderbook.fetchAppOrderbook(
-      appAddress,
-      {
-        workerpool: ace.WORKERPOOL_ADDRESS
-      }
-    );
-    console.log('total orders:', count);
-    console.log("App orders:", orders);
-    console.log("One order:", orders[0]);
-    return orders[0];
-  };
-
 
   /**
    * Gets the datasets from the orderbook
