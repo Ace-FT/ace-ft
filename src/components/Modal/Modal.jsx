@@ -18,7 +18,7 @@ const Modal = (props) => {
                         <p className="modal-text"></p>
                         
                         <div class="flex justify-end pt-2">
-                            <div class="mx-4 rounded-lg bg-iexblk"><button class="btn h-8 w-full font-bold" onClick={()=>{toggleModal(props.id)}}>OK</button></div>
+                            <div class="mx-4 rounded-lg bg-iexblk"><button class="btn h-8 w-full font-bold" onClick={()=>{toggleModal(props.id, props.onModalClose)}}>OK</button></div>
                         </div>
 
                     </div>

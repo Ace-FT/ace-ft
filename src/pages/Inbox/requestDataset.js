@@ -1,11 +1,8 @@
-import { IExec } from "iexec";
 import * as ace from "../../shared/constants";
+import { getIexec } from "../../shared/getIexec";
 import { getAppOrders, getWorkerpoolOrders, getDatasetOrders } from "./getOrders";
 const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
-const configArgs = { ethProvider: window.ethereum, chainId: 134 };
-const configOptions = {smsURL: ace.SMS_URL};
-const iexec = new IExec(configArgs, configOptions);
 
 /**
  * Request the dataset in order to download the contained file
@@ -13,12 +10,14 @@ const iexec = new IExec(configArgs, configOptions);
  * @param {string} datasetRequester wallet address requesting the dataset
  */
 const requestDataset = async(datasetAddress, datasetRequester) => {
-    console.log("START requestDataset");
+
+    let iexec = getIexec() ;
+    if (IS_DEBUG) console.log("START requestDataset");
 
     const ipfsToken = await iexec.storage.defaultStorageLogin();
-    console.log("datasetAddress, datasetRequester, ipfsToken", datasetAddress, datasetRequester, ipfsToken);
+    if (IS_DEBUG) console.log("datasetAddress, datasetRequester, ipfsToken", datasetAddress, datasetRequester, ipfsToken);
     const { isPushed } = await iexec.storage.pushStorageToken(ipfsToken, { forceUpdate: true });
-    console.log('Default storage initialized:', isPushed);
+    if (IS_DEBUG) console.log('Default storage initialized:', isPushed);
 
     const appOrders = await getAppOrders(); // order on my app
     const workerpoolOrders = await getWorkerpoolOrders();
@@ -36,9 +35,6 @@ const requestDataset = async(datasetAddress, datasetRequester) => {
     if (datasetOrders && datasetOrders[0]) {
         datasetOrderToMatch = datasetOrders[0];
     }
-
-    console.log("START createRequestorder");
-
 
     let secretExists = await iexec.secrets.checkRequesterSecretExists(datasetRequester, "my-address");
     if (!secretExists) await iexec.secrets.pushRequesterSecret("my-address", datasetRequester);
@@ -58,18 +54,18 @@ const requestDataset = async(datasetAddress, datasetRequester) => {
         }
             //params: { iexec_developer_logger: true },
     });
-    console.log("Request order", requestOrderTemplate);
+    if (IS_DEBUG) console.log("Request order", requestOrderTemplate);
 
     const signedRequestOrder = await iexec.order.signRequestorder(
         requestOrderTemplate
     );
-    console.log("signedRequestOrder:", signedRequestOrder);
+    if (IS_DEBUG) console.log("signedRequestOrder:", signedRequestOrder);
 
-    console.log("---------------------------------------------");
-    console.log("Matching orders...");
-    console.log("datasetorder\n", datasetOrderToMatch)
-    console.log("workerpoolorder\n", workerpoolOrderToMatch);
-    console.log("apporder\n", appOrderToMatch)
+    if (IS_DEBUG) console.log("---------------------------------------------");
+    if (IS_DEBUG) console.log("Matching orders...");
+    if (IS_DEBUG) console.log("datasetorder\n", datasetOrderToMatch)
+    if (IS_DEBUG) console.log("workerpoolorder\n", workerpoolOrderToMatch);
+    if (IS_DEBUG) console.log("apporder\n", appOrderToMatch)
 
     const { dealid, txHash } = await iexec.order.matchOrders({
         apporder: appOrderToMatch.order,
@@ -77,14 +73,9 @@ const requestDataset = async(datasetAddress, datasetRequester) => {
         workerpoolorder: workerpoolOrderToMatch.order,
         requestorder: signedRequestOrder,
     });
-    console.log("deal id:", dealid);
-    console.log("Tx hash", txHash);
-    // const deal = await iexec.deal.show(dealid)
-    // console.log("deat\n", deal)
-    // const task = deal.tasks;
-    // console.log(task)
-    // console.log(task[0])
-    // return task[0];
+    if (IS_DEBUG) console.log("deal id:", dealid);
+    if (IS_DEBUG) console.log("Tx hash", txHash);
+
 };
 
 export default requestDataset;

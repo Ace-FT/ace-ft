@@ -11,6 +11,7 @@ import Params from "./pages/Settings/Params";
 import Protected from "./pages/Protected";
 import Footer from "./components/Footer";
 import Helmet from "react-helmet";
+import Modal from "./components/Modal/Modal" ;
 import {toggleModal} from "./components/Modal/ModalController" ;
 
 function App() {
@@ -79,7 +80,7 @@ function App() {
         backgroundRepeat: "no-repeat",
       }}
     >
-
+      <Modal id="app-modal" />
       <Router>
         <NavBar />
         <div className="w-full">

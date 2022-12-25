@@ -1,13 +1,11 @@
-import { IExec } from "iexec";
 import { Buffer } from "buffer";
 import { delay } from "../../utils/delay";
 import { datasetStruct } from "../../utils/datasetStruct.ts";
+import {getIexec} from "../../shared/getIexec"; 
+
 import * as ace from "../../shared/constants";
 const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
-const configArgs = { ethProvider: window.ethereum, chainId: 134 };
-const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
-const iexec = new IExec(configArgs, configOptions);
 
 /**
  * Deploy a dataset contract on the blockchain
@@ -18,6 +16,7 @@ const iexec = new IExec(configArgs, configOptions);
  */
 const deployDataset = async(name, multiaddr, checksum) => {
     try {
+        let iexec = getIexec();
         const owner = await iexec.wallet.getAddress();
         console.log("Owner", owner);
         const { address, txHash } = await iexec.dataset.deployDataset({
@@ -26,11 +25,11 @@ const deployDataset = async(name, multiaddr, checksum) => {
             multiaddr,
             checksum,
         });
-        console.log("Dataset deployed at", address);
+        if (IS_DEBUG) console.log("Dataset deployed at", address);
 
         // VERIFICATION DATASET DEPLOYMENT
         await delay(2);
-        console.log("Deployed dataset\n", await iexec.dataset.showDataset(address));
+        if (IS_DEBUG) console.log("Deployed dataset\n", await iexec.dataset.showDataset(address));
         return address;
         // ...............................
     } catch (err) {
@@ -45,10 +44,11 @@ const deployDataset = async(name, multiaddr, checksum) => {
  */
 const pushSecret = async(datasetAddress, datasetEncryptionKey) => {
     try {
+        let iexec = getIexec();
         const pushed = await iexec.dataset.pushDatasetSecret(datasetAddress, datasetEncryptionKey);
-        console.log("Secret pushed ", pushed);
+        if (IS_DEBUG) console.log("Secret pushed ", pushed);
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 };
 
@@ -59,6 +59,8 @@ const pushSecret = async(datasetAddress, datasetEncryptionKey) => {
  */
 const pushOrder = async(datasetAddress, requesterrestrict) => {
     try {
+        let iexec = getIexec();
+
         const orderTemplate = await iexec.order.createDatasetorder({
             dataset: datasetAddress,
             volume: 100,
@@ -67,9 +69,9 @@ const pushOrder = async(datasetAddress, requesterrestrict) => {
             requesterrestrict: requesterrestrict
         })
         const signedOrder = await iexec.order.signDatasetorder(orderTemplate)
-        console.log("Signed order", signedOrder)
+        if (IS_DEBUG) console.log("Signed order", signedOrder)
         const pushedOrder = await iexec.order.publishDatasetorder(signedOrder)
-        console.log(pushedOrder);
+        if (IS_DEBUG) console.log(pushedOrder);
 
         const foundorders = await iexec.orderbook.fetchDatasetOrderbook(
             datasetAddress, {
@@ -80,7 +82,7 @@ const pushOrder = async(datasetAddress, requesterrestrict) => {
                 maxTag: ace.TEE_TAG
             }
         );
-        console.log("dataset foundorders", foundorders);
+        if (IS_DEBUG) console.log("dataset foundorders", foundorders);
 
     } catch (err) {
         console.log(err)

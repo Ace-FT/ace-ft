@@ -1,16 +1,19 @@
 import { createContext, useEffect, useState } from "react";
-import { IExec } from "iexec";
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import { delay } from "../utils/delay";
+import { getIexec } from "../shared/getIexec";
+
 import { isLightColor } from "../utils/isLightColor";
 
 import * as ace from "../shared/constants";
 
+import { setModalContent } from "../components/Modal/ModalController";
+
 export const AceContext = createContext();
 
 const { ethereum } = window;
-const iexec = window.ethereum ? new IExec({ ethProvider: window.ethereum }) : null ;
+
 
 export const AceProvider = ({ children }) => {
   const [connectedAccount, setConnectedAccount] = useState("");
@@ -44,16 +47,16 @@ export const AceProvider = ({ children }) => {
 
 
   const getNextIpfsGateway = (ipfsUrl, trycount) => {
-    var parts = ipfsUrl.split('/ipfs') ; 
-    console.log("parts", parts) ; 
+    var parts = ipfsUrl.split('/ipfs');
+    console.log("parts", parts);
 
-    const gateways = process.env.REACT_APP_IPFS_GATEWAYS.split(',') ;
+    const gateways = process.env.REACT_APP_IPFS_GATEWAYS.split(',');
 
-    let numNext = trycount % gateways.length 
-    let nextUrl = gateways[numNext] + parts[1] ;
-    console.log("gateways", gateways, "numNext", numNext, "nextUrl", nextUrl) ;
+    let numNext = trycount % gateways.length
+    let nextUrl = gateways[numNext] + parts[1];
+    console.log("gateways", gateways, "numNext", numNext, "nextUrl", nextUrl);
 
-    return nextUrl ; 
+    return nextUrl;
   }
 
 
@@ -68,8 +71,8 @@ export const AceProvider = ({ children }) => {
       setBgCreator(creator);
       setBgUrls(bg.urls);
       setBgCreatorSocial(creator.social);
-      setBackgroundIsLight(  isLightColor(bg.color)  ) ;
-    
+      setBackgroundIsLight(isLightColor(bg.color));
+
     } catch (e) {
       console.log(e);
     }
@@ -78,9 +81,18 @@ export const AceProvider = ({ children }) => {
 
   const connectWallet = async () => {
     try {
+
+      var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
       if (!ethereum) {
-        alert("Please install Metamask plugin");
+        let modalText = "Please install the Metamask plugin." ; 
+        modalText += isSafari ? "<br/>Metamask is not currently supported on Safari. Please use another browser like Chrome." : "" ; 
+        setModalContent("app-modal", "Metamask missing 🦊", modalText , true);
+        return ; 
       }
+
+      let iexec = getIexec();
+      
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
@@ -131,7 +143,7 @@ export const AceProvider = ({ children }) => {
         throw new Error("no Ethereum object");
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -159,13 +171,13 @@ export const AceProvider = ({ children }) => {
 
       // await delay(2) ;
 
-      if (IS_DEBUG) console.log("response", response) ; 
+      if (IS_DEBUG) console.log("response", response);
       if (IS_DEBUG) console.log("url", url, "response.status", response.status, "response.statusText", response.statusText, "ok", ok);
       _callback()
 
       return ok; // If status is 200, then it's OK
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   };
@@ -173,6 +185,7 @@ export const AceProvider = ({ children }) => {
 
   const pushOrder = async (address, requesterrestrict) => {
     try {
+      let iexec = getIexec();
       const order = await iexec.order.createDatasetorder({ dataset: address, volume: 100, apprestrict: ace.APP_ADDRESS, requesterrestrict: requesterrestrict })
       if (IS_DEBUG) console.log("Unsigned order", order)
       const signedOrder = await iexec.order.signDatasetorder(order)

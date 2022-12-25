@@ -1,25 +1,22 @@
-import { IExec } from "iexec";
 import * as ace from "../../shared/constants";
+import { getIexec } from "../../shared/getIexec";
+
 const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
-const configArgs = { ethProvider: window.ethereum, chainId: 134 };
-const configOptions = {
-    smsURL: "https://v7.sms.debug-tee-services.bellecour.iex.ec",
-};
-const iexec = new IExec(configArgs, configOptions);
 
 /**
  * Get the app orders from the orderbook for ACE app
  * @returns the app orders from the orderbook
  */
 const getAppOrders = async() => {
+    let iexec = getIexec();
     const { count, orders } = await iexec.orderbook.fetchAppOrderbook(
         ace.APP_ADDRESS, {
             workerpool: ace.WORKERPOOL_ADDRESS,
         }
     );
-    console.log("total orders:", count);
-    console.log("App orders:", orders);
+    if(IS_DEBUG) console.log("total orders:", count);
+    if(IS_DEBUG) console.log("App orders:", orders);
     //console.log("One order:", orders[0]);
     return orders;
 };
@@ -29,13 +26,14 @@ const getAppOrders = async() => {
  * @returns the workerpool orders from the orderbook
  */
 const getWorkerpoolOrders = async() => {
+    let iexec = getIexec() ;
     const { orders } = await iexec.orderbook.fetchWorkerpoolOrderbook({
         workerpool: ace.WORKERPOOL_ADDRESS,
         category: 0,
         minTag: ace.TEE_TAG,
         maxTag: ace.TEE_TAG,
     });
-    console.log("Workerpool orders", orders);
+    if(IS_DEBUG) console.log("Workerpool orders", orders);
     return orders;
 };
 
@@ -46,6 +44,8 @@ const getWorkerpoolOrders = async() => {
  * @returns the dataset orders from the orderbook for the dataset address
  */
 const getDatasetOrders = async(datasetAddress, datasetRequester) => {
+    let iexec = getIexec();
+
     const { orders } = await iexec.orderbook.fetchDatasetOrderbook(
         datasetAddress, {
             app: ace.APP_ADDRESS,
@@ -54,7 +54,7 @@ const getDatasetOrders = async(datasetAddress, datasetRequester) => {
             requester: datasetRequester,
         }
     );
-    console.log("dataset orders", orders);
+    if(IS_DEBUG) console.log("dataset orders", orders);
     // console.log("One dataset order", orders[0]);
     return orders;
 };

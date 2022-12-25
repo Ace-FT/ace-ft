@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { AceContext } from "../context/context";
-import { IExec } from "iexec";
 import { useRequest } from 'ahooks';
 import * as ace from "../shared/constants";
 import { inboxDatasetsQuery } from "../shared/queries.ts";
@@ -18,11 +17,6 @@ import { delay } from "../utils/delay";
 import { openExplorer } from "../utils/openExplorer";
 const APP_NAME = process.env.REACT_APP_NAME;
 
-
-
-const configArgs = { ethProvider: window.ethereum, chainId: 134 };
-const configOptions = { smsURL: ace.SMS_URL };
-const iexec = new IExec(configArgs, configOptions);
 
 function Inbox() {
   const { ethereum } = window;
@@ -144,7 +138,7 @@ function Inbox() {
                               let resultFileUrl = resultFile.url;
                               const resultFileKey = resultFile.key;
                               const resultFileName = resultFile.name;
-                              if (IS_DEBUG) console.log("resultFileUrl", resultFileUrl)
+                              if (IS_DEBUG) console.log("resultFileUrl", resultFileUrl);
                               if (IS_DEBUG) console.log("resultFileKey", resultFileKey);
                               if (IS_DEBUG) console.log("resultFileName", resultFileName);
                               var ok = false;

@@ -1,18 +1,16 @@
-import { IExec } from "iexec";
 import { Buffer } from "buffer";
 import { datasetStruct } from "../../utils/datasetStruct.ts";
 import { jsonToBuffer } from "../../utils/jsonToBuffer";
 import * as ace from "../../shared/constants";
+import { getIexec } from "../../shared/getIexec";
+
 import crypto from 'crypto-browserify';
 import {fileEncKey, fromFileToEncryptedFile} from "../../utils/fileAESEncryption";
 const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 const { ethereum } = window;
-const configArgs = { ethProvider: window.ethereum, chainId : 134};
-const configOptions = { smsURL: ace.SMS_URL };
-const iexec = new IExec(configArgs, configOptions);
-const ALGORITHM = "aes-256-cbc";
 
+const ALGORITHM = "aes-256-cbc";
 
 var datasetEncryptionKey = "";
 
@@ -24,8 +22,8 @@ var datasetEncryptionKey = "";
  */
 const encryptFile = async (selectedFile) => {  
     try {
-      console.log("Encryption key: " + fileEncKey);
-      console.log(selectedFile)
+      if (IS_DEBUG) console.log("Encryption key: " + fileEncKey);
+      if (IS_DEBUG) console.log(selectedFile)
       const fileBytes = await new Promise(async (resolve, reject) => {
           const fileReader = new FileReader();
           await fileReader.readAsArrayBuffer(selectedFile);
@@ -35,7 +33,7 @@ const encryptFile = async (selectedFile) => {
       });
 
       let fileArray = new Uint8Array(fileBytes)
-      console.log("File array\n", fileArray)
+      if (IS_DEBUG) console.log("File array\n", fileArray)
 
       let output = fromFileToEncryptedFile(fileArray)
       return output;
@@ -57,8 +55,9 @@ const encryptFile = async (selectedFile) => {
  * @returns The encrypted dataset buffer
  */
 const encryptDataset = async (fileUrl, fileName, message, size) => {
+    let iexec = getIexec() ;
     datasetEncryptionKey = iexec.dataset.generateEncryptionKey();
-    console.log("FILE encryption key tostring:", fileEncKey.toString());
+    if (IS_DEBUG) console.log("FILE encryption key tostring:", fileEncKey.toString());
     // console.log("FILE encryption buffer:", Buffer.from(fileEncKey));
 
     var datasetContent = datasetStruct(fileEncKey, fileUrl, fileName, message, size);
@@ -74,8 +73,9 @@ const encryptDataset = async (fileUrl, fileName, message, size) => {
  * @returns the sha256sum of the encrypted dataset file
  */
 const generateEncryptedFileChecksum = async (encrypted) => {
+  let iexec = getIexec() ;
   const checksum = await iexec.dataset.computeEncryptedFileChecksum(encrypted)
-  console.log(checksum)
+  if (IS_DEBUG) console.log(checksum)
   return checksum;
 }
 

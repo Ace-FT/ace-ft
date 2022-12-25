@@ -1,7 +1,4 @@
-import { IExec } from "iexec";
-
 import * as datasetNameGenerator from "../utils/datasetNameGenerator.ts";
-
 
 export const inboxDatasetsQuery = (owner?: string, requesterrestrict?:string) =>  {
 

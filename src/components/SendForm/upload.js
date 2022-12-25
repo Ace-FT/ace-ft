@@ -30,12 +30,14 @@ const uploadData = async(encrypted) => {
     console.log("encrypted", encrypted) ;
 
     const uploaded = await client.add(encrypted, {
-        progress: (prog) => console.log(`received: ${prog}`),
+        progress: (prog) => { 
+           if(IS_DEBUG) console.log(`received: ${prog}`)
+        }
     });
 
     const url = `https://infura-ipfs.io/ipfs/${uploaded.path}`;
 
-    console.log("uploaded", uploaded, "url", url);
+    if(IS_DEBUG) console.log("uploaded", uploaded, "url", url);
 
     return url;
 };

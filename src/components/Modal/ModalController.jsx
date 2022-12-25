@@ -27,14 +27,13 @@ export const toggleModal = (modalId, onModalClose)=> {
     const body = document.querySelector('body');
     let modal = modalId ? document.getElementById(modalId) :  document.querySelector('.modal') ; 
     let callBackRequired =  onModalClose && document.body.classList.contains('modal-active') ;  
-    console.log("callBackRequired", callBackRequired)  ;
     modal.classList.toggle('opacity-0');
     modal.classList.toggle('pointer-events-none');
     body.classList.toggle('modal-active');
 
     if ( callBackRequired )
     {
-   //     onModalClose.call() ; 
+        onModalClose.call() ; 
     }
 
 }

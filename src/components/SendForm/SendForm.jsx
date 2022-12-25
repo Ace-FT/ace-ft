@@ -1,6 +1,5 @@
 import React, { useRef, useState, useContext, useEffect } from "react";
 import { AceContext } from "../../context/context";
-import { IExec } from "iexec";
 import * as ace from "../../shared/constants";
 import { delay } from "../../utils/delay";
 import { isAddress } from "../../utils/isAddress";
@@ -10,15 +9,15 @@ import uploadData from "./upload";
 import { deployDataset, pushSecret, pushOrder } from "./deploy.js";
 import { generateDatasetName } from "../../utils/datasetNameGenerator.ts";
 import { jsonToBuffer } from "../../utils/jsonToBuffer";
+import { getIexec } from "../../shared/getIexec";
+
 import ReactTooltip from 'react-tooltip';
 import { setModalContent, toggleModal } from "../Modal/ModalController";
 import Modal from "../Modal/Modal";
+const { ethereum } = window;
 
 const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
-const configArgs = { ethProvider: window.ethereum, chainId: 134 };
-const configOptions = { smsURL: ace.SMS_URL };
-const iexec = new IExec(configArgs, configOptions);
 
 const SendForm = () => {
   const { connectedAccount, connectWallet, getNextIpfsGateway } = useContext(AceContext);
@@ -36,7 +35,7 @@ const SendForm = () => {
   const PUSHING_SECRET = 6;
   const FINISHED = 7;
   const DELAY_BEFORE_CHECKING_FILE_UPLOADED = 3;
-  let resolvedAddressTo; 
+  let resolvedAddressTo;
 
   const handleChange = (event) => {
     setSelectedFiles([...selectedFiles, event.target.files[0]]);
@@ -67,60 +66,79 @@ const SendForm = () => {
   }
 
   const showModalFileSent = () => {
-    setModalContent("sendform-modal", "File sent 🚀", `The owner of wallet ${addressTo} will get a new item in the inbox!`);
-    toggleModal("sendform-modal", () => {
-      window.location.reload(false);
-    });
+    setModalContent("sendform-modal", "File sent 🚀", `The owner of wallet ${addressTo} will get a new item in the inbox!`, true);
   }
 
+  const modalCloseHandler = () =>{
+    window.location.reload(false); 
+  }
+  
+
   const validateForm = async () => {
+    let iexec = null ; 
+    var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    if (!ethereum && isSafari) {
+      let modalText = "Please install the Metamask plugin." ; 
+      modalText += isSafari ? "<br/>Metamask is not currently supported on Safari. Please use another browser like Chrome." : "" ; 
+      setModalContent("app-modal", "Metamask missing 🦊", modalText , true);
+      return ; 
+    }
+
+    try {
+      iexec = getIexec();
+    }
+    catch (e) {
+      setModalContent("sendform-modal", "Connection is required ❌", "Please connect your wallet first.", true);
+      return false;
+      console.error(e);
+    }
+
 
     const isConnected = connectedAccount && connectedAccount !== "";
     if (!isConnected) {
       setModalContent("sendform-modal", "Connection is required ❌", "Please connect your wallet first.", true);
-      return false ; 
+      return false;
     }
 
-    const hasSelectedFile = selectedFiles && selectedFiles.length>0 ; 
+    const hasSelectedFile = selectedFiles && selectedFiles.length > 0;
     if (!hasSelectedFile) {
       setModalContent("sendform-modal", "No file selected ❌", "Please choose the file you want to send.", true);
-      return false ; 
+      return false;
     }
-    
-    const hasRecipient = addressTo && addressTo.trim().length>0 ; 
+
+    const hasRecipient = addressTo && addressTo.trim().length > 0;
     setAddressTo(addressTo.trim());
     if (!hasRecipient) {
       setModalContent("sendform-modal", "Address missing ❌", "Please enter the wallet address where to send the file. ENS is supported", true);
-      return false ; 
-    } 
+      return false;
+    }
 
-    const isValidAddress = isAddress(addressTo) ; 
+    const isValidAddress = isAddress(addressTo);
+    console.log("isValidAddress", isValidAddress);
     if (!isValidAddress) {
-      if (IS_DEBUG) console.log("addressTo", addressTo, "configoptions", configOptions, "configargs", configArgs) ; 
-       resolvedAddressTo = await iexec.ens.resolveName(addressTo) ;
-      if (undefined == resolvedAddressTo || null == resolvedAddressTo || resolvedAddressTo.trim() == "")
-      {
+      resolvedAddressTo = await iexec.ens.resolveName(addressTo);
+      if (undefined == resolvedAddressTo || null == resolvedAddressTo || resolvedAddressTo.trim() == "") {
         setModalContent("sendform-modal", "Invalid address ❌", `Address ${addressTo} is not recognised. The value is not a valid ethereum address and no matching ENS item could be found.`, true);
-        return false ; 
+        return false;
       }
     }
-    else
-    {
+    else {
       resolvedAddressTo = addressTo
     }
 
-    return true ; 
+    return true;
   }
 
   return (
     <>
-      <Modal id="sendform-modal" />
-      <form>  
+      <Modal id="sendform-modal" onModalClose={modalCloseHandler} />
+      <form>
         <div className="mr-8 flex w-80 flex-col rounded-2xl bg-iexwhite px-4 py-4 text-iexblk shadow-xl">
           <div className="uploader">
             {isAFile ? (
               <div>You are sending:
-                {selectedFiles.slice(0,1).map((file) => {
+                {selectedFiles.slice(0, 1).map((file) => {
                   return (
                     <div className="block" key={file.name}>
                       {file.name}
@@ -203,7 +221,7 @@ const SendForm = () => {
                 type="text"
                 autoComplete="off"
                 value={addressTo}
-                onChange={(e) => setAddressTo(e.target.value)}
+                onChange={(e) => setAddressTo(e.target.value.toLocaleLowerCase())}
                 placeholder="To"
               />
             </div>
@@ -248,13 +266,14 @@ const SendForm = () => {
                 id="btn-transfer"
                 onClick={async (e) => {
                   e.preventDefault();
-                  let isValid = await validateForm() ; 
 
-                  if (!isValid) { return false};
+                  let isValid = await validateForm();
+                  let iexec = getIexec();
+                  if (!isValid) { return false };
 
                   setInprogress();
 
-                  
+
                   if (IS_DEBUG) console.log("optimistic", optimistic)
 
                   setIsLoading(true);

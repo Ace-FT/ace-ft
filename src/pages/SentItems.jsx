@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { AceContext } from "../context/context";
-import { IExec } from "iexec";
 import * as ace from "../shared/constants";
 import { inboxDatasetsQuery } from "../shared/queries.ts";
 import { useRequest } from 'ahooks';
@@ -15,10 +14,7 @@ const APP_NAME = process.env.REACT_APP_NAME;
 const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 const SentItems = () => {
-  const { ethereum } = window;
-  const configArgs = { ethProvider: window.ethereum, chainId: 134 };
-  const configOptions = { smsURL: 'https://v7.sms.debug-tee-services.bellecour.iex.ec' };
-  const iexec = new IExec(configArgs, configOptions);
+
   const { connectedAccount } = useContext(AceContext);
 
   const WAITING_FOR_REQUEST = 0;
