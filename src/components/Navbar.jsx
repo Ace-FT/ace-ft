@@ -5,6 +5,9 @@ import { AceContext } from "../context/context";
 import { shortenAddress } from "../utils/shortenAddress";
 import OnOffToggleButton from "../components/OnOffToggleButton";
 import { copyTextToClipboard } from "../utils/copyToClipboard";
+import { setModalContent } from "./Modal/ModalController";
+import Modal from "./Modal/Modal";
+
 import ReactTooltip from 'react-tooltip';
 
 const NavBar = () => {
@@ -20,30 +23,35 @@ const NavBar = () => {
     copyTextToClipboard(connectedAccount) ;
   }
 
+
+  const showModalNotConnected = (()=>{
+    setModalContent("navbar-modal", "Connection is required ❌", "Please connect your wallet to acces this menu option!") ; 
+    const body = document.querySelector('body')
+    const modal = document.querySelector('.modal')
+    modal.classList.toggle('opacity-0')
+    modal.classList.toggle('pointer-events-none')
+    body.classList.toggle('modal-active')
+  });
+
   return (
     <>
+    <Modal id="navbar-modal" closeHand/>
       <div className="flex w-full items-center justify-center bg-iexblk">
         <div className="top-container">
           <div className="flex items-center">
-          <img src="/logo512.png" className="app-logo" /><div className="logo-container h-6 flex-none text-left font-logo text-xl not-italic">
+          <img src="/logo512.png" className="app-logo"  /><div className="logo-container h-6 flex-none text-left font-logo text-xl not-italic">
              Ace File Transfer
             </div>
             <nav className="top-navigation">
               <ul className="flex list-none">
                 <li>
-                  <NavLink to="/" relative="path">
-                    Home
-                  </NavLink>
+                <NavLink to="/" relative="path">Home</NavLink> 
                 </li>
                 <li>
-                  <NavLink to="/inbox" relative="path">
-                    Inbox
-                  </NavLink>
+                {connectedAccount ? (<NavLink to="/inbox" relative="path">Inbox</NavLink> ): (<span onClick={showModalNotConnected}>Inbox</span>)}
                 </li>
                 <li>
-                  <NavLink to="/sent" relative="path">
-                    Sent
-                  </NavLink>
+                {connectedAccount ? (<NavLink to="/sent" relative="path">Sent</NavLink> ): (<span onClick={showModalNotConnected}>Sent</span>)}
                 </li>
                 <li></li>
               </ul>

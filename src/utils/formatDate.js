@@ -19,8 +19,8 @@ function formatDate(newDate) {
     const date = d.getDate()
     const monthIndex = d.getMonth()
     const monthName = months[d.getMonth()]
-    const hour = d.getHours();
-    const minutes = d.getMinutes();
+    const hour = d.getHours() < 10 ? "0" + d.getHours() : d.getHours() ;
+    const minutes = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes() ;
     const dayName = days[d.getDay()] // Thu
     //const formatted = `${dayName}, ${date} ${monthName} ${year} at ${hour}:${minutes}`
     const formatted = `${date} ${monthName} ${year} at ${hour}:${minutes}`

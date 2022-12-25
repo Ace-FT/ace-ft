@@ -11,10 +11,25 @@ import Params from "./pages/Settings/Params";
 import Protected from "./pages/Protected";
 import Footer from "./components/Footer";
 import Helmet from "react-helmet";
+import {toggleModal} from "./components/Modal/ModalController" ;
 
 function App() {
   const { connectedAccount, connectWallet, bgUrls, background, creativeMode, setCreativeMode } = useContext(AceContext);
   const { ethereum } = window;
+
+  document.onkeydown = function (evt) {
+    evt = evt || window.event
+    var isEscape = false
+    if ("key" in evt) {
+      isEscape = (evt.key === "Escape" || evt.key === "Esc")
+    } else {
+      isEscape = (evt.keyCode === 27)
+    }
+
+    if (isEscape && document.body.classList.contains('modal-active')) {
+      toggleModal.call() ; 
+    }
+  };
 
   useEffect(() => {
     const connectWalletOnPageLoad = async () => {
@@ -45,8 +60,8 @@ function App() {
   const isConnected = connectedAccount !== "";
 
   const refreshOnWalletChange = () => {
-    if(ethereum) {
-      ethereum.on('accountsChanged', function() {
+    if (ethereum) {
+      ethereum.on('accountsChanged', function () {
         window.location.reload()
       })
     }

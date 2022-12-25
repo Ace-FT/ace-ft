@@ -15,14 +15,13 @@ const StepBar = () => {
   const seven = document.querySelector(".seven");
 
   useEffect(() => {
-    console.log("Step", step);
-    if (step === 1) one.classList.add("inprogr");
-    if (step === 2) two.classList.add("inprogr");
-    if (step === 3) three.classList.add("inprogr");
-    if (step === 4) four.classList.add("inprogr");
-    if (step === 5) five.classList.add("inprogr");
-    if (step === 6) six.classList.add("inprogr");
-    if (step === 7) seven.classList.add("inprogr");
+    if (step === 1 && one) one.classList.add("inprogr");
+    if (step === 2 && two) two.classList.add("inprogr");
+    if (step === 3 && three) three.classList.add("inprogr");
+    if (step === 4 && four) four.classList.add("inprogr");
+    if (step === 5 && five) five.classList.add("inprogr");
+    if (step === 6 && six) six.classList.add("inprogr");
+    if (step === 7 && seven) seven.classList.add("inprogr");
   }, [step]);
 
 

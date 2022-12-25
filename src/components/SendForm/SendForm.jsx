@@ -3,12 +3,17 @@ import { AceContext } from "../../context/context";
 import { IExec } from "iexec";
 import * as ace from "../../shared/constants";
 import { delay } from "../../utils/delay";
+import { isAddress } from "../../utils/isAddress";
+
 import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from "./encryption.js";
 import uploadData from "./upload";
 import { deployDataset, pushSecret, pushOrder } from "./deploy.js";
 import { generateDatasetName } from "../../utils/datasetNameGenerator.ts";
 import { jsonToBuffer } from "../../utils/jsonToBuffer";
 import ReactTooltip from 'react-tooltip';
+import { setModalContent, toggleModal } from "../Modal/ModalController";
+import Modal from "../Modal/Modal";
+
 const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
 const configArgs = { ethProvider: window.ethereum, chainId: 134 };
@@ -30,8 +35,8 @@ const SendForm = () => {
   const DEPLOYING_DATASET = 5;
   const PUSHING_SECRET = 6;
   const FINISHED = 7;
-
   const DELAY_BEFORE_CHECKING_FILE_UPLOADED = 3;
+  let resolvedAddressTo; 
 
   const handleChange = (event) => {
     setSelectedFiles([...selectedFiles, event.target.files[0]]);
@@ -61,14 +66,61 @@ const SendForm = () => {
     document.getElementById("btn-transfer").disabled = true;
   }
 
+  const showModalFileSent = () => {
+    setModalContent("sendform-modal", "File sent 🚀", `The owner of wallet ${addressTo} will get a new item in the inbox!`);
+    toggleModal("sendform-modal", () => {
+      window.location.reload(false);
+    });
+  }
+
+  const validateForm = async () => {
+
+    const isConnected = connectedAccount && connectedAccount !== "";
+    if (!isConnected) {
+      setModalContent("sendform-modal", "Connection is required ❌", "Please connect your wallet first.", true);
+      return false ; 
+    }
+
+    const hasSelectedFile = selectedFiles && selectedFiles.length>0 ; 
+    if (!hasSelectedFile) {
+      setModalContent("sendform-modal", "No file selected ❌", "Please choose the file you want to send.", true);
+      return false ; 
+    }
+    
+    const hasRecipient = addressTo && addressTo.trim().length>0 ; 
+    setAddressTo(addressTo.trim());
+    if (!hasRecipient) {
+      setModalContent("sendform-modal", "Address missing ❌", "Please enter the wallet address where to send the file. ENS is supported", true);
+      return false ; 
+    } 
+
+    const isValidAddress = isAddress(addressTo) ; 
+    if (!isValidAddress) {
+      if (IS_DEBUG) console.log("addressTo", addressTo, "configoptions", configOptions, "configargs", configArgs) ; 
+       resolvedAddressTo = await iexec.ens.resolveName(addressTo) ;
+      if (undefined == resolvedAddressTo || null == resolvedAddressTo || resolvedAddressTo.trim() == "")
+      {
+        setModalContent("sendform-modal", "Invalid address ❌", `Address ${addressTo} is not recognised. The value is not a valid ethereum address and no matching ENS item could be found.`, true);
+        return false ; 
+      }
+    }
+    else
+    {
+      resolvedAddressTo = addressTo
+    }
+
+    return true ; 
+  }
+
   return (
     <>
-      <form>
+      <Modal id="sendform-modal" />
+      <form>  
         <div className="mr-8 flex w-80 flex-col rounded-2xl bg-iexwhite px-4 py-4 text-iexblk shadow-xl">
           <div className="uploader">
             {isAFile ? (
-              <div>
-                {selectedFiles.map((file) => {
+              <div>You are sending:
+                {selectedFiles.slice(0,1).map((file) => {
                   return (
                     <div className="block" key={file.name}>
                       {file.name}
@@ -193,13 +245,16 @@ const SendForm = () => {
             <div className="mx-4 rounded-lg bg-iexblk">
               <button
                 className="btn h-8 w-full font-bold"
-                type="submit"
                 id="btn-transfer"
                 onClick={async (e) => {
+                  e.preventDefault();
+                  let isValid = await validateForm() ; 
+
+                  if (!isValid) { return false};
 
                   setInprogress();
 
-                  e.preventDefault();
+                  
                   if (IS_DEBUG) console.log("optimistic", optimistic)
 
                   setIsLoading(true);
@@ -269,7 +324,7 @@ const SendForm = () => {
                   document.body.style.cursor = 'wait';
                   setStep(DEPLOYING_DATASET);
                   await delay(1)
-                  const datasetName = generateDatasetName(connectedAccount, addressTo);
+                  const datasetName = generateDatasetName(connectedAccount, resolvedAddressTo);
                   const checksum = await generateEncryptedFileChecksum(encryptedDataset);
                   const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
                   document.body.style.cursor = 'default';
@@ -280,10 +335,11 @@ const SendForm = () => {
                   document.body.style.cursor = 'default';
 
                   document.body.style.cursor = 'wait';
-                  await pushOrder(datasetAddress, addressTo);
+                  await pushOrder(datasetAddress, resolvedAddressTo);
                   document.body.style.cursor = 'default';
                   setStep(FINISHED);
                   setReady();
+                  showModalFileSent();
                 }}
               >
                 Transfer

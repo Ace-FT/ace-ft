@@ -10,7 +10,7 @@ import * as ace from "../shared/constants";
 export const AceContext = createContext();
 
 const { ethereum } = window;
-const iexec = new IExec({ ethProvider: window.ethereum });
+const iexec = window.ethereum ? new IExec({ ethProvider: window.ethereum }) : null ;
 
 export const AceProvider = ({ children }) => {
   const [connectedAccount, setConnectedAccount] = useState("");
