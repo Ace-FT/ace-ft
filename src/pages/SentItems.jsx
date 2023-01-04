@@ -28,9 +28,13 @@ const SentItems = () => {
   const query = inboxDatasetsQuery(connectedAccount, null);
 
   const [data, setData] = useState(false);
+  const [isLoading, setIsLoading] = useState(true) ;
+  
+
 
   useRequest(
     ( async ()=>{
+      setIsLoading(true) ;
       let ret = await fetchData(query) ;
       if (IS_DEBUG) console.log("Calling fectdata", ret) ; 
       setData(ret.data) ;
@@ -49,9 +53,21 @@ const SentItems = () => {
   useEffect(() => {
     console.log("sentitems user effects ! ", data) ; 
     const doMapping = async () => {
-      let foundItems = await mapSentItemsOrders(connectedAccount, structuredResponse)
-      if (IS_DEBUG) console.log("INBOX ITEMS SET", foundItems);
-      setInboxItems(foundItems);
+      try
+      {
+        let foundItems = await mapSentItemsOrders(connectedAccount, structuredResponse)
+        if (IS_DEBUG) console.log("INBOX ITEMS SET", foundItems);
+        setInboxItems(foundItems);  
+      }
+      catch(exc)
+      {
+        console.error(exc)
+      }
+      finally
+      {
+        setIsLoading(false);
+      }
+      
     }
 
     if (data) {
@@ -147,8 +163,12 @@ const SentItems = () => {
             ) : (
             
               <tr class="text-center">
-              <td colSpan={4}>No sent item found.</td>
-              </tr>
+              {isLoading ? (
+                <td colSpan={4}>LOADING ...</td>
+              ) : 
+                <td colSpan={4}>No sent item found.</td>
+              }
+            </tr>
             
         )}
           </tbody>

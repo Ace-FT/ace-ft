@@ -31,12 +31,27 @@ function Inbox() {
   const query = inboxDatasetsQuery(null, connectedAccount);
   const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
   const [data, setData] = useState(false);
+  const [isLoading, setIsLoading] = useState(true) ;
 
   useRequest(
     ( async ()=>{
-      let ret = await fetchData(query) ;
-      if (IS_DEBUG) console.log("Calling fectdata", ret) ; 
-      setData(ret.data) ;
+
+      setIsLoading(true);
+      try
+      {
+        let ret = await fetchData(query) ;
+        if (IS_DEBUG) console.log("Calling fectdata", ret) ; 
+        setData(ret.data) ;
+      }
+      catch(exc)
+      {
+        console.error(exc) ;
+      }
+      finally
+      {
+      //  setIsLoading(false);
+      }
+      
     }), 
     
     { pollingInterval: ace.POLLING_INTERVAL }
@@ -58,10 +73,24 @@ function Inbox() {
 
   useEffect(() => { }, [connectedAccount])
 
+  useEffect(() => { console.log("isLoading", isLoading)  }, [isLoading])
+
   useEffect(() => {
+
     const doMapping = async () => {
-      setInboxItems(await mapInboxOrders(connectedAccount, structuredResponse));
-      if(IS_DEBUG) console.log("INBOX ITEMS SET");
+      try
+      {
+        setInboxItems(await mapInboxOrders(connectedAccount, structuredResponse));
+        if(IS_DEBUG) console.log("INBOX ITEMS SET");  
+      }
+      catch(err)
+      {
+        console.error(err);
+      }
+      finally
+      {
+        setIsLoading(false);
+      }      
     };
 
     if (data) {
@@ -194,7 +223,11 @@ function Inbox() {
                 })
             ) : (
               <tr class="text-center">
-                <td colSpan={4}>You have no pending files in your inbox.</td>
+                {isLoading ? (
+                  <td colSpan={4}>LOADING ...</td>
+                ) : 
+                  <td colSpan={4}>You have no pending files in your inbox.</td>
+                }
               </tr>
             )}
           </tbody>
