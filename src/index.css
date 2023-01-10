@@ -1178,3 +1178,9 @@ table {
 {
     color: #0d0d12 !important;
 }
+
+.badge
+{
+    position:relative;
+    top:-0.5rem
+}

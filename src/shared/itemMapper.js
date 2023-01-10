@@ -74,12 +74,27 @@ export const mapInboxOrders = async (connectedAccount, structuredResponseItems) 
         return null != item && item.to && item.to.toLowerCase() === connectedAccount;
     })
 
+
     await ensLookup(mapped) ; 
 
     if (IS_DEBUG) console.log("mapped", mapped);
 
     return mapped;
 }
+
+
+export const countPendingInboxItems = async (connectedAccount, structuredResponseItems) => {
+   
+    let mapped = await mapInboxOrders (connectedAccount, structuredResponseItems) ; 
+
+    let pendingInboxItem = mapped.filter((item) => {
+        return  !item.taskid || item.taskid == "";
+    }) ; 
+
+    return pendingInboxItem.length ;
+}
+
+
 
 export const mapSentItemsOrders = async (connectedAccount, structuredResponseItems) => {
     let iexec = getIexec();
