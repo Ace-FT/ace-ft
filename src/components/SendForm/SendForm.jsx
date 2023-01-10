@@ -140,8 +140,17 @@ const SendForm = () => {
               <div>You are sending:
                 {selectedFiles.slice(0, 1).map((file) => {
                   return (
-                    <div className="block" key={file.name}>
+                    <div className="flex items-center" key={file.name}>
                       {file.name}
+                      <button
+                        className="ml-2"
+                        onClick={(e) => {
+                          setSelectedFiles([])
+                          setIsAFile(false)
+                        }}
+                      >
+                        <svg width="16px" height="16px" viewBox="0 0 24 24"  fill="none" xmlns="http://www.w3.org/2000/svg" stroke="" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.096"></g><g id="SVGRepo_iconCarrier"> <g id="style=fill"> <g id="minus-circle"> <path id="Subtract" fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM16.25 12.75C16.6642 12.75 17 12.4142 17 12C17 11.5858 16.6642 11.25 16.25 11.25L7.76477 11.25C7.35055 11.25 7.01477 11.5857 7.01476 12C7.01476 12.4142 7.35055 12.75 7.76476 12.75L16.25 12.75Z" fill="#fcd15a"></path> </g> </g> </g></svg>
+                      </button>
                     </div>
                   );
                 })}
