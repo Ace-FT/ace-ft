@@ -223,6 +223,7 @@ const SendForm = () => {
                 value={addressTo}
                 onChange={(e) => setAddressTo(e.target.value.toLocaleLowerCase())}
                 placeholder="To"
+                data-tip="0x address or ENS name" 
               />
             </div>
             <div className="pb-4">
