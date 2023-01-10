@@ -42,7 +42,7 @@ const NavBar = () => {
     () => {
       const countPending = (async () => {
 
-        console.log("Use effect", new Date(), "connectedAccount", connectedAccount);
+        console.log("Use effect", new Date(), "connectedAccount", connectedAccount, "ace.POLLING_INTERVAL_BADGE", ace.POLLING_INTERVAL_BADGE, "connectedAccount", connectedAccount);
 
         if (connectedAccount && connectedAccount != "") {
 
@@ -73,11 +73,12 @@ const NavBar = () => {
         };
 
         setTimeout(countPending, ace.POLLING_INTERVAL_BADGE);
+
       });
 
       countPending() ;
 
-    }, []);
+    }, [connectedAccount,]);
 
   
 
@@ -99,7 +100,7 @@ const NavBar = () => {
                   {connectedAccount ?
                     (
                       <NavLink to="/inbox" relative="path">Inbox&nbsp;
-                         {pendingCount!="" && (<span class="badge text-xs px-1 bg-red-500 text-white-800 rounded-full">{pendingCount}</span>)}
+                         {pendingCount!="" && (<span class="badge text-xs px-1 bg-red-500 text-white-100 rounded-full">{pendingCount}</span>)}
                       </NavLink>) :
                     (<span onClick={showModalNotConnected}>Inbox</span>)}
                 </li>
