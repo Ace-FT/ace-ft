@@ -22,7 +22,6 @@ const NavBar = () => {
   const { connectWallet, connectedAccount } = useContext(AceContext);
   const [pendingCount, setPendingCount] = useState("");
 
-
   const copyAddressToClipboard = () => {
     document.getElementById("walletAddressContainer").innerHTML = `Copied! ${shortenAddress(connectedAccount)} 👋`;
 
