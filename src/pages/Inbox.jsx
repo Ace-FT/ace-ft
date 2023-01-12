@@ -15,7 +15,6 @@ import formatDate from "../utils/formatDate";
 import ReactTooltip from 'react-tooltip';
 import { delay } from "../utils/delay";
 import { openExplorer } from "../utils/openExplorer";
-import {getIexec} from "../shared/getIexec";
 const APP_NAME = process.env.REACT_APP_NAME;
 
 
@@ -26,12 +25,13 @@ function Inbox() {
   const STATUS_OPEN_ORDER = "open";
   const STATUS_ACTIVE_ORDER = "ACTIVE";
   const STATUS_REVEALING_ORDER = "REVEALING";
-  const BEFORE_END_OF_REVEALING = 6.5 // (sec)
   const STATUS_COMPLETED_ORDER = "COMPLETED";
   const query = inboxDatasetsQuery(null, connectedAccount);
   const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
   const [data, setData] = useState(false);
   const [isLoading, setIsLoading] = useState(true) ;
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [currentDownloading, setCurrentDownloading] = useState("")
 
   useRequest(
     (async () => {
@@ -75,12 +75,10 @@ function Inbox() {
     console.log("isLoading", isLoading)
 
   }, [isLoading])
-  //useEffect(() => move(), [])
 
 
 
   useEffect(() => {
-
     const doMapping = async () => {
       try {
         setInboxItems(await mapInboxOrders(connectedAccount, structuredResponse));
@@ -111,14 +109,13 @@ function Inbox() {
         for (var i = 0; i < inboxItems.length; i++) {
           console.log(i, inboxItems[i])
           if (inboxItems[i].status === STATUS_COMPLETED_ORDER) {
+            console.log("Get session storage", (inboxItems[i].taskid), sessionStorage.getItem(inboxItems[i].taskid))
             if (sessionStorage.getItem(inboxItems[i].taskid)) {
               sessionStorage.removeItem(inboxItems[i].taskid)
               await processDownload(inboxItems[i])
             }
           }
-          
-        }
-        
+        }  
       }
     }
     processEach() 
@@ -127,45 +124,12 @@ function Inbox() {
 
   useEffect(() => { }, [taskID]);
 
-  useEffect(() => {
-    async function process() {
-      if (inboxItems) {
-        for (var i = 0; i < inboxItems.length; i++) {
-          if (inboxItems[i].taskid) {
-            console.log((inboxItems[i].taskid))
-            move(inboxItems[i].taskid)
-          }
-        }
-      }
-    }
-
-    process()
-  }, [isLoading])
-
-
-  var i = 0;
-  function move(taskid) {
-    if (i === 0) {
-      var elem = document.getElementById(taskid);
-      console.log(elem);
-      console.log(elem.style.width);
-      var width = parseInt((elem.style.width).replace("%",""));
-      var id = setInterval(frame, 20000);
-      frame()
-      function frame() {
-        if (width >= 100) {
-          clearInterval(id);
-        } else {
-          width += 2;
-          console.log(elem.style.width)
-          elem.style.width = width + "%";
-          console.log("After", elem.style.width)
-        }
-      }
-    }
-  }
   
   async function processDownload(inboxItem) {
+    await delay(2)
+    setIsDownloading(true);
+    document.body.style.cursor = 'wait';
+    setCurrentDownloading(inboxItem.taskid);
     const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
     let resultFileUrl = resultFile.url;
     const resultFileKey = resultFile.key;
@@ -177,7 +141,6 @@ function Inbox() {
     if(IS_DEBUG)
       console.log("resultFileName", resultFileName);
     var ok = false;
-    document.body.style.cursor = 'wait';
     let trycount = 0;
 
     while(!ok && trycount < 50) {
@@ -206,8 +169,9 @@ function Inbox() {
     else {
       alert("Could not download file. Please try again");
     }
-    inboxItem.isDownloaded = true;
     document.body.style.cursor = 'default';
+    setIsDownloading(false);
+    setCurrentDownloading("");
   }
 
   return (
@@ -272,35 +236,36 @@ function Inbox() {
                             </div>
                           ) : (
                             <div className="w-full bg-gray-200 rounded-full">
-                              <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `60%`}}>60%</div>
+                              <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `65%`}}>65%</div>
                             </div>
                           )}
                         </>     
                         )
                         }
-                        {inboxItem.status === STATUS_REVEALING_ORDER &&
-                        (
+                        {inboxItem.status === STATUS_REVEALING_ORDER && (
                         <>
                           <p>
                             Request started on {formatDate(inboxItem.downloadDate)}
                           </p>
-                          {/* <ProgressBar value={inboxItem.taskid} /> */}
-                          {/* <div className="w-full bg-gray-200 rounded-full">
-                            <div id={inboxItem.taskid} className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `10%`}}>10%</div>
-                          </div>                           */}
-                          
                           <div className="w-full bg-gray-200 rounded-full">
                             <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `90%`}}>90%</div>
                           </div>
                         </>     
-                        )
-                        }
+                        )}
                         {inboxItem.status === STATUS_COMPLETED_ORDER && (
-                          <p>
-                            <button className="btn h-6" onClick={async () => await processDownload(inboxItem)}>
-                              Download
-                            </button>
-                          </p>
+                        <>
+                          {
+                            (isDownloading && inboxItem.taskid === currentDownloading) ? (
+                              <p>Downloading file...</p>
+                            ) : (
+                              <p>
+                                <button className="btn h-6" onClick={async () => await processDownload(inboxItem)}>
+                                  Download
+                                </button>
+                              </p>
+                            )  
+                          }
+                        </>
                         )}
                       </td>
                       <td className="text-center">

@@ -1,7 +1,7 @@
 import * as ace from "../../shared/constants";
 import { getIexec } from "../../shared/getIexec";
 import { getAppOrders, getWorkerpoolOrders, getDatasetOrders } from "./getOrders";
-const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
 
 /**
@@ -79,6 +79,7 @@ const requestDataset = async(datasetAddress, datasetRequester) => {
     const deal = await iexec.deal.show(dealid)
     if (IS_DEBUG) console.log("Deal details", deal)
     sessionStorage.setItem(`${deal.tasks[0]}`, true)
+    console.log("Get storage session", deal.tasks[0], sessionStorage.getItem(deal.tasks[0]))
 };
 
 export default requestDataset;

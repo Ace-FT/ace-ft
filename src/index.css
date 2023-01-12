@@ -1179,15 +1179,12 @@ table {
     color: #0d0d12 !important;
 }
 
-<<<<<<< HEAD
 .pgbr {
     border-top-left-radius: 9999px;
     border-bottom-left-radius: 9999px;
-=======
-.badge
-{
+}
+.badge {
     position:relative;
     top:-0.5rem;
     color:white !important;
->>>>>>> a2c18360ac62ad71e88bd78e0f6036d87aeee831
 }

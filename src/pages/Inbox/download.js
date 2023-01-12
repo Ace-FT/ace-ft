@@ -14,11 +14,11 @@ const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
  */
 const fromDatasetToFileJSON = async (taskId) => {
   let iexec  = getIexec() ;
-  delay(3)
+  await delay(5)
   const task = await iexec.task.show(taskId);
   console.log("task show:\n", task);
   const dealId = task.dealid;
-  delay(3)
+  await delay(2)
   const taskResult = await iexec.task.fetchResults(task.taskid); // fetch task id from table here
   if (IS_DEBUG) console.log(taskResult);
   const url = await taskResult.url;
