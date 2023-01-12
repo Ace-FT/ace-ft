@@ -2,8 +2,9 @@ import * as ace from "../../shared/constants";
 import JSZip from "jszip";
 import { bufferToJson } from "../../utils/bufferToJson";
 import { getIexec } from "../../shared/getIexec";
+import {delay} from "../../utils/delay";
 
-const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
 
 /**
@@ -13,10 +14,11 @@ const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
  */
 const fromDatasetToFileJSON = async (taskId) => {
   let iexec  = getIexec() ;
+  delay(3)
   const task = await iexec.task.show(taskId);
-  if (IS_DEBUG) console.log("task show:\n", task);
+  console.log("task show:\n", task);
   const dealId = task.dealid;
-  
+  delay(3)
   const taskResult = await iexec.task.fetchResults(task.taskid); // fetch task id from table here
   if (IS_DEBUG) console.log(taskResult);
   const url = await taskResult.url;

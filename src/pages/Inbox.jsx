@@ -15,6 +15,7 @@ import formatDate from "../utils/formatDate";
 import ReactTooltip from 'react-tooltip';
 import { delay } from "../utils/delay";
 import { openExplorer } from "../utils/openExplorer";
+import {getIexec} from "../shared/getIexec";
 const APP_NAME = process.env.REACT_APP_NAME;
 
 
@@ -22,19 +23,18 @@ function Inbox() {
   const { ethereum } = window;
   const { connectedAccount, checkFileAvailability, getNextIpfsGateway } = useContext(AceContext);
 
-  const WAITING_FOR_REQUEST = 0;
-  const REQUESTING = 1;
-  const READY_FOR_DOWNLOAD = 2;
   const STATUS_OPEN_ORDER = "open";
-  const STATUS_COMPLETED_ORDER = "COMPLETED";
   const STATUS_ACTIVE_ORDER = "ACTIVE";
+  const STATUS_REVEALING_ORDER = "REVEALING";
+  const BEFORE_END_OF_REVEALING = 6.5 // (sec)
+  const STATUS_COMPLETED_ORDER = "COMPLETED";
   const query = inboxDatasetsQuery(null, connectedAccount);
-  const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
+  const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
   const [data, setData] = useState(false);
   const [isLoading, setIsLoading] = useState(true) ;
 
   useRequest(
-    ( async ()=>{
+    (async () => {
 
       setIsLoading(true);
       try
@@ -49,7 +49,7 @@ function Inbox() {
       }
       finally
       {
-      //  setIsLoading(false);
+       setIsLoading(false);
       }
       
     }), 
@@ -59,8 +59,6 @@ function Inbox() {
 
 
   if (IS_DEBUG) console.log("QUERY", query, "POLLING_INTERVAL", ace.POLLING_INTERVAL);
-
-  //const { data } = useRequest(query);
 
 
   const [isReadyForDownload] = useState(false);
@@ -73,22 +71,25 @@ function Inbox() {
 
   useEffect(() => { }, [connectedAccount])
 
-  useEffect(() => { console.log("isLoading", isLoading)  }, [isLoading])
+  useEffect(() => { 
+    console.log("isLoading", isLoading)
+
+  }, [isLoading])
+  //useEffect(() => move(), [])
+
+
 
   useEffect(() => {
 
     const doMapping = async () => {
-      try
-      {
+      try {
         setInboxItems(await mapInboxOrders(connectedAccount, structuredResponse));
         if(IS_DEBUG) console.log("INBOX ITEMS SET");  
       }
-      catch(err)
-      {
+      catch(err) {
         console.error(err);
       }
-      finally
-      {
+      finally {
         setIsLoading(false);
       }      
     };
@@ -100,15 +101,114 @@ function Inbox() {
       doMapping();
       return;
     }
+
   }, [data]);
 
   useEffect(() => {
-    if (inboxItems) {
-      if(IS_DEBUG) console.log("inboxItems===>", inboxItems);
+    async function processEach() {
+      if (inboxItems) {
+        if(IS_DEBUG) console.log("inboxItems===>", inboxItems);
+        for (var i = 0; i < inboxItems.length; i++) {
+          console.log(i, inboxItems[i])
+          if (inboxItems[i].status === STATUS_COMPLETED_ORDER) {
+            if (sessionStorage.getItem(inboxItems[i].taskid)) {
+              sessionStorage.removeItem(inboxItems[i].taskid)
+              await processDownload(inboxItems[i])
+            }
+          }
+          
+        }
+        
+      }
     }
+    processEach() 
   }, [inboxItems]);
 
+
   useEffect(() => { }, [taskID]);
+
+  useEffect(() => {
+    async function process() {
+      if (inboxItems) {
+        for (var i = 0; i < inboxItems.length; i++) {
+          if (inboxItems[i].taskid) {
+            console.log((inboxItems[i].taskid))
+            move(inboxItems[i].taskid)
+          }
+        }
+      }
+    }
+
+    process()
+  }, [isLoading])
+
+
+  var i = 0;
+  function move(taskid) {
+    if (i === 0) {
+      var elem = document.getElementById(taskid);
+      console.log(elem);
+      console.log(elem.style.width);
+      var width = parseInt((elem.style.width).replace("%",""));
+      var id = setInterval(frame, 20000);
+      frame()
+      function frame() {
+        if (width >= 100) {
+          clearInterval(id);
+        } else {
+          width += 2;
+          console.log(elem.style.width)
+          elem.style.width = width + "%";
+          console.log("After", elem.style.width)
+        }
+      }
+    }
+  }
+  
+  async function processDownload(inboxItem) {
+    const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
+    let resultFileUrl = resultFile.url;
+    const resultFileKey = resultFile.key;
+    const resultFileName = resultFile.name;
+    if(IS_DEBUG)
+      console.log("resultFileUrl", resultFileUrl);
+    if(IS_DEBUG)
+      console.log("resultFileKey", resultFileKey);
+    if(IS_DEBUG)
+      console.log("resultFileName", resultFileName);
+    var ok = false;
+    document.body.style.cursor = 'wait';
+    let trycount = 0;
+
+    while(!ok && trycount < 50) {
+      ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...")); //fileUrl
+      if(IS_DEBUG)
+        console.log("ok 1", ok, resultFileUrl);
+      if(!ok) {
+        await delay(2);
+        ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...")); //fileUrl
+        if(IS_DEBUG)
+          console.log("ok 2", ok, resultFileUrl);
+
+        trycount++;
+        resultFileUrl = getNextIpfsGateway(resultFileUrl, trycount); // await useNextIpfsGateway(resultFileUrl, trycount); 
+        if(IS_DEBUG)
+          console.log("next  resultFileUrl", resultFileUrl, "trycount", trycount);
+      }
+    }
+
+    if(ok) {
+      const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
+      let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
+      let fileBlob = new Blob([decryptedFile], {type: 'application/octet-stream'});
+      saveFile(fileBlob, resultFileName);
+    }
+    else {
+      alert("Could not download file. Please try again");
+    }
+    inboxItem.isDownloaded = true;
+    document.body.style.cursor = 'default';
+  }
 
   return (
     <>
@@ -135,6 +235,7 @@ function Inbox() {
               inboxItems
                 .sort((a, b) => b.sendDate - a.sendDate)
                 .map((inboxItem, i) => {
+                  //console.log(inboxItem)
                   return (
                     <tr className="text-center" key={i}>
                       <td>{formatDate(inboxItem.sendDate)}</td>
@@ -147,6 +248,7 @@ function Inbox() {
                               className="btn h-6"
                               onClick={async () => {
                                 await requestDataset(inboxItem.id, connectedAccount);
+                                localStorage.setItem(`${inboxItem.taskid}`, `loading`)
                                 //window.location.reload(false);
                               }}
                             >
@@ -155,50 +257,47 @@ function Inbox() {
                           </p>
                         )}
                         {inboxItem.status === STATUS_ACTIVE_ORDER &&
+                        (
+                        <>
                           <p>
                             Request started on {formatDate(inboxItem.downloadDate)}
                           </p>
-
+                          {/* <div className="w-full bg-gray-200 rounded-full">
+                            <div id={inboxItem.taskid} className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `10%`}}>10%</div>
+                          </div>                           */}
+                          {console.log(new Date().getTime(), inboxItem.downloadDate.getTime())}
+                          {new Date().getTime() - inboxItem.downloadDate.getTime() < 240000 ? (
+                            <div className="w-full bg-gray-200 rounded-full">
+                              <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `15%`}}>15%</div>
+                            </div>
+                          ) : (
+                            <div className="w-full bg-gray-200 rounded-full">
+                              <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `60%`}}>60%</div>
+                            </div>
+                          )}
+                        </>     
+                        )
+                        }
+                        {inboxItem.status === STATUS_REVEALING_ORDER &&
+                        (
+                        <>
+                          <p>
+                            Request started on {formatDate(inboxItem.downloadDate)}
+                          </p>
+                          {/* <ProgressBar value={inboxItem.taskid} /> */}
+                          {/* <div className="w-full bg-gray-200 rounded-full">
+                            <div id={inboxItem.taskid} className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `10%`}}>10%</div>
+                          </div>                           */}
+                          
+                          <div className="w-full bg-gray-200 rounded-full">
+                            <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `90%`}}>90%</div>
+                          </div>
+                        </>     
+                        )
                         }
                         {inboxItem.status === STATUS_COMPLETED_ORDER && (
                           <p>
-                            <button className="btn h-6" onClick={async () => {
-                              const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
-                              let resultFileUrl = resultFile.url;
-                              const resultFileKey = resultFile.key;
-                              const resultFileName = resultFile.name;
-                              if (IS_DEBUG) console.log("resultFileUrl", resultFileUrl);
-                              if (IS_DEBUG) console.log("resultFileKey", resultFileKey);
-                              if (IS_DEBUG) console.log("resultFileName", resultFileName);
-                              var ok = false;
-                              document.body.style.cursor = 'wait';
-                              let trycount = 0;
-
-                              while (!ok && trycount < 50) {
-                                ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...")); //fileUrl
-                                if (IS_DEBUG) console.log("ok 1", ok, resultFileUrl);
-                                if (!ok) {
-                                  await delay(2);
-                                  ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...")); //fileUrl
-                                  if (IS_DEBUG) console.log("ok 2", ok, resultFileUrl);
-
-                                  trycount++;
-                                  resultFileUrl = getNextIpfsGateway(resultFileUrl, trycount);// await useNextIpfsGateway(resultFileUrl, trycount); 
-                                  if (IS_DEBUG) console.log("next  resultFileUrl", resultFileUrl, "trycount", trycount);
-                                }
-                              }
-                              if (ok) {
-                                const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
-                                let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
-                                let fileBlob = new Blob([decryptedFile], { type: 'application/octet-stream' });
-                                saveFile(fileBlob, resultFileName);
-                              }
-                              else {
-                                alert("Could not download file. Please try again");
-                              }
-                              document.body.style.cursor = 'default';
-
-                            }}>
+                            <button className="btn h-6" onClick={async () => await processDownload(inboxItem)}>
                               Download
                             </button>
                           </p>
@@ -209,7 +308,7 @@ function Inbox() {
                         <svg xmlns="http://www.w3.org/2000/svg"
                           data-tip="View in iExec explorer"
                           fill="none" viewBox="0 0 24 24"
-                          stroke-width="1.5"
+                          strokeWidth="1.5"
                           stroke="currentColor"
                           className="w-5 h-5 clickable"
                           onClick={async () => {

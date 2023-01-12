@@ -59,6 +59,7 @@ export const mapInboxOrders = async (connectedAccount, structuredResponseItems) 
                 if (IS_DEBUG) console.log("item.orders[0].deals[0].startTime", Number(item.orders[0].deals[0].startTime));
                 inboxItem.downloadDate = new Date(Number(item.orders[0].deals[0].startTime) * 1000);
                 inboxItem.status = "ACTIVE";
+                if (IS_DEBUG) console.log(item.orders[0].deals)
 
                 if (item.orders[0].deals[0].tasks && item.orders[0].deals[0].tasks.length > 0) {
                     inboxItem.status = item.orders[0].deals[0].tasks[0].status;
@@ -67,7 +68,6 @@ export const mapInboxOrders = async (connectedAccount, structuredResponseItems) 
             }
             return inboxItem
         }
-
     }));
 
     mapped = mapped.filter((item) => {
@@ -123,7 +123,6 @@ export const mapSentItemsOrders = async (connectedAccount, structuredResponseIte
         if (IS_DEBUG) console.log("ORDER BOOK", orderBook);
 
         if (orderBook && orderBook.orders.length > 0) {
-
             inboxItem.status = orderBook.orders[0].status;
             inboxItem.to = orderBook.orders[0].order.requesterrestrict;
             inboxItem.orderHash = orderBook.orders[0].orderHash;
@@ -131,7 +130,6 @@ export const mapSentItemsOrders = async (connectedAccount, structuredResponseIte
             inboxItem.price = orderBook.orders[0].order.datasetprice;
             inboxItem.tag = orderBook.orders[0].order.tag;
             inboxItem.workerpoolrestrict = orderBook.orders[0].order.workerpoolrestrict;
-
 
             if (item.orders &&
                 item.orders.length > 0 &&

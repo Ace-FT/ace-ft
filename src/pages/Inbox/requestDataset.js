@@ -75,7 +75,10 @@ const requestDataset = async(datasetAddress, datasetRequester) => {
     });
     if (IS_DEBUG) console.log("deal id:", dealid);
     if (IS_DEBUG) console.log("Tx hash", txHash);
-
+    
+    const deal = await iexec.deal.show(dealid)
+    if (IS_DEBUG) console.log("Deal details", deal)
+    sessionStorage.setItem(`${deal.tasks[0]}`, true)
 };
 
 export default requestDataset;

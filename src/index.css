@@ -1178,3 +1178,8 @@ table {
 {
     color: #0d0d12 !important;
 }
+
+.pgbr {
+    border-top-left-radius: 9999px;
+    border-bottom-left-radius: 9999px;
+}
