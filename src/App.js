@@ -13,6 +13,7 @@ import Footer from "./components/Footer";
 import Helmet from "react-helmet";
 import Modal from "./components/Modal/Modal" ;
 import {toggleModal} from "./components/Modal/ModalController" ;
+import {getIexec} from "./shared/getIexec";
 
 function App() {
   const { connectedAccount, connectWallet, bgUrls, background, creativeMode, setCreativeMode } = useContext(AceContext);
