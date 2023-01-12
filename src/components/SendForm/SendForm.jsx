@@ -189,6 +189,7 @@ const SendForm = () => {
               <div>
                 <button
                   className="flex w-full items-center border-b border-gray-500 px-4 py-16"
+                  data-tip="Click here to choose the file to transfer" 
                   onClick={(e) => {
                     e.preventDefault();
                     inputFile.current.click();
@@ -207,6 +208,7 @@ const SendForm = () => {
                       d="M36.493 72C16.118 72 0 55.883 0 36.493 0 16.118 16.118 0 36.493 0 55.882 0 72 16.118 72 36.493 72 55.882 55.883 72 36.493 72zM34 34h-9c-.553 0-1 .452-1 1.01v1.98A1 1 0 0 0 25 38h9v9c0 .553.452 1 1.01 1h1.98A1 1 0 0 0 38 47v-9h9c.553 0 1-.452 1-1.01v-1.98A1 1 0 0 0 47 34h-9v-9c0-.553-.452-1-1.01-1h-1.98A1 1 0 0 0 34 25v9z"
                       fill="rgb(252 209 90)"
                       fillRule="nonzero"
+                      data-tip="Click here to choose the file to transfer" 
                     ></path>
                   </svg>
                   <h3 className="mx-4 text-2xl font-extralight">
@@ -232,6 +234,7 @@ const SendForm = () => {
                 value={addressTo}
                 onChange={(e) => setAddressTo(e.target.value.toLocaleLowerCase())}
                 placeholder="To"
+                data-tip="Enter a 0x address or ENS name" 
               />
             </div>
             <div className="pb-4">
