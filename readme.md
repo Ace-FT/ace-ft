@@ -2,8 +2,6 @@
 ## _Web3 file transfer application powered by iExec_ 
 
 
-TO BE UOPDATED 
-
 Ace is the very first web3 file transfer application that is built with the [iExec](https://iex.ec) protocol.  
 The choice of the iExec stack was a no-brainer given that it covers the key requirements for the implementation of a trustworthy web3 file transfer application.  
 Moreover, the iExec protocols has a built-in data monetization capability that we are leveraging in this project.
@@ -39,12 +37,12 @@ Ace is an illustration that there is a better way to do business when it comes t
 ## Features
 
 - "WeTransfer-like" experience,  simply chose the file you want to share
-- Set the beneficiary in the form of 0x address
+- Set the beneficiary in the form of 0x address or ENS name
 - Cryptographic access control to the file being transfered powered by iExec
-- Telegram integration for notification and querying. The beneficiary can use telegram to get notified for new file transfer. Check out your new friend [Mr ACE](http://t.me/ace_ft_bot) the telgram bot!
-- No time limit for file download, other service require the recipient to download the file within x days
+- Telegram integration for notification and querying. The beneficiary can use telegram to get notified for new file transfer. Check out your new friend [Mr ACE](http://t.me/ace_ft_bot) the Telegram bot!
+- No time limit for file download. Download will be possible as long as the file is available on IPFS. Other service require the recipient to download the file within x days
 - Built-in monetization! You can sell your added value content and get paid in [$RLC](https://coinmarketcap.com/currencies/rlc/)
-- Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API. 
+- Cool visual backgrounds randomly sourced from [unsplash](https://unsplash.com) API.
 
 
 ## Core principles  
@@ -166,6 +164,7 @@ Total transfer fees = worker usage fee
 
 **Hey, doesn't that look great? At last with Ace we can benefit from a trustworthy, privacy-preserving decentralised file transfer application whose revenue model is not correlated to the monetization of my personal and private data!**  
 
+
 ## IPFS implementation
   ### Uploading
 Files and datasets are uploaded to IPFS through an Infura node. A security CORS privacy has been set on Infura node to make sure files can only be posted through Ace DApp. Once a file is uploaded, it gets assigned a unique CID, corresponding to its location on IPFS.
@@ -175,12 +174,13 @@ In a future upgrade, we could imagine Ace users being able to configure in a Set
   
 By default, *optimistic mode* is set to off, which means Ace will check the file availablity on IPFS by calling `checkFileAvailability` function. This function sends a HTTP HEAD request on different IPFS gateways stored in an environment variable (cloudflare at https://cloudflare-ipfs.com/ipfs, pinata at https://gateway.pinata.cloud/ipfs, W3s at https://w3s.link/ipfs, etc...), and the file's CID.
 
-When *optimistic mode* is set to on, `checkFileAvailability` function is not called, but the file availability on IPFS will not be verified before proceeding.
+When *optimistic mode* is set to on, `checkFileAvailability` function is not called, but the file availability on IPFS will not be verified before proceeding. In this mode it is assumed that the file will be available at some point before being downloaded.
   
   ### Downloading
 To be downloaded, the file needs to be available on IPFS. Before processing download, `checkFileAvailability` function is called until it returns `true` and the IPFS gateway URL where the file has been found.
 
   Once downloaded, the file gets unencrypted with the key from the result file of the iExec task.
+  
   
 ## Use cases
 - Content monetization
@@ -196,7 +196,6 @@ Add the ability for the content provider to get proofs about the beneficiary's i
 The version 0 will work on the basis that the content creator manages the list of beneficiaries on a seperate system. The subscription model will allow people to register their interest and join a "fan" club. Content providers will be able to chose their subscription list rather than selecting beneficiaries one by one.
 
 ### Full privacy on the notification system
-
 
 
 
