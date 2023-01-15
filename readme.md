@@ -24,7 +24,6 @@ Moreover, the iExec protocols has a built-in data monetization capability that w
     - [Copyright protection and licensing](#copyright-protection-and-licensing)
     - [KYC](#kyc)
     - [Subscriptions](#subscriptions)
-    - [Task category management](#task-category-management)
     - [Full privacy on the notification system](#full-privacy-on-the-notification-system)
   - [License](#license)
 
@@ -167,6 +166,18 @@ Total transfer fees = worker usage fee
 
 **Hey, doesn't that look great? At last with Ace we can benefit from a trustworthy, privacy-preserving decentralised file transfer application whose revenue model is not correlated to the monetization of my personal and private data!**  
 
+## IPFS implementation
+  ### Uploading
+Files and datasets are uploaded to IPFS through an Infura node. A security CORS privacy has been set on Infura node to make sure files can only be posted through Ace DApp.
+
+By default, *optimistic mode* is set to off, which means Ace will check the file availablity on IPFS, calling `checkFileAvailability` function. This function sends a HTTP HEAD method on different IPFS gateways (cloudflare at https://cloudflare-ipfs.com/ipfs, pinata at https://gateway.pinata.cloud/ipfs and W3s at https://w3s.link/ipfs).
+
+When *optimistic mode* is set to on, `checkFileAvailability` function is not called, but the file availability on IPFS will not be verified.
+  
+  ### Downloading
+To be downloaded, the file needs to be available on IPFS, before processing download, `checkFileAvailability` function is called until it returns `true`
+  
+  
 ## Use cases
 - Content monetization
 - Any use case that services like WeTransfer can handle 
