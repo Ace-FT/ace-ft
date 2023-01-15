@@ -109,8 +109,8 @@ A detailed description of dataset orders can be found [in this section of the do
 
 
 **Step 3 -  Beneficiary notification (non-iExec service)**   
-Users (recipients) can register their email addresses to get notified whenever a transfer is initiated with their 0x address as the beneficiary (i.e in iExec terms : when a dataset order has been placed for the download app for the user's 0x address as the `requesterrestrict` parameter).  
-Such a notification mechanism is a must-have as it is not conceivable to browse to Ace's every minture to check if someone sent something to me. 
+Users (recipients) can register their Telegram user IDs to get notified whenever a transfer is initiated with their 0x address as the beneficiary (i.e in iExec terms : when a dataset order has been placed for the download app for the user's 0x address as the `requesterrestrict` parameter).  
+Such a notification mechanism is a must-have for best User Experience
 
 **Step 4 - (optional payment) and file download**   
 Triggering the download application is handled with iExec SDK and protocol, including making the "payment" when monetization has been set as a governance condition.  
@@ -128,16 +128,10 @@ Triggering the download application is handled with iExec SDK and protocol, incl
 A detailed description of the app execution order can be found [in this section of the documentation](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#app-run)
 
 
-**Step 5 - Provider notification (non-iExec service)**  
-Senders (providers) can optionaly register their email addresses to get notified whenever the benefeciary downloaded the file (i.e in iExec terms : when the task execution completed)
-
 ## Notification system
 
 **Recipient notification**  
 The notification system is an application that will monitor pending file transfers. From an iExec prospective this will consists in polling the marketplace for any pending order matching the requester's 0x address, the dataset 0x address and the download app 0x address.
-
-**Sender nnotification that the file was downloaded**  
-For "tranfer complete" notifications, the system will check the status of the dataset order that was placed by the provider (sender/content creator).
 
 **Decentralization of the notification service**  
 Users have the choice to either use the instance of the notification service that will be deployed as part of this project or run their own instance should they need the highest level of confidentiality on their email addresses.  
