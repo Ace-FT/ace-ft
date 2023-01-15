@@ -24,7 +24,6 @@ Moreover, the iExec protocols has a built-in data monetization capability that w
     - [Copyright protection and licensing](#copyright-protection-and-licensing)
     - [KYC](#kyc)
     - [Subscriptions](#subscriptions)
-    - [Task category management](#task-category-management)
     - [Full privacy on the notification system](#full-privacy-on-the-notification-system)
   - [License](#license)
 
@@ -109,8 +108,8 @@ A detailed description of dataset orders can be found [in this section of the do
 
 
 **Step 3 -  Beneficiary notification (non-iExec service)**   
-Users (recipients) can register their email addresses to get notified whenever a transfer is initiated with their 0x address as the beneficiary (i.e in iExec terms : when a dataset order has been placed for the download app for the user's 0x address as the `requesterrestrict` parameter).  
-Such a notification mechanism is a must-have as it is not conceivable to browse to Ace's every minture to check if someone sent something to me. 
+Users (recipients) can register their Telegram user IDs to get notified whenever a transfer is initiated with their 0x address as the beneficiary (i.e in iExec terms : when a dataset order has been placed for the download app for the user's 0x address as the `requesterrestrict` parameter).  
+Such a notification mechanism is a must-have for best User Experience
 
 **Step 4 - (optional payment) and file download**   
 Triggering the download application is handled with iExec SDK and protocol, including making the "payment" when monetization has been set as a governance condition.  
@@ -128,16 +127,10 @@ Triggering the download application is handled with iExec SDK and protocol, incl
 A detailed description of the app execution order can be found [in this section of the documentation](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#app-run)
 
 
-**Step 5 - Provider notification (non-iExec service)**  
-Senders (providers) can optionaly register their email addresses to get notified whenever the benefeciary downloaded the file (i.e in iExec terms : when the task execution completed)
-
 ## Notification system
 
 **Recipient notification**  
 The notification system is an application that will monitor pending file transfers. From an iExec prospective this will consists in polling the marketplace for any pending order matching the requester's 0x address, the dataset 0x address and the download app 0x address.
-
-**Sender nnotification that the file was downloaded**  
-For "tranfer complete" notifications, the system will check the status of the dataset order that was placed by the provider (sender/content creator).
 
 **Decentralization of the notification service**  
 Users have the choice to either use the instance of the notification service that will be deployed as part of this project or run their own instance should they need the highest level of confidentiality on their email addresses.  
@@ -173,6 +166,22 @@ Total transfer fees = worker usage fee
 
 **Hey, doesn't that look great? At last with Ace we can benefit from a trustworthy, privacy-preserving decentralised file transfer application whose revenue model is not correlated to the monetization of my personal and private data!**  
 
+## IPFS implementation
+  ### Uploading
+Files and datasets are uploaded to IPFS through an Infura node. A security CORS privacy has been set on Infura node to make sure files can only be posted through Ace DApp. Once a file is uploaded, it gets assigned a unique CID, corresponding to its location on IPFS.
+  
+In a future upgrade, we could imagine Ace users being able to configure in a Settings section which IPFS node they prefer using: the default Infura IPFS node, a in-browser IPFS node, or their own IPFS node.
+  
+  
+By default, *optimistic mode* is set to off, which means Ace will check the file availablity on IPFS by calling `checkFileAvailability` function. This function sends a HTTP HEAD request on different IPFS gateways stored in an environment variable (cloudflare at https://cloudflare-ipfs.com/ipfs, pinata at https://gateway.pinata.cloud/ipfs, W3s at https://w3s.link/ipfs, etc...), and the file's CID.
+
+When *optimistic mode* is set to on, `checkFileAvailability` function is not called, but the file availability on IPFS will not be verified before proceeding.
+  
+  ### Downloading
+To be downloaded, the file needs to be available on IPFS. Before processing download, `checkFileAvailability` function is called until it returns `true` and the IPFS gateway URL where the file has been found.
+
+  Once downloaded, the file gets unencrypted with the key from the result file of the iExec task.
+  
 ## Use cases
 - Content monetization
 - Any use case that services like WeTransfer can handle 
@@ -185,8 +194,7 @@ Making the application more intelligent with the integration of a library for cr
 Add the ability for the content provider to get proofs about the beneficiary's identity. For example a creator of adult materials will be able to check that the beneficiary is over 18.  
 ### Subscriptions  
 The version 0 will work on the basis that the content creator manages the list of beneficiaries on a seperate system. The subscription model will allow people to register their interest and join a "fan" club. Content providers will be able to chose their subscription list rather than selecting beneficiaries one by one.
-### Task category management
-The goal here will be to dynamically determine the iExec task category depending on the transfered file size. For this v0, this value has been defaulted to `1 – S` (20 min task execution). Check out [this section](https://docs.iex.ec/key-concepts/pay-per-task-model) of the documentation to learn more about [iExec's pay per task model](https://docs.iex.ec/key-concepts/pay-per-task-model) 
+
 ### Full privacy on the notification system
 
 
