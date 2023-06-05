@@ -50,27 +50,6 @@ function Home() {
           <SendForm />
           <StepBar />
         </div>
-
-        <div className="text-iexwhite">
-          {/* <button className="rounded-l-full rounded-r-full border border-iexwhite ml-8 px-4 py-2"
-            onClick={(e) => {
-              e.preventDefault();
-              console.log(bgCreator)
-              console.log(background.user)
-            }}
-          >
-            Test bg creator
-          </button> */}
-          {/* <button className="rounded-l-full rounded-r-full border border-white ml-8 px-4 py-2"
-            onClick={(e) => {
-              e.preventDefault();
-              console.log(bgUrls)
-              console.log(bgUrls.full)
-            }}
-          >
-            Test bg Urls
-          </button> */}
-        </div>
        
           
             <div className="credits-container">
