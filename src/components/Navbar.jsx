@@ -1,6 +1,8 @@
 import { disconnect } from "process";
 import React, { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { Web3Auth } from "@web3auth/modal";
+import { walletLogin, walletLogout } from "../shared/web3AuthLogin"
 import { AceContext } from "../context/context";
 import { shortenAddress } from "../utils/shortenAddress";
 import OnOffToggleButton from "../components/OnOffToggleButton";
@@ -19,7 +21,7 @@ import ReactTooltip from 'react-tooltip';
 const NavBar = () => {
   const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
 
-  const { connectWallet, connectedAccount } = useContext(AceContext);
+  const { connectWallet, connectedAccount, setConnectedAccount, setW3authPrivatekey, setWeb3authConnectedAccount } = useContext(AceContext);
   const [pendingCount, setPendingCount] = useState("");
 
   const copyAddressToClipboard = () => {
@@ -37,20 +39,16 @@ const NavBar = () => {
     setModalContent("navbar-modal", "Connection is required ❌", "Please connect your wallet to acces this menu option!", true);
   });
 
-  useEffect(
-
-    () => {
+  useEffect(() => {
       const countPending = (async () => {
 
         console.log("Use effect", new Date(), "connectedAccount", connectedAccount, "ace.POLLING_INTERVAL_BADGE", ace.POLLING_INTERVAL_BADGE, "connectedAccount", connectedAccount);
 
         if (connectedAccount && connectedAccount != "") {
-
           try {
             const query = inboxDatasetsQuery(null, connectedAccount);
 
             if (IS_DEBUG) console.log("Use effect", new Date(), "query", query);
-
 
             let ret = await fetchData(query);
             let structuredResponse = structureResponse(ret.data);
@@ -79,7 +77,6 @@ const NavBar = () => {
       countPending() ;
 
     }, [connectedAccount,]);
-
   
 
   return (
@@ -122,7 +119,6 @@ const NavBar = () => {
           </div>
           <div className="flex max-w-2/10 basis-1/5">
             {connectedAccount ? (
-
               <div className="ml-auto items-center" >
 
                 <ReactTooltip multiline="true" />
@@ -133,12 +129,25 @@ const NavBar = () => {
                 </p>
               </div>
             ) : (
+              <>
               <button
                 className="btn ml-auto h-8 text-l font-bold"
                 onClick={connectWallet}
               >
                 Connect Wallet
               </button>
+              <button
+                className="btn ml-auto h-8 text-l font-bold"
+                onClick={async () => {
+                  const walletInfo = await walletLogin();
+                  setWeb3authConnectedAccount(walletInfo.address) 
+                  setConnectedAccount(walletInfo.address)
+                  setW3authPrivatekey(walletInfo.pk)
+                }}
+              >
+                Connect Wallet w3Auth
+              </button>
+              </>          
             )}
           </div>
         </div>

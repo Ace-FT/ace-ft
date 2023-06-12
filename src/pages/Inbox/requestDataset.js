@@ -67,7 +67,7 @@ const requestDataset = async(datasetAddress, datasetRequester) => {
         beneficiary: datasetRequester,
         params: {
             iexec_secrets: secrets,
-            iexec_result_encryption: true
+            // iexec_result_encryption: true
         }
     });
     if (IS_DEBUG) console.log("Request order", requestOrderTemplate);

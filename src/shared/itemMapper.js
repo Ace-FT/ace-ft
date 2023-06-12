@@ -70,9 +70,13 @@ export const mapInboxOrders = async (connectedAccount, structuredResponseItems) 
         }
     }));
 
+    if (IS_DEBUG) console.log("mapped before filter", mapped);
+
     mapped = mapped.filter((item) => {
-        return null != item && item.to && item.to.toLowerCase() === connectedAccount;
+        return (null != item && item.to && item.to.toLowerCase() === connectedAccount) || (null != item && item.to && item.to === connectedAccount);
     })
+
+    console.log("mapped after filter", mapped)
 
 
     await ensLookup(mapped) ; 
@@ -126,8 +130,8 @@ export const mapSentItemsOrders = async (connectedAccount, structuredResponseIte
 
         let options = {
             requester: requester,
-            app: ace.APP_ADDRESS
-            , minTag: ace.TEE_TAG,
+            app: ace.APP_ADDRESS,
+            minTag: ace.TEE_TAG,
             maxTag: ace.TEE_TAG
         };
 
@@ -168,7 +172,7 @@ export const mapSentItemsOrders = async (connectedAccount, structuredResponseIte
     }));
 
     mapped = mapped.filter((item) => {
-        return null != item && item.from && item.from.toLowerCase() === connectedAccount;
+        return (null != item && item.from && item.from.toLowerCase() === connectedAccount) || (null != item && item.from === connectedAccount);
     })
 
     await ensLookup(mapped) ; 
