@@ -19,7 +19,7 @@ import Modal from "./Modal/Modal";
 import ReactTooltip from 'react-tooltip';
 
 const NavBar = () => {
-  const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
+  const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
   const { connectWallet, connectedAccount, setConnectedAccount, setW3authPrivatekey, setWeb3authConnectedAccount } = useContext(AceContext);
   const [pendingCount, setPendingCount] = useState("");
@@ -34,7 +34,6 @@ const NavBar = () => {
     copyTextToClipboard(connectedAccount);
   }
 
-
   const showModalNotConnected = (() => {
     setModalContent("navbar-modal", "Connection is required ❌", "Please connect your wallet to acces this menu option!", true);
   });
@@ -44,7 +43,8 @@ const NavBar = () => {
 
         console.log("Use effect", new Date(), "connectedAccount", connectedAccount, "ace.POLLING_INTERVAL_BADGE", ace.POLLING_INTERVAL_BADGE, "connectedAccount", connectedAccount);
 
-        if (connectedAccount && connectedAccount != "") {
+        if (connectedAccount && connectedAccount !== "") {
+          console.log("CA", connectedAccount)
           try {
             const query = inboxDatasetsQuery(null, connectedAccount);
 
@@ -52,11 +52,9 @@ const NavBar = () => {
 
             let ret = await fetchData(query);
             let structuredResponse = structureResponse(ret.data);
-
             if (IS_DEBUG) console.log("Calling fecthdata from NAVBAR", structuredResponse);
 
             let count = await countPendingInboxItems(connectedAccount, structuredResponse)
-
             if (IS_DEBUG) console.log("PENDING count", count)
 
             setPendingCount(count);
@@ -67,17 +65,18 @@ const NavBar = () => {
           finally {
             //  setIsLoading(false);
           }
-
-        };
-
-        setTimeout(countPending, ace.POLLING_INTERVAL_BADGE);
-
+        }
       });
 
-      countPending() ;
+      const refreshInterval = setInterval(countPending, ace.POLLING_INTERVAL_BADGE);
 
-    }, [connectedAccount,]);
+      if (!connectedAccount || connectedAccount === "") {
+        clearInterval(refreshInterval);
+      }
+
+    }, [connectedAccount]);
   
+    useEffect(()=>{}, [connectedAccount])
 
   return (
     <>
@@ -119,23 +118,23 @@ const NavBar = () => {
           </div>
           <div className="flex max-w-2/10 basis-1/5">
             {connectedAccount ? (
-              <div className="ml-auto items-center" >
-
+              <div className="flex ml-auto items-center" >
                 <ReactTooltip multiline="true" />
                 <p className="ml-8 text-right clickable" data-tip="Click to copy" id="walletAddressContainer"
                   onClick={copyAddressToClipboard}
                 >
-                  Hello! {shortenAddress(connectedAccount)} 👋
+                  Hello {shortenAddress(connectedAccount)}
                 </p>
+                <img src="/exit_logo2.svg" alt="Exit logo"
+                  className="ml-3 w-4"
+                  onClick={async () => {
+                    const walletInfo = await walletLogout();
+                    setWeb3authConnectedAccount(walletInfo.address) 
+                    setConnectedAccount(walletInfo.address)
+                    setW3authPrivatekey("")
+                  }} />
               </div>
             ) : (
-              <>
-              <button
-                className="btn ml-auto h-8 text-l font-bold"
-                onClick={connectWallet}
-              >
-                Connect Wallet
-              </button>
               <button
                 className="btn ml-auto h-8 text-l font-bold"
                 onClick={async () => {
@@ -145,9 +144,8 @@ const NavBar = () => {
                   setW3authPrivatekey(walletInfo.pk)
                 }}
               >
-                Connect Wallet w3Auth
-              </button>
-              </>          
+                Login
+              </button>         
             )}
           </div>
         </div>

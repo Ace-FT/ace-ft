@@ -2,7 +2,7 @@ import * as ace from "./constants";
 import { getIexec } from "./getIexec";
 import inboxItemStruct from "../utils/inboxItemStruct.ts";
 
-const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
 const ensLookup = async (items)=>{
     let iexec = getIexec();
@@ -92,7 +92,7 @@ export const countPendingInboxItems = async (connectedAccount, structuredRespons
     let mapped = await mapInboxOrders (connectedAccount, structuredResponseItems) ; 
 
     let pendingInboxItem = mapped.filter((item) => {
-        return  !item.taskid || item.taskid == "";
+        return  !item.taskid || item.taskid === "";
     }) ; 
 
     return pendingInboxItem.length ;
