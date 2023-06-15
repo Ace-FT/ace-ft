@@ -3,9 +3,12 @@ import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import { MetamaskAdapter } from "@web3auth/metamask-adapter";
 import RPC from "./web3RPC";
+import {getSignerFromPrivateKey} from "iexec/dist/lib/utils";
+
 
 export var web3auth;
 export var w3AprivateKey;
+export var web3authProvider;
 
 export const initWeb3auth = async function () {
   const CLIENT_ID = "BFYmc7bYzgY8_pVWZ2Rxmo5GpR-UoR9TtSVpfzGeQ264uw-5oN9I3ZPeCV9BxQ0J7j3Rv8RtNkK9XiuSlUm24GE";
@@ -56,20 +59,25 @@ export const walletLogin = async () => {
   }
 
   const provider = await web3auth.connect();
-  const pk = await web3auth.provider.request({
-    method: "private_key",
-  });
+  web3authProvider = web3auth.provider
+  console.log("provider", provider);
 
-  // const info = await web3auth.getUserInfo();
-  // console.log("info", info);
-  // console.log("provider", provider)
-  window.privateKey = pk;
-  console.log(pk);
-  w3AprivateKey = pk;
+  var pk;
+  if(!web3auth.provider.isMetaMask) {
+    pk = await web3auth.provider.request({
+      method: "private_key",
+    });
+
+    w3AprivateKey = pk;
+  } else {
+    console.log("IT IS METAMASK")
+  }
 
   const rpc = new RPC(provider);
   const address = await rpc.getAccounts();
   console.log("address", address);
+  console.log("web3auth.provider", web3auth.provider)
+  console.log("eth provider", window.ethereum)
 
   return { provider: provider, address: address[0], pk: pk };
 };
@@ -87,3 +95,16 @@ export const walletLogout = async () => {
 
   return { provider: provider, address: address };
 };
+
+export const setIexecProvider = () => {
+  if (!web3auth) {
+    console.log("web3 auth not initialised yet");
+    return;
+  }
+
+  if(web3auth.provider.isMetaMask) {
+    return web3auth.provider;
+  }
+
+  return getSignerFromPrivateKey('https://bellecour.iex.ec', w3AprivateKey);
+}

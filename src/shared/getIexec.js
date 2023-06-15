@@ -1,15 +1,15 @@
 import { IExec } from "iexec";
 import {getSignerFromPrivateKey} from "iexec/dist/lib/utils";
 import * as ace from "./constants";
-import { w3AprivateKey } from "./web3AuthLogin";
+import { web3auth, w3AprivateKey, web3authProvider, setIexecProvider } from "./web3AuthLogin";
 
 
 
 var w3provider;
 
-if (w3AprivateKey) {
-    w3provider = getSignerFromPrivateKey('https://bellecour.iex.ec', w3AprivateKey);
-}
+// if (w3AprivateKey || web3authProvider) {
+//     w3provider = setIexecProvider();
+// }
 
 
 const configArgs = { ethProvider: w3provider, chainId: 134 };
@@ -22,8 +22,9 @@ let iexec = null;
 export const getIexec = function (pk) {
 
     if (iexec === null) {
-        if (pk === undefined && w3AprivateKey) {
-            w3provider = getSignerFromPrivateKey('https://bellecour.iex.ec', w3AprivateKey);
+        if (pk === undefined && (w3AprivateKey || web3authProvider)) {
+            w3provider = setIexecProvider();
+            console.log("w3provider", w3provider)
         }
         const configArgs = { ethProvider: w3provider, chainId: 134 };
 
