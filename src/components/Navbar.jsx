@@ -126,7 +126,7 @@ const NavBar = () => {
                   Hello {shortenAddress(connectedAccount)}
                 </p>
                 <img src="/exit_logo2.svg" alt="Exit logo"
-                  className="ml-3 w-4"
+                  className="ml-3 w-4 clickable"
                   onClick={async () => {
                     const walletInfo = await walletLogout();
                     setWeb3authConnectedAccount(walletInfo.address) 
