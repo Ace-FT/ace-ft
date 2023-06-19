@@ -1,5 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Web3Auth } from "@web3auth/modal";
+import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
 import NavBar from "./components/Navbar";
 import Home from "./pages/Home";
 import Inbox from "./pages/Inbox";
@@ -14,9 +16,10 @@ import Helmet from "react-helmet";
 import Modal from "./components/Modal/Modal" ;
 import {toggleModal} from "./components/Modal/ModalController" ;
 import {getIexec} from "./shared/getIexec";
+import { initWeb3auth } from "./shared/web3AuthLogin";
 
 function App() {
-  const { connectedAccount, connectWallet, bgUrls, background, creativeMode, setCreativeMode } = useContext(AceContext);
+  const { connectedAccount, initWeb3Modal, connectWallet, bgUrls, background, creativeMode, setCreativeMode } = useContext(AceContext);
   const { ethereum } = window;
 
   document.onkeydown = function (evt) {
@@ -57,6 +60,10 @@ function App() {
 
   useEffect(() => {
     refreshOnWalletChange()
+  }, [])
+
+  useEffect(() => {
+    initWeb3auth()
   }, [])
 
   const isConnected = connectedAccount !== "";

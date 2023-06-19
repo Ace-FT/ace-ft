@@ -3,12 +3,16 @@ import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import { delay } from "../utils/delay";
 import { getIexec } from "../shared/getIexec";
+import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
+
+import RPC from "../shared/web3RPC"
 
 import { isLightColor } from "../utils/isLightColor";
 
 import * as ace from "../shared/constants";
 
 import { setModalContent } from "../components/Modal/ModalController";
+import { initWeb3auth } from "../shared/web3AuthLogin";
 
 export const AceContext = createContext();
 
@@ -17,6 +21,10 @@ const { ethereum } = window;
 
 export const AceProvider = ({ children }) => {
   const [connectedAccount, setConnectedAccount] = useState("");
+  const [web3auth, setWeb3Auth] = useState();
+  const [web3AuthProvider, setWeb3AuthProvider] = useState();
+  const [web3authConnectedAccount, setWeb3authConnectedAccount] = useState("");
+  const [w3authPrivatekey, setW3authPrivatekey] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [addressTo, setAddressTo] = useState("");
   const [price, setPrice] = useState(0);
@@ -148,6 +156,26 @@ export const AceProvider = ({ children }) => {
   };
 
 
+  const initWeb3Modal = async () => {
+    // const web3auth = new Web3Auth({
+    //   clientId: "BFYmc7bYzgY8_pVWZ2Rxmo5GpR-UoR9TtSVpfzGeQ264uw-5oN9I3ZPeCV9BxQ0J7j3Rv8RtNkK9XiuSlUm24GE",
+    //   chainConfig: {
+    //     chainNamespace: CHAIN_NAMESPACES.EIP155,
+    //     chainId: "0x86",     
+    //     rpcTarget: "https://bellecour.iex.ec",
+    //     // rpcTarget: "https://rpc.ankr.com/eth",
+    //     displayName: "bellecour",
+    //     blockExplorer: "https://blockscout-bellecour.iex.ec/"
+    //   },
+    //   uiConfig: {
+    //     loginGridCol: 2
+    //   }
+    // })
+    // await web3auth.initModal();
+    const web3auth = await initWeb3auth();
+    setWeb3Auth(web3auth)
+  }
+
 
 
   const checkFileAvailability = async (url, _callback) => {
@@ -204,6 +232,10 @@ export const AceProvider = ({ children }) => {
         connectWallet,
         connectedAccount,
         setConnectedAccount,
+        web3authConnectedAccount, setWeb3authConnectedAccount,
+        w3authPrivatekey, setW3authPrivatekey,
+        initWeb3Modal,
+        web3auth, setWeb3Auth,
         isLoading,
         setIsLoading,
         addressTo,

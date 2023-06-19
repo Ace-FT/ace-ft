@@ -1,6 +1,7 @@
 import * as ace from "../../shared/constants";
 import { getIexec } from "../../shared/getIexec";
 import { getAppOrders, getWorkerpoolOrders, getDatasetOrders } from "./getOrders";
+import NodeRSA from "node-rsa";
 const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
 
@@ -43,16 +44,31 @@ const requestDataset = async(datasetAddress, datasetRequester) => {
     let secrets = {
         1: "my-address"
     }
+    // const nodeRSA = new NodeRSA({b: 4096});
+    // const encrkey = nodeRSA.exportKey('pkcs8-public');
+    let isEncryptionKeyAvailable = await iexec.result.checkResultEncryptionKeyExists(datasetRequester);
+    console.log("TEST TEST TEST", isEncryptionKeyAvailable)
+    // let isEncryptionKeyAvailable = false;
+    // if (!isEncryptionKeyAvailable) {
+    //     //const encrkey = await iexec.dataset.generateEncryptionKey();
+    //     console.log("encr key", encrkey)
+    //     const { isPushed } = await iexec.result.pushResultEncryptionKey(encrkey, {
+    //         forceUpdate : true
+    //     })
+    //     console.log(isPushed)
+    // }
+    
     const requestOrderTemplate = await iexec.order.createRequestorder({
         app: ace.APP_ADDRESS,
         category: 0,
         dataset: datasetAddress,
         workerpool: ace.WORKERPOOL_ADDRESS,
         tag: "tee",
+        beneficiary: datasetRequester,
         params: {
-            iexec_secrets: secrets
+            iexec_secrets: secrets,
+            // iexec_result_encryption: true
         }
-            //params: { iexec_developer_logger: true },
     });
     if (IS_DEBUG) console.log("Request order", requestOrderTemplate);
 
