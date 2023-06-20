@@ -171,7 +171,6 @@ Files and datasets are uploaded to IPFS through an Infura node. A security CORS 
   
 In a future upgrade, we could imagine Ace users being able to configure in a Settings section which IPFS node they prefer using: the default Infura IPFS node, a in-browser IPFS node, or their own IPFS node.
   
-  
 By default, *optimistic mode* is set to off, which means Ace will check the file availablity on IPFS by calling `checkFileAvailability` function. This function sends a HTTP HEAD request on different IPFS gateways stored in an environment variable (cloudflare at https://cloudflare-ipfs.com/ipfs, pinata at https://gateway.pinata.cloud/ipfs, W3s at https://w3s.link/ipfs, etc...), and the file's CID.
 
 When *optimistic mode* is set to on, `checkFileAvailability` function is not called, but the file availability on IPFS will not be verified before proceeding. In this mode it is assumed that the file will be available at some point before being downloaded.
