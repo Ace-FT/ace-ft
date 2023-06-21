@@ -1,5 +1,4 @@
 import { IExec } from "iexec";
-import {getSignerFromPrivateKey} from "iexec/dist/lib/utils";
 import * as ace from "./constants";
 import { web3auth, w3AprivateKey, web3authProvider, setIexecProvider } from "./web3AuthLogin";
 

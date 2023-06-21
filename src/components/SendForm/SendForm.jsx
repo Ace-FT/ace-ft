@@ -3,6 +3,8 @@ import { AceContext } from "../../context/context";
 import * as ace from "../../shared/constants";
 import { delay } from "../../utils/delay";
 import { isAddress } from "../../utils/isAddress";
+import { IExecDataProtector } from "@iexec/dataprotector";
+
 
 import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from "./encryption.js";
 import uploadData from "./upload";
@@ -14,6 +16,7 @@ import { getIexec } from "../../shared/getIexec";
 import ReactTooltip from 'react-tooltip';
 import { setModalContent, toggleModal } from "../Modal/ModalController";
 import Modal from "../Modal/Modal";
+import {setIexecProvider} from "../../shared/web3AuthLogin";
 const { ethereum } = window;
 
 const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
@@ -51,6 +54,30 @@ const SendForm = () => {
     if (IS_DEBUG) console.log(checkbox.checked);
     optimistic = checkbox.checked;
   };
+
+  const protectData = async (fileUrl, fileName, message, fileSize, requesterrestrict) => {
+    const web3provider = await setIexecProvider();
+    console.log(web3provider)
+    const dataProtector = new IExecDataProtector(web3provider);
+
+    const protectedData = await dataProtector.protectData({
+      data: {
+        url: fileUrl,
+        fn: fileName,
+        message: message,
+        size: fileSize
+      }
+    })
+
+    const datasetAddress = protectedData.address;
+    const grantedAccess = await dataProtector.grantAccess({
+      protectedData: datasetAddress,
+      authorizedApp: ace.APP_ADDRESS,
+      authorizedUser: requesterrestrict,     
+    })
+
+    console.log("protected data", protectedData)
+  }
 
 
   var setInprogress = () => {
@@ -327,6 +354,8 @@ const SendForm = () => {
                   setStep(ENCRYPTING_DATASET);
                   await delay(1)
                   const encryptedDataset = await encryptDataset(fileUrl, fileName, message, fileSize);
+                  
+                  await protectData(fileUrl, fileName, message, fileSize, resolvedAddressTo)
 
                   setStep(UPLOADING_DATASET);
                   var datasetUrl = await uploadData(encryptedDataset);
