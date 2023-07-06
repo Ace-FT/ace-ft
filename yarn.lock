@@ -4184,7 +4184,7 @@
     "@walletconnect/window-metadata" "1.0.0"
     "detect-browser" "5.2.0"
 
-"@walletconnect/client@~1.x":
+"@walletconnect/client@^1.8.0", "@walletconnect/client@~1.x":
   "integrity" "sha512-svyBQ14NHx6Cs2j4TpkQaBI/2AF4+LXz64FojTjMtV4VMMhl81jSO1vNeg+yYhQzvjcGH/GpSwixjyCW0xFBOQ=="
   "resolved" "https://registry.npmjs.org/@walletconnect/client/-/client-1.8.0.tgz"
   "version" "1.8.0"

@@ -1,0 +1,1 @@
+export const MAX_DESIRED_WORKERPOOL_ORDER_PRICE = 0;

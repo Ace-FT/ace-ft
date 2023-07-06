@@ -40,7 +40,7 @@ function Inbox() {
       try
       {
         let ret = await fetchData(query) ;
-        if (IS_DEBUG) console.log("Calling fectdata", ret) ; 
+        if (IS_DEBUG) console.log("Calling fecthdata for INBOX", ret) ; 
         setData(ret.data) ;
       }
       catch(exc)
@@ -56,7 +56,6 @@ function Inbox() {
     
     { pollingInterval: ace.POLLING_INTERVAL }
   );
-
 
   if (IS_DEBUG) console.log("QUERY", query, "POLLING_INTERVAL", ace.POLLING_INTERVAL);
 
@@ -105,7 +104,7 @@ function Inbox() {
   useEffect(() => {
     async function processEach() {
       if (inboxItems) {
-        if(IS_DEBUG) console.log("inboxItems===>", inboxItems);
+        console.log("inboxItems===>", inboxItems); //if(IS_DEBUG) 
         for (var i = 0; i < inboxItems.length; i++) {
           console.log(i, inboxItems[i])
           if (inboxItems[i].status === STATUS_COMPLETED_ORDER) {
@@ -199,11 +198,10 @@ function Inbox() {
               inboxItems
                 .sort((a, b) => b.sendDate - a.sendDate)
                 .map((inboxItem, i) => {
-                  //console.log(inboxItem)
                   return (
                     <tr className="text-center" key={i}>
-                      <td>{formatDate(inboxItem.sendDate)}</td>
-                      <td>{inboxItem.from}</td>
+                      <td>{formatDate(inboxItem.sendTimestamp)}</td>
+                      <td>{inboxItem.dataOwner}</td>
                       <td className="invisible-element">{inboxItem.price}</td>
                       <td>
                         {inboxItem.status === STATUS_OPEN_ORDER && (
@@ -211,7 +209,7 @@ function Inbox() {
                             <button
                               className="btn h-6"
                               onClick={async () => {
-                                await requestDataset(inboxItem.id, connectedAccount);
+                                await requestDataset(inboxItem.id, connectedAccount, inboxItem.from, inboxItem.sendDate);
                                 localStorage.setItem(`${inboxItem.taskid}`, `loading`)
                                 //window.location.reload(false);
                               }}
@@ -224,13 +222,13 @@ function Inbox() {
                         (
                         <>
                           <p>
-                            Request started on {formatDate(inboxItem.downloadDate)}
+                            Request started on {formatDate(inboxItem.downloadTimestamp)}
                           </p>
                           {/* <div className="w-full bg-gray-200 rounded-full">
                             <div id={inboxItem.taskid} className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `10%`}}>10%</div>
                           </div>                           */}
-                          {console.log(new Date().getTime(), inboxItem.downloadDate.getTime())}
-                          {new Date().getTime() - inboxItem.downloadDate.getTime() < 240000 ? (
+                          {console.log(new Date().getTime(), inboxItem.downloadTimestamp.getTime())}
+                          {new Date().getTime() - inboxItem.downloadTimestamp.getTime() < 240000 ? (
                             <div className="w-full bg-gray-200 rounded-full">
                               <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `15%`}}>15%</div>
                             </div>
@@ -245,7 +243,7 @@ function Inbox() {
                         {inboxItem.status === STATUS_REVEALING_ORDER && (
                         <>
                           <p>
-                            Request started on {formatDate(inboxItem.downloadDate)}
+                            Request started on {formatDate(inboxItem.downloadTimestamp)}
                           </p>
                           <div className="w-full bg-gray-200 rounded-full">
                             <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `90%`}}>90%</div>
