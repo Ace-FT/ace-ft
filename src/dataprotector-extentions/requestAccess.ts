@@ -1,6 +1,6 @@
 import * as ace from "../shared/constants";
 import { getIexec } from "../shared/getIexec";
-import { MAX_DESIRED_WORKERPOOL_ORDER_PRICE } from "./config.ts";
+import { MAX_DESIRED_WORKERPOOL_ORDER_PRICE, WORKERPOOL_ADDRESS } from "./config.ts";
 
 export const requestAccess = async (accessRequester: string,protectedDataAddress: string) => {
   const iexec = getIexec();
@@ -36,6 +36,7 @@ export const requestAccess = async (accessRequester: string,protectedDataAddress
     const appOrderbook = await iexec.orderbook.fetchAppOrderbook(
       ace.APP_ADDRESS,
       {
+        workerpool: WORKERPOOL_ADDRESS,
         minTag: ["tee", "scone"],
         maxTag: ["tee", "scone"],
       }
@@ -47,7 +48,7 @@ export const requestAccess = async (accessRequester: string,protectedDataAddress
 
     // Fetch workerpool order
     const workerpoolOrderbook = await iexec.orderbook.fetchWorkerpoolOrderbook({
-      app: ace.APP_ADDRESS,
+      workerpool: WORKERPOOL_ADDRESS,
       dataset: protectedDataAddress,
       minTag: ["tee", "scone"],
       maxTag: ["tee", "scone"],
