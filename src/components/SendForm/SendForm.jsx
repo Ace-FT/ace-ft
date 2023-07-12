@@ -3,6 +3,8 @@ import { AceContext } from "../../context/context";
 import * as ace from "../../shared/constants";
 import { delay } from "../../utils/delay";
 import { isAddress } from "../../utils/isAddress";
+import { IExecDataProtector } from "@iexec/dataprotector";
+
 
 import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from "./encryption.js";
 import uploadData from "./upload";
@@ -14,9 +16,10 @@ import { getIexec } from "../../shared/getIexec";
 import ReactTooltip from 'react-tooltip';
 import { setModalContent, toggleModal } from "../Modal/ModalController";
 import Modal from "../Modal/Modal";
+import {setIexecProvider} from "../../shared/web3AuthLogin";
 const { ethereum } = window;
 
-const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
 
 const SendForm = () => {
@@ -51,6 +54,39 @@ const SendForm = () => {
     if (IS_DEBUG) console.log(checkbox.checked);
     optimistic = checkbox.checked;
   };
+
+  const protectData = async (fileUrl, fileName, message, fileSize, requesterrestrict, datasetName) => {
+    const web3provider = await setIexecProvider();
+    console.log(web3provider)
+    const dataProtector = new IExecDataProtector(web3provider, 
+    //   {
+    //   iexecOptions: {
+    //     smsURL: ace.SMS_URL
+    //   }
+    // }
+    );
+
+    const protectedData = await dataProtector.protectData({
+      data: {
+        url: fileUrl,
+        fn: fileName,
+        message: message,
+        size: fileSize
+      },
+      name: datasetName
+    })
+
+    const datasetAddress = protectedData.address;
+    const grantedAccess = await dataProtector.grantAccess({
+      protectedData: datasetAddress,
+      authorizedApp: ace.APP_ADDRESS,
+      authorizedUser: requesterrestrict, 
+      numberOfAccess: ace.DEFAULT_NUMBER_OF_ACCESS_VOLUME
+    })
+
+    console.log("protected data", protectedData)
+    console.log("granted data", grantedAccess)
+  }
 
 
   var setInprogress = () => {
@@ -90,8 +126,8 @@ const SendForm = () => {
     }
     catch (e) {
       setModalContent("sendform-modal", "Connection is required ❌", "Please connect your wallet first.", true);
-      return false;
       console.error(e);
+      return false;
     }
 
 
@@ -118,7 +154,7 @@ const SendForm = () => {
     console.log("isValidAddress", isValidAddress);
     if (!isValidAddress) {
       resolvedAddressTo = await iexec.ens.resolveName(addressTo);
-      if (undefined == resolvedAddressTo || null == resolvedAddressTo || resolvedAddressTo.trim() == "") {
+      if (undefined === resolvedAddressTo || null === resolvedAddressTo || resolvedAddressTo.trim() === "") {
         setModalContent("sendform-modal", "Invalid address ❌", `Address ${addressTo} is not recognised. The value is not a valid ethereum address and no matching ENS item could be found.`, true);
         return false;
       }
@@ -327,46 +363,49 @@ const SendForm = () => {
                   setStep(ENCRYPTING_DATASET);
                   await delay(1)
                   const encryptedDataset = await encryptDataset(fileUrl, fileName, message, fileSize);
+                  
+                  const datasetName = generateDatasetName(connectedAccount, resolvedAddressTo)
+                  await protectData(fileUrl, fileName, message, fileSize, resolvedAddressTo, datasetName)
 
                   setStep(UPLOADING_DATASET);
-                  var datasetUrl = await uploadData(encryptedDataset);
-                  // await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED );
-                  ok = false;
-                  if (!optimistic) {
-                    let trycount = 1;
-                    while (!ok && trycount < 50) {
-                      let ipfsUrl = getNextIpfsGateway(datasetUrl, trycount);
-                      if (IS_DEBUG) console.log("Checking dataset availability", ipfsUrl);
-                      ok = await checkFileAvailability(ipfsUrl, () => { if (IS_DEBUG) console.log("checking ended...", trycount) }
-                      );
-                      trycount++;
-                      if (IS_DEBUG) console.log(ok);
-                    }
-                  }
-                  else {
-                    ok = true;
-                  }
+                  // var datasetUrl = await uploadData(encryptedDataset);
+                  // // await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED );
+                  // ok = false;
+                  // if (!optimistic) {
+                  //   let trycount = 1;
+                  //   while (!ok && trycount < 50) {
+                  //     let ipfsUrl = getNextIpfsGateway(datasetUrl, trycount);
+                  //     if (IS_DEBUG) console.log("Checking dataset availability", ipfsUrl);
+                  //     ok = await checkFileAvailability(ipfsUrl, () => { if (IS_DEBUG) console.log("checking ended...", trycount) }
+                  //     );
+                  //     trycount++;
+                  //     if (IS_DEBUG) console.log(ok);
+                  //   }
+                  // }
+                  // else {
+                  //   ok = true;
+                  // }
 
 
                   document.body.style.cursor = 'default';
-                  if (!ok) { alert("The file is not found on IPFS. Please try again later."); setReady(); return; }
+                  // if (!ok) { alert("The file is not found on IPFS. Please try again later."); setReady(); return; }
 
 
                   document.body.style.cursor = 'wait';
                   setStep(DEPLOYING_DATASET);
-                  await delay(1)
-                  const datasetName = generateDatasetName(connectedAccount, resolvedAddressTo);
-                  const checksum = await generateEncryptedFileChecksum(encryptedDataset);
-                  const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
-                  document.body.style.cursor = 'default';
+                  // await delay(1)
+                  // const datasetName = generateDatasetName(connectedAccount, resolvedAddressTo);
+                  // const checksum = await generateEncryptedFileChecksum(encryptedDataset);
+                  // const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
+                  // document.body.style.cursor = 'default';
 
                   setStep(PUSHING_SECRET);
-                  await pushSecret(datasetAddress, datasetEncryptionKey);
-                  const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
-                  document.body.style.cursor = 'default';
+                  // await pushSecret(datasetAddress, datasetEncryptionKey);
+                  // const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
+                  // document.body.style.cursor = 'default';
 
-                  document.body.style.cursor = 'wait';
-                  await pushOrder(datasetAddress, resolvedAddressTo);
+                  // document.body.style.cursor = 'wait';
+                  // await pushOrder(datasetAddress, resolvedAddressTo);
                   document.body.style.cursor = 'default';
                   setStep(FINISHED);
                   setReady();

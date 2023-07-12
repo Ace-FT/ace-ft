@@ -1,10 +1,9 @@
+import { utils } from "iexec";
 import { Web3Auth } from "@web3auth/modal";
 import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import { MetamaskAdapter } from "@web3auth/metamask-adapter";
 import RPC from "./web3RPC";
-import {getSignerFromPrivateKey} from "iexec/dist/lib/utils";
-
 
 export var web3auth;
 export var w3AprivateKey;
@@ -106,5 +105,5 @@ export const setIexecProvider = () => {
     return web3auth.provider;
   }
 
-  return getSignerFromPrivateKey('https://bellecour.iex.ec', w3AprivateKey);
+  return utils.getSignerFromPrivateKey('https://bellecour.iex.ec', w3AprivateKey);
 }

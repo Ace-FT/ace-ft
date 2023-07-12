@@ -109,11 +109,11 @@ const SentItems = () => {
           <tbody>
             {inboxItems && inboxItems.length > 0 ? (
 
-              inboxItems.sort((a, b) => b.sendDate - a.sendDate).map((inboxItem, i) => {
+              inboxItems.sort((a, b) => b.sendTimestamp - a.sendTimestamp).map((inboxItem, i) => {
                 return (
                   <tr class="text-center" key={i}>
                     <td>
-                      {formatDate(inboxItem.sendDate)}
+                      {formatDate(inboxItem.sendTimestamp)}
                     </td>
                     <td>
                       {inboxItem.to}
@@ -132,13 +132,13 @@ const SentItems = () => {
                       {
                         inboxItem.status === STATUS_COMPLETED_ORDER &&
                         <p>
-                          Downloaded on {formatDate(inboxItem.downloadDate)}
+                          Downloaded on {formatDate(inboxItem.downloadTimestamp)}
                         </p>
                       }
                       {
                         inboxItem.status === STATUS_ACTIVE_ORDER &&
                         <p>
-                          Download started on {formatDate(inboxItem.downloadDate)}
+                          Download started on {formatDate(inboxItem.downloadTimestamp)}
                         </p>
                       }
                     </td>
@@ -168,8 +168,7 @@ const SentItems = () => {
               ) : 
                 <td colSpan={4}>No sent item found.</td>
               }
-            </tr>
-            
+            </tr>           
         )}
           </tbody>
         </table>
