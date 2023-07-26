@@ -21,7 +21,7 @@ import ReactTooltip from 'react-tooltip';
 const NavBar = () => {
   const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
-  const { connectWallet, connectedAccount, setConnectedAccount, setW3authPrivatekey, setWeb3authConnectedAccount } = useContext(AceContext);
+  const { connectWallet, connectedAccount, setConnectedAccount, setW3authPrivatekey, setWeb3authConnectedAccount, userInfo, setUserInfo } = useContext(AceContext);
   const [pendingCount, setPendingCount] = useState("");
 
   const copyAddressToClipboard = () => {
@@ -123,7 +123,11 @@ const NavBar = () => {
                 <p className="ml-8 text-right clickable" data-tip="Click to copy" id="walletAddressContainer"
                   onClick={copyAddressToClipboard}
                 >
-                  Hello {shortenAddress(connectedAccount)}
+                  {userInfo && userInfo.name ? (
+                    <>Hello {userInfo.name}</>
+                  ) : (
+                    <>Hello {shortenAddress(connectedAccount)}</>
+                  )}
                 </p>
                 <img src="/exit_logo2.svg" alt="Exit logo"
                   className="ml-3 w-4 clickable"
@@ -139,7 +143,8 @@ const NavBar = () => {
                 className="btn ml-auto h-8 text-l font-bold"
                 onClick={async () => {
                   const walletInfo = await walletLogin();
-                  setWeb3authConnectedAccount(walletInfo.address) 
+                  setWeb3authConnectedAccount(walletInfo.address)
+                  setUserInfo(walletInfo.userInfo)
                   setConnectedAccount(walletInfo.address)
                   setW3authPrivatekey(walletInfo.pk)
                 }}

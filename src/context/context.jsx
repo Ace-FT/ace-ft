@@ -25,6 +25,7 @@ export const AceProvider = ({ children }) => {
   const [web3AuthProvider, setWeb3AuthProvider] = useState();
   const [web3authConnectedAccount, setWeb3authConnectedAccount] = useState("");
   const [w3authPrivatekey, setW3authPrivatekey] = useState("");
+  const [userInfo, setUserInfo] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [addressTo, setAddressTo] = useState("");
   const [price, setPrice] = useState(0);
@@ -234,6 +235,7 @@ export const AceProvider = ({ children }) => {
         setConnectedAccount,
         web3authConnectedAccount, setWeb3authConnectedAccount,
         w3authPrivatekey, setW3authPrivatekey,
+        userInfo, setUserInfo,
         initWeb3Modal,
         web3auth, setWeb3Auth,
         isLoading,

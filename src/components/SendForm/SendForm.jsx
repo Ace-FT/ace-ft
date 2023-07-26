@@ -32,11 +32,8 @@ const SendForm = () => {
   const BEGINNING_PROCESS = 0;
   const ENCRYPTING_FILE = 1;
   const UPLOADING_FILE = 2;
-  const ENCRYPTING_DATASET = 3;
-  const UPLOADING_DATASET = 4;
-  const DEPLOYING_DATASET = 5;
-  const PUSHING_SECRET = 6;
-  const FINISHED = 7;
+  const PROTECTING_DATA = 3;
+  const FINISHED = 4;
   const DELAY_BEFORE_CHECKING_FILE_UPLOADED = 3;
   let resolvedAddressTo;
 
@@ -321,7 +318,6 @@ const SendForm = () => {
 
                   setInprogress();
 
-
                   if (IS_DEBUG) console.log("optimistic", optimistic)
 
                   setIsLoading(true);
@@ -360,46 +356,24 @@ const SendForm = () => {
 
                   setIsAvailable(ok);
 
-                  setStep(ENCRYPTING_DATASET);
                   await delay(1)
                   const encryptedDataset = await encryptDataset(fileUrl, fileName, message, fileSize);
-                  
+                  setStep(PROTECTING_DATA);
                   const datasetName = generateDatasetName(connectedAccount, resolvedAddressTo)
                   await protectData(fileUrl, fileName, message, fileSize, resolvedAddressTo, datasetName)
-
-                  setStep(UPLOADING_DATASET);
-                  // var datasetUrl = await uploadData(encryptedDataset);
-                  // // await delay(DELAY_BEFORE_CHECKING_FILE_UPLOADED );
-                  // ok = false;
-                  // if (!optimistic) {
-                  //   let trycount = 1;
-                  //   while (!ok && trycount < 50) {
-                  //     let ipfsUrl = getNextIpfsGateway(datasetUrl, trycount);
-                  //     if (IS_DEBUG) console.log("Checking dataset availability", ipfsUrl);
-                  //     ok = await checkFileAvailability(ipfsUrl, () => { if (IS_DEBUG) console.log("checking ended...", trycount) }
-                  //     );
-                  //     trycount++;
-                  //     if (IS_DEBUG) console.log(ok);
-                  //   }
-                  // }
-                  // else {
-                  //   ok = true;
-                  // }
-
 
                   document.body.style.cursor = 'default';
                   // if (!ok) { alert("The file is not found on IPFS. Please try again later."); setReady(); return; }
 
 
                   document.body.style.cursor = 'wait';
-                  setStep(DEPLOYING_DATASET);
                   // await delay(1)
+                  
                   // const datasetName = generateDatasetName(connectedAccount, resolvedAddressTo);
                   // const checksum = await generateEncryptedFileChecksum(encryptedDataset);
                   // const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
                   // document.body.style.cursor = 'default';
 
-                  setStep(PUSHING_SECRET);
                   // await pushSecret(datasetAddress, datasetEncryptionKey);
                   // const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
                   // document.body.style.cursor = 'default';

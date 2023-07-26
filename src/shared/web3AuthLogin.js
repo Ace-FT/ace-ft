@@ -58,16 +58,20 @@ export const walletLogin = async () => {
   }
 
   const provider = await web3auth.connect();
+  await provider;
+  console.log("provider", provider)
   web3authProvider = web3auth.provider
-  console.log("provider", provider);
+  console.log("provider from web3auth.provider", provider);
 
-  var pk;
+  let pk;
+  let info;
   if(!web3auth.provider.isMetaMask) {
     pk = await web3auth.provider.request({
       method: "private_key",
     });
 
     w3AprivateKey = pk;
+    info = await web3auth.getUserInfo()
   } else {
     console.log("IT IS METAMASK")
   }
@@ -75,10 +79,11 @@ export const walletLogin = async () => {
   const rpc = new RPC(provider);
   const address = await rpc.getAccounts();
   console.log("address", address);
+  console.log("info", info)
   console.log("web3auth.provider", web3auth.provider)
   console.log("eth provider", window.ethereum)
 
-  return { provider: provider, address: address[0], pk: pk };
+  return { provider: provider, address: address[0], pk: pk, userInfo: info };
 };
 
 export const walletLogout = async () => {

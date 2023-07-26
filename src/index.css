@@ -184,7 +184,7 @@ a {
     z-index: 10;
     position: relative;
     color: #a2b5d2;
-    background-color: #d4dcea;
+    background-color: #d0d7dc;
 
 }
 .progress::after {
@@ -195,7 +195,7 @@ a {
     top: -27px;
     left: 43%;
     z-index: 2;
-    background-color: #d4dcea;
+    background-color: #d0d7dc;
 }
 .inprogr {
     background-color: var(--iexec-yellow);
@@ -209,7 +209,6 @@ a {
 }
 
 
-
 .one::after {
     width: 0;
     height: 0;
@@ -220,11 +219,6 @@ a {
     margin:0 0 auto 5px
 }
 
-.customSliderContainer {
-    border-radius: 10px;
-    box-shadow: 0 0 10px 1px hsla(0, 0%, 100%, .5);
-    padding:0 3px
-}
 
 .customSlider {
     align-items: center;
@@ -246,35 +240,6 @@ a {
     border-radius: 10px;
     cursor: pointer;
     height:50px
-}
-
-.customSlider-thumb {
-    background: #fcd15a;
-    background: var(--iexec-yellow);
-    border-radius: 10px;
-    color: #0d0d12;
-    color: var(--background-color);
-    font-weight: 700;
-    height: 44px;
-    outline: none;
-    width:45px
-}
-
-.customSlider-mark, .customSlider-thumb {
-    align-items: center;
-    display: flex;
-    font-size: 1.8em;
-    justify-content:center
-}
-
-.customSlider-mark {
-    cursor: pointer;
-    font-weight: 300;
-    padding-left:4px
-}
-
-.customSlider-mark.customSlider-mark-active {
-    display:none
 }
 
 .page {
