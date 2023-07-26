@@ -1,14 +1,12 @@
-import React, { useRef, useState, useContext, useEffect } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { AceContext } from "../../context/context";
 import * as ace from "../../shared/constants";
 import { delay } from "../../utils/delay";
 import { isAddress } from "../../utils/isAddress";
 import { IExecDataProtector } from "@iexec/dataprotector";
 
-
-import { encryptFile, encryptDataset, generateEncryptedFileChecksum, datasetEncryptionKey } from "./encryption.js";
+import { encryptFile, encryptDataset } from "./encryption.js";
 import uploadData from "./upload";
-import { deployDataset, pushSecret, pushOrder } from "./deploy.js";
 import { generateDatasetName } from "../../utils/datasetNameGenerator.ts";
 import { jsonToBuffer } from "../../utils/jsonToBuffer";
 import { getIexec } from "../../shared/getIexec";
@@ -25,7 +23,7 @@ const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 const SendForm = () => {
   const { connectedAccount, connectWallet, getNextIpfsGateway } = useContext(AceContext);
 
-  const { isLoading, setIsLoading, addressTo, setAddressTo, step, setStep, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);
+  const { setIsLoading, addressTo, setAddressTo, step, setStep, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
   const [isAFile, setIsAFile] = useState(false);
 
@@ -313,7 +311,6 @@ const SendForm = () => {
                   e.preventDefault();
 
                   let isValid = await validateForm();
-                  let iexec = getIexec();
                   if (!isValid) { return false };
 
                   setInprogress();
@@ -357,7 +354,7 @@ const SendForm = () => {
                   setIsAvailable(ok);
 
                   await delay(1)
-                  const encryptedDataset = await encryptDataset(fileUrl, fileName, message, fileSize);
+                  // const encryptedDataset = await encryptDataset(fileUrl, fileName, message, fileSize);
                   setStep(PROTECTING_DATA);
                   const datasetName = generateDatasetName(connectedAccount, resolvedAddressTo)
                   await protectData(fileUrl, fileName, message, fileSize, resolvedAddressTo, datasetName)
@@ -368,7 +365,7 @@ const SendForm = () => {
 
                   document.body.style.cursor = 'wait';
                   // await delay(1)
-                  
+
                   // const datasetName = generateDatasetName(connectedAccount, resolvedAddressTo);
                   // const checksum = await generateEncryptedFileChecksum(encryptedDataset);
                   // const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);

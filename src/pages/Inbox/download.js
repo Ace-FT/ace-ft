@@ -1,4 +1,3 @@
-import * as ace from "../../shared/constants";
 import JSZip from "jszip";
 import { bufferToJson } from "../../utils/bufferToJson";
 import { getIexec } from "../../shared/getIexec";

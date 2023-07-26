@@ -4,7 +4,7 @@ import { datasetStruct } from "../../utils/datasetStruct.ts";
 import {getIexec} from "../../shared/getIexec"; 
 
 import * as ace from "../../shared/constants";
-const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
 
 /**

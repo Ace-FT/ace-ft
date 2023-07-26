@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
 const fetchData = (async (theGraphQuery) => {
 

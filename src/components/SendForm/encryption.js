@@ -1,16 +1,13 @@
 import { Buffer } from "buffer";
 import { datasetStruct } from "../../utils/datasetStruct.ts";
 import { jsonToBuffer } from "../../utils/jsonToBuffer";
-import * as ace from "../../shared/constants";
 import { getIexec } from "../../shared/getIexec";
 
-import crypto from 'crypto-browserify';
 import {fileEncKey, fromFileToEncryptedFile} from "../../utils/fileAESEncryption";
-const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
 const { ethereum } = window;
-
-const ALGORITHM = "aes-256-cbc";
+// const ALGORITHM = "aes-256-cbc";
 
 var datasetEncryptionKey = "";
 
