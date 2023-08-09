@@ -77,7 +77,7 @@ The processing capacity required to execute the application is provided by worke
 - Processing power provider: This is a marketplace participant who is providing its machine for the execution of the application.  
  
 ### File Transfer process  
-The table below illustrates the 5 steps involved in the file transfer process and their corresponding implementation using the iExec stack.  
+The table below illustrates the 5 steps involved in the file transfer process and their corresponding implementation using the iExec stack.   (with dataprotector ?)
 ![ace 5 step process](https://github.com/leootshudi59/ace-ft/blob/main/media/ace-steps.png#1)
 
 
