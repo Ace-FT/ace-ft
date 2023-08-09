@@ -23,6 +23,7 @@ module.exports = {
       },
       maxWidth: {
         "2/10": "20%",
+        "3/10": "30%"
       },
       borderRadius: {
         "lg": "9px",

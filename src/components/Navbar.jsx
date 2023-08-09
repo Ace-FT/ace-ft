@@ -17,18 +17,19 @@ import * as ace from "../shared/constants";
 import Modal from "./Modal/Modal";
 
 import ReactTooltip from 'react-tooltip';
+import ProfileIdentifier from "./ProfileIdentifier";
 
 const NavBar = () => {
   const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
-  const { connectWallet, connectedAccount, setConnectedAccount, setW3authPrivatekey, setWeb3authConnectedAccount } = useContext(AceContext);
+  const { connectWallet, connectedAccount, setConnectedAccount, setW3authPrivatekey, setWeb3authConnectedAccount, userInfo, setUserInfo } = useContext(AceContext);
   const [pendingCount, setPendingCount] = useState("");
 
   const copyAddressToClipboard = () => {
     document.getElementById("walletAddressContainer").innerHTML = `Copied! ${shortenAddress(connectedAccount)} 👋`;
 
     setTimeout(() => {
-      document.getElementById("walletAddressContainer").innerHTML = `Hello! ${shortenAddress(connectedAccount)} 👋`;
+      document.getElementById("walletAddressContainer").innerHTML = `<><ProfileIdentifier /><>`;
     }, 1000)
 
     copyTextToClipboard(connectedAccount);
@@ -77,6 +78,12 @@ const NavBar = () => {
     }, [connectedAccount]);
   
     useEffect(()=>{}, [connectedAccount])
+    
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleMenu = () => {
+      setIsOpen(!isOpen);
+    };
 
   return (
     <>
@@ -103,7 +110,9 @@ const NavBar = () => {
                 <li>
                   {connectedAccount ? (<NavLink to="/sent" relative="path">Sent</NavLink>) : (<span onClick={showModalNotConnected}>Sent</span>)}
                 </li>
-                <li></li>
+                {/* <li>
+                  {connectedAccount && (<NavLink to="/info" relative="path">Info</NavLink>)}
+                </li> */}
               </ul>
             </nav>
           </div>
@@ -120,32 +129,61 @@ const NavBar = () => {
             {connectedAccount ? (
               <div className="flex ml-auto items-center" >
                 <ReactTooltip multiline="true" />
-                <p className="ml-8 text-right clickable" data-tip="Click to copy" id="walletAddressContainer"
-                  onClick={copyAddressToClipboard}
+                <p className="ml-8 text-right"
+                  // onClick={copyAddressToClipboard}
                 >
-                  Hello {shortenAddress(connectedAccount)}
+                  {/* {userInfo && userInfo.name ? (
+                    <>
+                      <div className="flex items-center justify-center">
+                        {userInfo.name}
+                        <img src={userInfo.profileImage} className="rounded-full ml-3 w-1/5" />
+                        <button
+                          onClick={toggleMenu}
+                          className="text-white focus:outline-none"
+                          aria-label="Menu"
+                        >
+                          {/* Utilisez une icône de flèche vers le bas ici (par exemple, un emoji flèche vers le bas) */}
+                          {/* ▼
+                        </button>
+                        {isOpen && (
+                      <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-lg">
+                        <ul className="py-2">
+                          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Info</li>
+                          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Logout</li>
+                        </ul>
+                      </div>
+                    )}
+                      </div>
+                    </>
+                  ) : (
+                    <>Hello {shortenAddress(connectedAccount)}</>
+                  )} */}
+
+                  <ProfileIdentifier />
                 </p>
-                <img src="/exit_logo2.svg" alt="Exit logo"
+                {/* <img src="/exit_logo2.svg" alt="Exit logo"
                   className="ml-3 w-4 clickable"
                   onClick={async () => {
                     const walletInfo = await walletLogout();
                     setWeb3authConnectedAccount(walletInfo.address) 
                     setConnectedAccount(walletInfo.address)
                     setW3authPrivatekey("")
-                  }} />
+                  }} /> */}
               </div>
             ) : (
               <button
                 className="btn ml-auto h-8 text-l font-bold"
                 onClick={async () => {
                   const walletInfo = await walletLogin();
-                  setWeb3authConnectedAccount(walletInfo.address) 
+                  console.log("walletInfo", walletInfo);
+                  setWeb3authConnectedAccount(walletInfo.address)
+                  setUserInfo(walletInfo.userInfo)
                   setConnectedAccount(walletInfo.address)
                   setW3authPrivatekey(walletInfo.pk)
                 }}
               >
                 Login
-              </button>         
+              </button>
             )}
           </div>
         </div>

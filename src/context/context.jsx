@@ -3,13 +3,10 @@ import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import { delay } from "../utils/delay";
 import { getIexec } from "../shared/getIexec";
-import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
 
 import RPC from "../shared/web3RPC"
 
 import { isLightColor } from "../utils/isLightColor";
-
-import * as ace from "../shared/constants";
 
 import { setModalContent } from "../components/Modal/ModalController";
 import { initWeb3auth } from "../shared/web3AuthLogin";
@@ -25,6 +22,7 @@ export const AceProvider = ({ children }) => {
   const [web3AuthProvider, setWeb3AuthProvider] = useState();
   const [web3authConnectedAccount, setWeb3authConnectedAccount] = useState("");
   const [w3authPrivatekey, setW3authPrivatekey] = useState("");
+  const [userInfo, setUserInfo] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [addressTo, setAddressTo] = useState("");
   const [price, setPrice] = useState(0);
@@ -39,8 +37,7 @@ export const AceProvider = ({ children }) => {
   const [imgUrl, setImgUrl] = useState("");
   const [step, setStep] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
-  const [datasetUrl, setDatasetUrl] = useState("");
-  const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
+  const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
   const auth = "Basic " + Buffer.from(
     process.env.REACT_APP_INFURA_ID +
@@ -188,7 +185,7 @@ export const AceProvider = ({ children }) => {
       //redirect: "follow"
     };
 
-    if (url.indexOf('cloudflare') == -1 && url.indexOf('pinata') == -1) {
+    if (url.indexOf('cloudflare') === -1 && url.indexOf('pinata') === -1) {
       //options.headers =  {"Access-Control-Allow-Origin": ["*"] }
     }
     try {
@@ -211,21 +208,6 @@ export const AceProvider = ({ children }) => {
   };
 
 
-  const pushOrder = async (address, requesterrestrict) => {
-    try {
-      let iexec = getIexec();
-      const order = await iexec.order.createDatasetorder({ dataset: address, volume: 100, apprestrict: ace.APP_ADDRESS, requesterrestrict: requesterrestrict })
-      if (IS_DEBUG) console.log("Unsigned order", order)
-      const signedOrder = await iexec.order.signDatasetorder(order)
-      if (IS_DEBUG) console.log("Signed order", signedOrder)
-      const pushedOrder = await iexec.order.publishDatasetorder(signedOrder)
-      if (IS_DEBUG) console.log(pushedOrder);
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-
   return (
     <AceContext.Provider
       value={{
@@ -234,6 +216,7 @@ export const AceProvider = ({ children }) => {
         setConnectedAccount,
         web3authConnectedAccount, setWeb3authConnectedAccount,
         w3authPrivatekey, setW3authPrivatekey,
+        userInfo, setUserInfo,
         initWeb3Modal,
         web3auth, setWeb3Auth,
         isLoading,
@@ -262,7 +245,6 @@ export const AceProvider = ({ children }) => {
         checkFileAvailability,
         isAvailable,
         setIsAvailable,
-        pushOrder,
         getNextIpfsGateway,
         backgroundIsLight,
         setBackgroundIsLight
