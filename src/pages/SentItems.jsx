@@ -11,15 +11,12 @@ import ReactTooltip from 'react-tooltip';
 import { openExplorer } from "../utils/openExplorer";
 import fetchData from "../shared//fetchData";
 const APP_NAME = process.env.REACT_APP_NAME;
-const IS_DEBUG = process.env.REACT_APP_IS_DEBUG == 'true';
+const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
 const SentItems = () => {
 
   const { connectedAccount } = useContext(AceContext);
 
-  const WAITING_FOR_REQUEST = 0;
-  const REQUESTING = 1;
-  const READY_FOR_DOWNLOAD = 2;
   const STATUS_OPEN_ORDER = "open";
   const STATUS_COMPLETED_ORDER = "COMPLETED";
   const STATUS_ACTIVE_ORDER = "ACTIVE";
@@ -29,7 +26,6 @@ const SentItems = () => {
 
   const [data, setData] = useState(false);
   const [isLoading, setIsLoading] = useState(true) ;
-  
 
 
   useRequest(
@@ -42,7 +38,6 @@ const SentItems = () => {
     
     { pollingInterval: ace.POLLING_INTERVAL }
   );
-
   
   
   const [isReadyForDownload] = useState(false)

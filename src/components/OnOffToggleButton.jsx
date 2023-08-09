@@ -3,7 +3,7 @@ import { AceContext } from "../context/context";
 import "tw-elements";
 
 const OnOffToggleButton = () => {
-  const { creativeMode, setCreativeMode: setCreativeMode } = useContext(AceContext);
+  const { creativeMode, setCreativeMode } = useContext(AceContext);
 
   const handleOnClick = () => {
     setCreativeMode((creativeMode) => !creativeMode);

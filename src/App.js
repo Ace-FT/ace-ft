@@ -1,25 +1,19 @@
 import React, { useContext, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Web3Auth } from "@web3auth/modal";
-import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
 import NavBar from "./components/Navbar";
 import Home from "./pages/Home";
 import Inbox from "./pages/Inbox";
 import SentItems from "./pages/SentItems";
 import Settings from "./pages/Settings";
 import { AceContext } from "./context/context";
-import PersonnalData from "./pages/Settings/PersonnalData";
-import Params from "./pages/Settings/Params";
 import Protected from "./pages/Protected";
 import Footer from "./components/Footer";
-import Helmet from "react-helmet";
 import Modal from "./components/Modal/Modal" ;
 import {toggleModal} from "./components/Modal/ModalController" ;
-import {getIexec} from "./shared/getIexec";
 import { initWeb3auth } from "./shared/web3AuthLogin";
 
 function App() {
-  const { connectedAccount, initWeb3Modal, connectWallet, bgUrls, background, creativeMode, setCreativeMode } = useContext(AceContext);
+  const { connectedAccount, connectWallet, bgUrls, creativeMode } = useContext(AceContext);
   const { ethereum } = window;
 
   document.onkeydown = function (evt) {
@@ -113,17 +107,13 @@ function App() {
                   }
                 />
                 <Route
-                  path="/settings"
+                  path="/info"
                   element={
                     <Protected isLoggedIn={isConnected}>
                       <Settings />
                     </Protected>
                   }
-                >
-                  <Route index element={<PersonnalData />} />
-                  <Route path="personnal-data" element={<PersonnalData />} />
-                  <Route path="params" element={<Params />} />
-                </Route>
+                />
               </Routes>
             </main>
           </div>

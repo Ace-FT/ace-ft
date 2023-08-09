@@ -50,26 +50,26 @@ function Home() {
           <SendForm />
           <StepBar />
         </div>
-          <div className="credits-container">
-            { creativeMode && (
-              <>
-                <h4 className={getCreditClassName()}><u>Credits</u></h4>
-              
-                {bgCreator && bgCreator.links ? (
-                    <><p className={getCreditClassName()}>Author: <a className={getCreditClassName()} href={bgCreator.links.html} target="_blank">{bgCreator.name} ({bgCreator.username})</a></p>
-                    <p className={getCreditClassName()}>ImageId:  <a className={getCreditClassName()} href={background.links.html} target="_blank">{background.id}</a></p></>
-                  ) : (<p></p>)}
+        <div className="credits-container">
+          { creativeMode && (
+            <>
+              <h4 className={getCreditClassName()}><u>Credits</u></h4>
+            
+              {bgCreator && bgCreator.links ? (
+                  <><p className={getCreditClassName()}>Author: <a className={getCreditClassName()} href={bgCreator.links.html} target="_blank">{bgCreator.name} ({bgCreator.username})</a></p>
+                  <p className={getCreditClassName()}>ImageId:  <a className={getCreditClassName()} href={background.links.html} target="_blank">{background.id}</a></p></>
+                ) : (<p></p>)}
 
-                <p className={getCreditClassName()}>Source: Unsplash</p>
-                {bgCreatorSocial && bgCreatorSocial.instagram_username && bgCreatorSocial.instagram_username.length > 0 ? (
-                  <p className={getCreditClassName()}>Instagram : <a className={getCreditClassName()} href={"https://instagram.com/" + bgCreatorSocial.instagram_username} target="_blank">{bgCreatorSocial.instagram_username}</a></p>
-                ) : (
-                  <div>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
+              <p className={getCreditClassName()}>Source: Unsplash</p>
+              {bgCreatorSocial && bgCreatorSocial.instagram_username && bgCreatorSocial.instagram_username.length > 0 ? (
+                <p className={getCreditClassName()}>Instagram : <a className={getCreditClassName()} href={"https://instagram.com/" + bgCreatorSocial.instagram_username} target="_blank">{bgCreatorSocial.instagram_username}</a></p>
+              ) : (
+                <div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </>
   )

@@ -5,7 +5,7 @@ import { delay } from "../../utils/delay";
 import { isAddress } from "../../utils/isAddress";
 import { IExecDataProtector } from "@iexec/dataprotector";
 
-import { encryptFile, encryptDataset } from "./encryption.js";
+import { encryptFile } from "./encryption.js";
 import uploadData from "./upload";
 import { generateDatasetName } from "../../utils/datasetNameGenerator.ts";
 import { jsonToBuffer } from "../../utils/jsonToBuffer";
@@ -21,7 +21,7 @@ const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
 
 const SendForm = () => {
-  const { connectedAccount, connectWallet, getNextIpfsGateway } = useContext(AceContext);
+  const { connectedAccount, getNextIpfsGateway } = useContext(AceContext);
 
   const { setIsLoading, addressTo, setAddressTo, step, setStep, price, setPrice, message, setMessage, selectedFiles, setSelectedFiles, checkFileAvailability, setIsAvailable } = useContext(AceContext);
   const inputFile = useRef(null);
