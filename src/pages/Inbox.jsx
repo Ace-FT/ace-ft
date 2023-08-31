@@ -188,7 +188,7 @@ function Inbox() {
             <tr>
               <th className="text-center">Received date</th>
               <th className="text-center">From</th>
-              <th className="text-center invisible-element">Price (in RLC)</th>
+              <th className="text-center">Price (in RLC)</th>
               <th className="text-center">Status</th>
               <th className="text-center px-8">&nbsp;</th>
             </tr>
@@ -202,7 +202,7 @@ function Inbox() {
                     <tr className="text-center" key={i}>
                       <td>{formatDate(inboxItem.sendTimestamp)}</td>
                       <td>{inboxItem.dataOwner}</td>
-                      <td className="invisible-element">{inboxItem.price}</td>
+                      <td>{inboxItem.price}</td>
                       <td>
                         {inboxItem.status === STATUS_OPEN_ORDER && (
                           <p>
@@ -286,9 +286,9 @@ function Inbox() {
             ) : (
               <tr class="text-center">
                 {isLoading ? (
-                  <td colSpan={4}>LOADING ...</td>
+                  <td colSpan={5}>LOADING ...</td>
                 ) : 
-                  <td colSpan={4}>You have no pending files in your inbox.</td>
+                  <td colSpan={5}>You have no pending files in your inbox.</td>
                 }
               </tr>
             )}

@@ -96,7 +96,7 @@ const SentItems = () => {
             <tr>
               <th className="text-center">Send date</th>
               <th className="text-center">To</th>
-              <th className="text-center invisible-element">Price (in RLC)</th>
+              <th className="text-center">Price (in RLC)</th>
               <th className="text-center">Status</th>
               <th className="text-center px-8">&nbsp;</th>
             </tr>
@@ -107,15 +107,9 @@ const SentItems = () => {
               inboxItems.sort((a, b) => b.sendTimestamp - a.sendTimestamp).map((inboxItem, i) => {
                 return (
                   <tr class="text-center" key={i}>
-                    <td>
-                      {formatDate(inboxItem.sendTimestamp)}
-                    </td>
-                    <td>
-                      {inboxItem.to}
-                    </td>
-                    <td className="invisible-element">
-                      {inboxItem.price}
-                    </td>
+                    <td>{formatDate(inboxItem.sendTimestamp)}</td>
+                    <td>{inboxItem.to}</td>
+                    <td>{inboxItem.price}</td>
                     <td>
                       {
                         inboxItem.status === STATUS_OPEN_ORDER ?
@@ -159,9 +153,9 @@ const SentItems = () => {
             
               <tr class="text-center">
               {isLoading ? (
-                <td colSpan={4}>LOADING ...</td>
+                <td colSpan={5}>LOADING ...</td>
               ) : 
-                <td colSpan={4}>No sent item found.</td>
+                <td colSpan={5}>No sent item found.</td>
               }
             </tr>           
         )}
