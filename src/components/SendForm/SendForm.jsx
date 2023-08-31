@@ -2,6 +2,7 @@ import React, { useRef, useState, useContext } from "react";
 import { AceContext } from "../../context/context";
 import * as ace from "../../shared/constants";
 import { delay } from "../../utils/delay";
+import {fileEncKey, fromFileToEncryptedFile} from "../../utils/fileAESEncryption";
 import { isAddress } from "../../utils/isAddress";
 import { IExecDataProtector } from "@iexec/dataprotector";
 
@@ -66,7 +67,7 @@ const SendForm = () => {
         url: fileUrl,
         fn: fileName,
         message: message,
-        size: fileSize
+        size: fileSize.toString()
       },
       name: datasetName
     })
@@ -359,7 +360,10 @@ const SendForm = () => {
                   setStep(PROTECTING_DATA);
                   const datasetName = generateDatasetName(connectedAccount, resolvedAddressTo)
                   document.body.style.cursor = 'wait';
-
+                  console.log("fileEncKey\n", fileEncKey)
+                  let test = fileEncKey.toString('utf-8')
+                  console.log("fileEncKey string", test)
+                  console.log("fileEncKey buffer back\n", Buffer.from(test))
                   await protectData(fileUrl, fileName, message, price, fileSize, resolvedAddressTo, datasetName)
 
                   document.body.style.cursor = 'default';

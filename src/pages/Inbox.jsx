@@ -131,13 +131,13 @@ function Inbox() {
     setCurrentDownloading(inboxItem.taskid);
     const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
     let resultFileUrl = resultFile.url;
-    const resultFileKey = resultFile.key;
-    const resultFileName = resultFile.name;
-    if(IS_DEBUG)
+    // const resultFileKey = resultFile.key;
+    const resultFileName = resultFile.fn;
+    // if(IS_DEBUG)
       console.log("resultFileUrl", resultFileUrl);
-    if(IS_DEBUG)
-      console.log("resultFileKey", resultFileKey);
-    if(IS_DEBUG)
+    // if(IS_DEBUG)
+      // console.log("resultFileKey", resultFileKey);
+    // if(IS_DEBUG)
       console.log("resultFileName", resultFileName);
     var ok = false;
     let trycount = 0;
@@ -161,7 +161,7 @@ function Inbox() {
 
     if(ok) {
       const fileObject = await fetchFromFileToDownloadableFileObject(resultFileUrl);
-      let decryptedFile = fromEnryptedFileToFile(fileObject, resultFileKey);
+      let decryptedFile = fromEnryptedFileToFile(fileObject);
       let fileBlob = new Blob([decryptedFile], {type: 'application/octet-stream'});
       saveFile(fileBlob, resultFileName);
     }
@@ -196,7 +196,7 @@ function Inbox() {
           <tbody>
             {inboxItems && inboxItems.length > 0 ? (
               inboxItems
-                .sort((a, b) => b.sendDate - a.sendDate)
+                .sort((a, b) => b.sendTimestamp - a.sendTimestamp)
                 .map((inboxItem, i) => {
                   return (
                     <tr className="text-center" key={i}>
