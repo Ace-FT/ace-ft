@@ -18,10 +18,10 @@ const ProfileIdentifier = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const copyAddressToClipboard = () => {
-    document.getElementById("walletAddressContainer").innerHTML = `Copied! ${shortenAddress(connectedAccount)} 👋`;
+    document.getElementById("walletAddressContainer").innerHTML = `Copied! ${shortenAddress(connectedAccount)}`;
 
     setTimeout(() => {
-      document.getElementById("walletAddressContainer").innerHTML = `<><ProfileIdentifier /><>`;
+      document.getElementById("walletAddressContainer").innerHTML = `${shortenAddress(connectedAccount)}<>`;
     }, 1000)
 
     copyTextToClipboard(connectedAccount);
@@ -29,7 +29,7 @@ const ProfileIdentifier = () => {
 
   
   useEffect(() => {
-    console.log(userInfo.name)
+    if (userInfo && userInfo.name) console.log(userInfo.name)
   }, [userInfo])
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -50,12 +50,12 @@ const ProfileIdentifier = () => {
               ) : (
                 <div className="flex items-center">
                   {shortenAddress(connectedAccount)}
-                  <img src="#" className="ml-3 w-1/5 rounded-full" />{/* Ethereum logo */}
+                  <img src="./ethlogo.png" className="ml-3 w-1/5 rounded-full" />{/* Ethereum logo */}
                 </div> 
               )}
             </a>
             <ul className="sous">
-              <li className="cursor-pointer px-4 py-2 hover:bg-gray-100" onClick={copyAddressToClipboard}>
+              <li id="walletAddressContainer" className="cursor-pointer px-4 py-2 hover:bg-gray-100" onClick={copyAddressToClipboard}>
                 {shortenAddress(connectedAccount)}
               </li>
               <li className="cursor-pointer px-4 py-2 hover:bg-gray-100">
@@ -75,51 +75,6 @@ const ProfileIdentifier = () => {
             </ul>
           </li>
         </ul>
-        {/* <div className="flex items-center justify-center mx-3 clickable" onClick={copyAddressToClipboard} id="walletAddressContainer" data-tip="Click to copy">
-          {userInfo && userInfo.name ? (
-            <>
-              {userInfo.name}
-              <img src={userInfo.profileImage} className="ml-3 w-1/5 rounded-full" />
-            </>
-          ) : (
-            <>
-              {shortenAddress(connectedAccount)}
-              <img src="#" className="ml-3 w-1/5 rounded-full" />{/* Ethereum logo */}
-            {/* </> 
-          {/* )}
-        </div>
-
-        <button
-          onClick={toggleMenu}
-          className="text-white focus:outline-none ml-2"
-          aria-label="Menu"
-        >
-          {/* Utilisez une icône de flèche vers le bas ici (par exemple, un emoji flèche vers le bas) */}
-          {/* ▼
-        </button> */}
-        {/* {isOpen && (
-          <div id="arrow-menu" className="mt-2 rounded-lg bg-iexwhite text-iexblk shadow-lg block">
-            <ul className="py-2">
-              <li className="cursor-pointer px-4 py-2 hover:bg-gray-100">
-                {shortenAddress(connectedAccount)}
-              </li>
-              <li className="cursor-pointer px-4 py-2 hover:bg-gray-100">
-                Info
-              </li>
-              <li
-                className="cursor-pointer px-4 py-2 hover:bg-gray-100"
-                onClick={async () => {
-                  const walletInfo = await walletLogout();
-                  setWeb3authConnectedAccount(walletInfo.address);
-                  setConnectedAccount(walletInfo.address);
-                  setW3authPrivatekey("");
-                }}
-              >
-                Logout
-              </li>
-            </ul>
-          </div>
-        )} */}
       </div>
     </>
   );

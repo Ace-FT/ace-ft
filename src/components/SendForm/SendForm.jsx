@@ -50,9 +50,9 @@ const SendForm = () => {
     optimistic = checkbox.checked;
   };
 
-  const protectData = async (fileUrl, fileName, message, fileSize, requesterrestrict, datasetName) => {
+  const protectData = async (fileUrl, fileName, message, accessPrice, fileSize, requesterrestrict, datasetName) => {
     const web3provider = await setIexecProvider();
-    console.log(web3provider)
+    console.log("web3provider", web3provider);
     const dataProtector = new IExecDataProtector(web3provider, 
     //   {
     //   iexecOptions: {
@@ -76,7 +76,8 @@ const SendForm = () => {
       protectedData: datasetAddress,
       authorizedApp: ace.APP_ADDRESS,
       authorizedUser: requesterrestrict, 
-      numberOfAccess: ace.DEFAULT_NUMBER_OF_ACCESS_VOLUME
+      numberOfAccess: ace.DEFAULT_NUMBER_OF_ACCESS_VOLUME,
+      pricePerAccess: accessPrice
     })
 
     console.log("protected data", protectedData)
@@ -278,14 +279,14 @@ const SendForm = () => {
                 placeholder="Message"
               />
             </div>
-            <div className="invisible-element">
+            <div className="pb-4">
               <input
                 className="w-full border-b border-gray-500 bg-iexwhite pb-2 focus:outline-none"
                 type="number"
                 autoComplete="off"
                 value={price}
                 min="0"
-                step="0.01"
+                step="0.1"
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="Price (RLC)"
               />
@@ -357,26 +358,15 @@ const SendForm = () => {
                   // const encryptedDataset = await encryptDataset(fileUrl, fileName, message, fileSize);
                   setStep(PROTECTING_DATA);
                   const datasetName = generateDatasetName(connectedAccount, resolvedAddressTo)
-                  await protectData(fileUrl, fileName, message, fileSize, resolvedAddressTo, datasetName)
+                  document.body.style.cursor = 'wait';
+
+                  await protectData(fileUrl, fileName, message, price, fileSize, resolvedAddressTo, datasetName)
 
                   document.body.style.cursor = 'default';
-                  // if (!ok) { alert("The file is not found on IPFS. Please try again later."); setReady(); return; }
-
 
                   document.body.style.cursor = 'wait';
                   // await delay(1)
 
-                  // const datasetName = generateDatasetName(connectedAccount, resolvedAddressTo);
-                  // const checksum = await generateEncryptedFileChecksum(encryptedDataset);
-                  // const datasetAddress = await deployDataset(datasetName, datasetUrl, checksum);
-                  // document.body.style.cursor = 'default';
-
-                  // await pushSecret(datasetAddress, datasetEncryptionKey);
-                  // const isSecretPushed = await iexec.dataset.checkDatasetSecretExists(datasetAddress);
-                  // document.body.style.cursor = 'default';
-
-                  // document.body.style.cursor = 'wait';
-                  // await pushOrder(datasetAddress, resolvedAddressTo);
                   document.body.style.cursor = 'default';
                   setStep(FINISHED);
                   setReady();
@@ -385,8 +375,6 @@ const SendForm = () => {
               >
                 Transfer
               </button>
-
-
             </div>
           </div>
         </div>

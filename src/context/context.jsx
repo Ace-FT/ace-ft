@@ -25,7 +25,7 @@ export const AceProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [addressTo, setAddressTo] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState();
   const [message, setMessage] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [background, setBackground] = useState({});
