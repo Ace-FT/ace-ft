@@ -132,33 +132,6 @@ const NavBar = () => {
                 <p className="ml-8 text-right"
                   // onClick={copyAddressToClipboard}
                 >
-                  {/* {userInfo && userInfo.name ? (
-                    <>
-                      <div className="flex items-center justify-center">
-                        {userInfo.name}
-                        <img src={userInfo.profileImage} className="rounded-full ml-3 w-1/5" />
-                        <button
-                          onClick={toggleMenu}
-                          className="text-white focus:outline-none"
-                          aria-label="Menu"
-                        >
-                          {/* Utilisez une icône de flèche vers le bas ici (par exemple, un emoji flèche vers le bas) */}
-                          {/* ▼
-                        </button>
-                        {isOpen && (
-                      <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-lg">
-                        <ul className="py-2">
-                          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Info</li>
-                          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Logout</li>
-                        </ul>
-                      </div>
-                    )}
-                      </div>
-                    </>
-                  ) : (
-                    <>Hello {shortenAddress(connectedAccount)}</>
-                  )} */}
-
                   <ProfileIdentifier />
                 </p>
                 {/* <img src="/exit_logo2.svg" alt="Exit logo"

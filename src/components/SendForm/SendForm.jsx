@@ -52,7 +52,7 @@ const SendForm = () => {
 
   const protectData = async (fileUrl, fileName, message, fileSize, requesterrestrict, datasetName) => {
     const web3provider = await setIexecProvider();
-    console.log(web3provider)
+    console.log("web3provider", web3provider);
     const dataProtector = new IExecDataProtector(web3provider, 
     //   {
     //   iexecOptions: {
@@ -385,8 +385,6 @@ const SendForm = () => {
               >
                 Transfer
               </button>
-
-
             </div>
           </div>
         </div>
