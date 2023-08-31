@@ -30,10 +30,11 @@ const fromFileToEncryptedFile = (file) => {
     iv: iv.toString("hex"),
     //encryptedData: encrypted.toString('hex')
     encryptedData: encrypted,
+    encrKey: fileEncKey
   };
 }
 
-const fromEnryptedFileToFile = (encryptedFile, key) => {
+const fromEnryptedFileToFile = (encryptedFile) => {
     const iv = Buffer.from(encryptedFile.iv, 'hex');
     //let encryptedText =
     //  Buffer.from(text.encryptedData, 'hex');
@@ -41,7 +42,7 @@ const fromEnryptedFileToFile = (encryptedFile, key) => {
     let encryptedText = Buffer.from(encryptedFile.encryptedData);
 
     // Creating Decipher
-    let decipher = crypto.createDecipheriv(ALGORITHM, Buffer.from(key), iv);
+    let decipher = crypto.createDecipheriv(ALGORITHM, Buffer.from(encryptedFile.encrKey), iv);
 
     // Updating encrypted text
     let decrypted = decipher.update(encryptedText);
