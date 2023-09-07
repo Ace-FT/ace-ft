@@ -13,7 +13,7 @@ import { jsonToBuffer } from "../../utils/jsonToBuffer";
 import { getIexec } from "../../shared/getIexec";
 
 import ReactTooltip from 'react-tooltip';
-import { setModalContent, toggleModal } from "../Modal/ModalController";
+import { setModalContent } from "../Modal/ModalController";
 import Modal from "../Modal/Modal";
 import {setIexecProvider} from "../../shared/web3AuthLogin";
 const { ethereum } = window;
@@ -94,7 +94,7 @@ const SendForm = () => {
 
   var setReady = () => {
     document.getElementById("btn-transfer").classList.remove("btn-inverted");
-    document.getElementById("btn-transfer").innerText = "Tranfer";
+    document.getElementById("btn-transfer").innerText = "Transfer";
     document.getElementById("btn-transfer").disabled = true;
   }
 
@@ -360,20 +360,16 @@ const SendForm = () => {
                   setStep(PROTECTING_DATA);
                   const datasetName = generateDatasetName(connectedAccount, resolvedAddressTo)
                   document.body.style.cursor = 'wait';
-                  console.log("fileEncKey\n", fileEncKey)
-                  let test = fileEncKey.toString('utf-8')
-                  console.log("fileEncKey string", test)
-                  console.log("fileEncKey buffer back\n", Buffer.from(test))
+
                   await protectData(fileUrl, fileName, message, price, fileSize, resolvedAddressTo, datasetName)
 
                   document.body.style.cursor = 'default';
 
                   document.body.style.cursor = 'wait';
-                  // await delay(1)
 
-                  document.body.style.cursor = 'default';
                   setStep(FINISHED);
                   setReady();
+                  document.body.style.cursor = 'default';
                   showModalFileSent();
                 }}
               >

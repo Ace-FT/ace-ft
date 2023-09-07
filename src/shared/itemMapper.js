@@ -1,6 +1,5 @@
 import * as ace from "./constants";
 import { getIexec } from "./getIexec";
-import inboxItemStruct from "../utils/inboxItemStruct.ts";
 import { setIexecProvider } from "./web3AuthLogin";
 import { getProtectedDataAccess } from "../dataprotector-extentions/fetchMyGrantedAccess.ts";
 
@@ -51,7 +50,7 @@ export const mapInboxOrders = async(connectedAccount, structuredResponseItems) =
     }));
 
     mapped = mapped.filter((item) => {
-        return (null != item && item.to && item.to.toLowerCase() === connectedAccount) || (null != item && item.to && item.to === connectedAccount);
+        return (null !== item && item.to && item.to.toLowerCase() === connectedAccount && item.status !== undefined) || (null !== item && item.to && item.to === connectedAccount && item.status !== undefined);
     })
     await ensLookup(mapped);
 
@@ -107,7 +106,7 @@ export const mapSentItemsOrders = async(connectedAccount, structuredResponseItem
     }));
 
     mapped = mapped.filter((item) => {
-        return (null !== item && item.dataOwner && item.dataOwner.toLowerCase() === connectedAccount) || (null !== item && item.dataOwner === connectedAccount);
+        return (null !== item && item.dataOwner && item.dataOwner.toLowerCase() === connectedAccount && item.status !== undefined) || (null !== item && item.dataOwner === connectedAccount && item.status !== undefined);
     })
     await ensLookup(mapped);
 

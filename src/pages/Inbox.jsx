@@ -76,7 +76,6 @@ function Inbox() {
   }, [isLoading])
 
 
-
   useEffect(() => {
     const doMapping = async () => {
       try {
@@ -104,11 +103,12 @@ function Inbox() {
   useEffect(() => {
     async function processEach() {
       if (inboxItems) {
-        console.log("inboxItems===>", inboxItems); //if(IS_DEBUG) 
+        if(IS_DEBUG) console.log("inboxItems===>", inboxItems); 
         for (var i = 0; i < inboxItems.length; i++) {
           console.log(i, inboxItems[i])
           if (inboxItems[i].status === STATUS_COMPLETED_ORDER) {
             console.log("Get session storage", (inboxItems[i].taskid), sessionStorage.getItem(inboxItems[i].taskid))
+            
             if (sessionStorage.getItem(inboxItems[i].taskid)) {
               sessionStorage.removeItem(inboxItems[i].taskid)
               await processDownload(inboxItems[i])
@@ -131,31 +131,24 @@ function Inbox() {
     setCurrentDownloading(inboxItem.taskid);
     const resultFile = await fromDatasetToFileJSON(inboxItem.taskid);
     let resultFileUrl = resultFile.url;
-    // const resultFileKey = resultFile.key;
     const resultFileName = resultFile.fn;
-    // if(IS_DEBUG)
-      console.log("resultFileUrl", resultFileUrl);
-    // if(IS_DEBUG)
-      // console.log("resultFileKey", resultFileKey);
-    // if(IS_DEBUG)
-      console.log("resultFileName", resultFileName);
+    if(IS_DEBUG) console.log("resultFileUrl", resultFileUrl);
+    if(IS_DEBUG) console.log("resultFileName", resultFileName);
+
     var ok = false;
     let trycount = 0;
 
     while(!ok && trycount < 50) {
       ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...")); //fileUrl
-      if(IS_DEBUG)
-        console.log("ok 1", ok, resultFileUrl);
+      if(IS_DEBUG) console.log("ok 1", ok, resultFileUrl);
       if(!ok) {
         await delay(2);
         ok = await checkFileAvailability(resultFileUrl, () => console.log("checking ended...")); //fileUrl
-        if(IS_DEBUG)
-          console.log("ok 2", ok, resultFileUrl);
+        if(IS_DEBUG) console.log("ok 2", ok, resultFileUrl);
 
         trycount++;
         resultFileUrl = getNextIpfsGateway(resultFileUrl, trycount); // await useNextIpfsGateway(resultFileUrl, trycount); 
-        if(IS_DEBUG)
-          console.log("next  resultFileUrl", resultFileUrl, "trycount", trycount);
+        if(IS_DEBUG) console.log("next  resultFileUrl", resultFileUrl, "trycount", trycount);
       }
     }
 
@@ -209,7 +202,7 @@ function Inbox() {
                             <button
                               className="btn h-6"
                               onClick={async () => {
-                                await requestDataset(inboxItem.id, connectedAccount, inboxItem.from, inboxItem.sendDate);
+                                await requestDataset(inboxItem.id, connectedAccount, inboxItem.from, inboxItem.sendDate, inboxItem.price);
                                 localStorage.setItem(`${inboxItem.taskid}`, `loading`)
                                 //window.location.reload(false);
                               }}

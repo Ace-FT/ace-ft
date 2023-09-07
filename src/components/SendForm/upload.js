@@ -26,9 +26,7 @@ const client = create({
  * @returns the IPFS location file URL
  */
 const uploadData = async(encrypted) => {
-    //UPLOADING
-    console.log("encrypted", encrypted) ;
-
+    //console.log("encrypted", encrypted) ;
     const uploaded = await client.add(encrypted, {
         progress: (prog) => { 
            if(IS_DEBUG) console.log(`received: ${prog}`)

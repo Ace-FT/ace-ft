@@ -6,8 +6,8 @@ import {requestAccess} from "../../dataprotector-extentions/requestAccess.ts";
  * @param {string} datasetAddress address of the requested dataset
  * @param {string} datasetRequester wallet address requesting the dataset
  */
-const requestDataset = async(datasetAddress, datasetRequester, datasetOwner, sendDate) => {
-    const {deal, task} = await requestAccess(datasetRequester, datasetAddress);
+const requestDataset = async(datasetAddress, datasetRequester, datasetOwner, sendDate, price) => {
+    const {deal, task} = await requestAccess(datasetRequester, datasetAddress, price);
     console.log("Deal details", deal, "\nTask details", task) //if (IS_DEBUG) 
 };
 
