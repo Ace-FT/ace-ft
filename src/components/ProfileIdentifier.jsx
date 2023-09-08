@@ -1,4 +1,5 @@
 import { disconnect } from "process";
+import { getIexec } from "../shared/getIexec";
 import React, { useContext, useEffect, useState } from "react";
 import { walletLogin, walletLogout } from "../shared/web3AuthLogin";
 import { AceContext } from "../context/context";
@@ -7,6 +8,8 @@ import { shortenAddress } from "../utils/shortenAddress";
 
 const ProfileIdentifier = () => {
   const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === "true";
+  const iexec = getIexec();
+
   const {
     connectedAccount,
     setConnectedAccount,
@@ -16,6 +19,7 @@ const ProfileIdentifier = () => {
   } = useContext(AceContext);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [balance, setBalance] = useState()
 
   const copyAddressToClipboard = () => {
     document.getElementById("walletAddressContainer").innerHTML = `Copied! ${shortenAddress(connectedAccount)}`;
@@ -27,7 +31,19 @@ const ProfileIdentifier = () => {
     copyTextToClipboard(connectedAccount);
   }
 
-  
+  useEffect(() => {
+    const getBalance = async () => {
+      let balance = await iexec.account.checkBalance(connectedAccount);
+      console.log("balance,", balance.stake.toString())
+      
+      const newBalance = parseInt(balance.stake.toString());
+      console.log(newBalance)
+      setBalance(newBalance/10**9);
+    }
+
+    getBalance()
+  }, [balance])
+
   useEffect(() => {
     if (userInfo && userInfo.name) console.log(userInfo.name)
   }, [userInfo])
@@ -59,7 +75,7 @@ const ProfileIdentifier = () => {
                 {shortenAddress(connectedAccount)}
               </li>
               <li className="cursor-pointer px-4 py-2 hover:bg-gray-100">
-                Info
+                {balance}
               </li>
               <li
                 className="cursor-pointer px-4 py-2 hover:bg-gray-100"

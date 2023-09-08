@@ -109,7 +109,7 @@ const SentItems = () => {
                   <tr class="text-center" key={i}>
                     <td>{formatDate(inboxItem.sendTimestamp)}</td>
                     <td>{inboxItem.to}</td>
-                    <td>{inboxItem.price}</td>
+                    <td>{(parseInt(inboxItem.price)/10**9)}</td>
                     <td>
                       {
                         inboxItem.status === STATUS_OPEN_ORDER ?

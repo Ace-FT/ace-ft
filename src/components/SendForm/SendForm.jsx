@@ -78,7 +78,7 @@ const SendForm = () => {
       authorizedApp: ace.APP_ADDRESS,
       authorizedUser: requesterrestrict, 
       numberOfAccess: ace.DEFAULT_NUMBER_OF_ACCESS_VOLUME,
-      pricePerAccess: accessPrice
+      pricePerAccess: accessPrice*10**9
     })
 
     console.log("protected data", protectedData)

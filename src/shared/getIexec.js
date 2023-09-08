@@ -29,7 +29,6 @@ export const getIexec = function (pk) {
 
         iexec = new IExec(configArgs, configOptions);
         
-        
         if (IS_DEBUG) console.log("Created new instance of iExec");
         console.log(iexec)
     }

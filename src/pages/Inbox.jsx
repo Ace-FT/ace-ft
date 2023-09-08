@@ -195,7 +195,7 @@ function Inbox() {
                     <tr className="text-center" key={i}>
                       <td>{formatDate(inboxItem.sendTimestamp)}</td>
                       <td>{inboxItem.dataOwner}</td>
-                      <td>{inboxItem.price}</td>
+                      <td>{(parseInt(inboxItem.price)/10**9)}</td>
                       <td>
                         {inboxItem.status === STATUS_OPEN_ORDER && (
                           <p>
@@ -221,9 +221,9 @@ function Inbox() {
                             <div id={inboxItem.taskid} className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `10%`}}>10%</div>
                           </div>                           */}
                           {console.log(new Date().getTime(), inboxItem.downloadTimestamp.getTime())}
-                          {new Date().getTime() - inboxItem.downloadTimestamp.getTime() < 240000 ? (
+                          {new Date().getTime() - inboxItem.downloadTimestamp.getTime() < 45000 ? (
                             <div className="w-full bg-gray-200 rounded-full">
-                              <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `15%`}}>15%</div>
+                              <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `17%`}}>17%</div>
                             </div>
                           ) : (
                             <div className="w-full bg-gray-200 rounded-full">

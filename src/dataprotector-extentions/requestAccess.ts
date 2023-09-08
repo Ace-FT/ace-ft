@@ -44,16 +44,8 @@ export const requestAccess = async (accessRequester: string, protectedDataAddres
 
     let max_desired_app_order_price: number;
     let min_desired_app_order_price: number;
-    // if (price > 5) {
-    //   max_desired_app_order_price = 0.5
-    // } else if (price > 2.5) {
-    //   max_desired_app_order_price = 0.25
-    // } else if (price > 0.1) {
-    //   max_desired_app_order_price = 0.05
-    // } else {
-    //   max_desired_app_order_price = 0
-    // }
-    if (price > 0.5) {
+
+    if (price > 0.5 * 10**9) {
       max_desired_app_order_price = 1
       min_desired_app_order_price = 1
     } else {
@@ -63,6 +55,8 @@ export const requestAccess = async (accessRequester: string, protectedDataAddres
     console.log("max_desired_app_order_price", max_desired_app_order_price)
 
 
+    max_desired_app_order_price = max_desired_app_order_price * 10**9
+    min_desired_app_order_price = min_desired_app_order_price * 10**9
     const desiredPriceAppOrderbook = appOrderbook.orders.filter(
       (order) =>
         order.order.appprice <= max_desired_app_order_price && order.order.appprice >= min_desired_app_order_price
