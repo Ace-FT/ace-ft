@@ -869,7 +869,11 @@ table {
 
 .sous li:hover{
     border-bottom: none;
-    background-color: RGBa(200, 200, 200,0.1);
+    background-color: RGBa(50, 45, 40, 0.02);
+    color: var(--iexec-yellow);
+}
+.sous li span .exit:hover {
+    border-bottom: none;
     color: var(--iexec-yellow);
 }
 .sous li {
