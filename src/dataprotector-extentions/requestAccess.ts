@@ -4,6 +4,7 @@ import { MAX_DESIRED_WORKERPOOL_ORDER_PRICE, WORKERPOOL_ADDRESS } from "./config
 
 export const requestAccess = async (accessRequester: string, protectedDataAddress: string, price: number) => {
   const iexec = getIexec();
+  const RLC = 10 ** 9;
 
   try {
     const isIpfsStorageInitialized = await iexec.storage.checkStorageTokenExists(accessRequester);
@@ -42,24 +43,28 @@ export const requestAccess = async (accessRequester: string, protectedDataAddres
       }
     );
 
-    let max_desired_app_order_price: number;
-    let min_desired_app_order_price: number;
+    let desiredOrderPrice: number;
 
-    if (price > 0.5 * 10**9) {
-      max_desired_app_order_price = 1
-      min_desired_app_order_price = 1
+
+    if (price <= 0.1 * RLC) {
+      desiredOrderPrice = 0
     } else {
-      max_desired_app_order_price = 0
-      min_desired_app_order_price = 0
+      if (price < 50 * RLC) {
+        desiredOrderPrice = 0.1 * RLC
+      } else if (price < 100 * RLC) {
+        desiredOrderPrice = 1 * RLC
+      } else if (price < 200 * RLC) {
+        desiredOrderPrice = 2 * RLC
+      } else {
+        desiredOrderPrice = 5 * RLC
+      }
     }
-    console.log("max_desired_app_order_price", max_desired_app_order_price)
+  
+    console.log("Desired app order price", desiredOrderPrice)
 
-
-    max_desired_app_order_price = max_desired_app_order_price * 10**9
-    min_desired_app_order_price = min_desired_app_order_price * 10**9
     const desiredPriceAppOrderbook = appOrderbook.orders.filter(
       (order) =>
-        order.order.appprice <= max_desired_app_order_price && order.order.appprice >= min_desired_app_order_price
+        order.order.appprice <= desiredOrderPrice && order.order.appprice >= desiredOrderPrice
     );
 
     console.log("desiredPriceAppOrderbook", desiredPriceAppOrderbook);
@@ -68,12 +73,6 @@ export const requestAccess = async (accessRequester: string, protectedDataAddres
     if (!desiredPriceAppOrder) {
       throw new Error("App order not found");
     }
-
-    const appOrder = appOrderbook?.orders[0]?.order;
-    if (!appOrder) {
-      throw new Error("App order not found");
-    }
-
 
     // Fetch workerpool order
     const workerpoolOrderbook = await iexec.orderbook.fetchWorkerpoolOrderbook({
@@ -127,7 +126,7 @@ export const requestAccess = async (accessRequester: string, protectedDataAddres
     const requestorder = await iexec.order.signRequestorder(requestorderToSign);
 
     const { dealid } = await iexec.order.matchOrders({
-      apporder: appOrder,
+      apporder: desiredPriceAppOrder,
       datasetorder: datasetorder,
       workerpoolorder: desiredPriceWorkerpoolOrder,
       requestorder: requestorder,
