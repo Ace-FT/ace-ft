@@ -128,7 +128,7 @@ A detailed description of the app execution order can be found [in this section 
 
 ### DataProtector
 Lauched with iExec v8, DataProtector is one of the new iExec dev tools. Implementing iExec dataProtector enables to simplify the whole workflow.
-After implementation of DataProtector, no more need to 
+
 The step 2 of the File Transfer process is simplified by the grantAccess fonction. When the sender calls grantAccess he deploys a dataset order on the marketplace. The following arguments of the dataset grantAccess will be used to define the governance rules:
 
 | Argument | Description |
