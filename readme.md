@@ -15,6 +15,7 @@ Moreover, the iExec protocols has a built-in data monetization capability that w
   - [Core principles](#core-principles)
     - [Modelization](#modelization)
     - [File Transfer process](#file-transfer-process)
+    - [iExec dev Tools: DataProtector](#dataprotector)
   - [Notification system](#notification-system)
   - [Transfer fees](#transfer-fees)
   - [Use cases](#use-cases)
@@ -81,7 +82,7 @@ The table below illustrates the 5 steps involved in the file transfer process an
 ![ace 5 step process](https://github.com/leootshudi59/ace-ft/blob/main/media/ace-steps.png#1)
 
 
-**Step 1 - Preparation**  
+#### Step 1 - Preparation
 The preparation stage consists in encrypting the File, uploading to [IPFS](https://ipfs.io), deploying the dataset (registration on the iExec marketplace) and sharing the encryption key with secret management service.
 ![ace's prepearation stage](https://bafybeigb3aodzwkqsf3kdffjodbluzxpvvpe5ixzz542jcec4swzl3wbqi.ipfs.infura-ipfs.io)
  
@@ -89,7 +90,7 @@ The preparation stage consists in encrypting the File, uploading to [IPFS](https
 The encryption and deployment steps are handled with the [iExec SDK](https://github.com/iExecBlockchainComputing/iexec-sdk) whilst the IPFS upload is a pretty straight forward process when using a library like [ipfs-http-client](https://www.npmjs.com/package/ipfs-http-client).
 You can refer to [This section of the iExec documentation](https://docs.iex.ec/for-developers/confidential-computing/sgx-encrypted-dataset) to get a more detailed explaination on how to use confidential assets with iExec.
 
-**Step 2 - Set governance rules**   
+#### Step 2 - Set governance rules  
 The second step of the process is for the sender/content creator to set the authorization for the recipient (beneficiary/requester) together with an optional monetization parameter (i.e. how much RLC will the requester need to pay in order to run the download app with my dataset).  
   
 **From an iExec prospective this step is just a dataset order being placed on the marketplace by the provider (sender/content creator).** The following arguments of the dataset order method will be used to define the governance rules:
@@ -105,11 +106,11 @@ The second step of the process is for the sender/content creator to set the auth
 A detailed description of dataset orders can be found [in this section of the documentation](https://docs.iex.ec/for-developers/advanced/manage-your-datasetorders#publish-a-custom-datasetorder)
 
 
-**Step 3 -  Beneficiary notification (non-iExec service)**   
+#### Step 3 -  Beneficiary notification (non-iExec service)   
 Users (recipients) can register their Telegram user IDs to get notified whenever a transfer is initiated with their 0x address as the beneficiary (i.e in iExec terms : when a dataset order has been placed for the download app for the user's 0x address as the `requesterrestrict` parameter).  
 Such a notification mechanism is a must-have for best User Experience
 
-**Step 4 - (optional payment) and file download**   
+#### Step 4 - (optional payment) and file download 
 Triggering the download application is handled with iExec SDK and protocol, including making the "payment" when monetization has been set as a governance condition.  
 **From an iExec prospective this step is just a computation order being placed on the marketplace by the requester (recipient).** The following arguments of the "buy computation" order method will be used to define the governance rules:  
 
@@ -123,6 +124,21 @@ Triggering the download application is handled with iExec SDK and protocol, incl
 
 
 A detailed description of the app execution order can be found [in this section of the documentation](https://github.com/iExecBlockchainComputing/iexec-sdk/blob/master/CLI.md#app-run)
+
+
+### DataProtector
+Lauched with iExec v8, DataProtector is one of the new iExec dev tools. Implementing iExec dataProtector enables to simplify the whole workflow.
+After implementation of DataProtector, no more need to 
+The step 2 of the File Transfer process is simplified by the grantAccess fonction. When the sender calls grantAccess he deploys a dataset order on the marketplace. The following arguments of the dataset grantAccess will be used to define the governance rules:
+
+| Argument | Description |
+| ------ | ------ |
+| protectedData | 0x Address of the dataset representing the file being shared |  
+| pricePerAccess | Set to a non-0 value when monetizing | 
+| authorizedApp | 0x address of our download app | 
+| authorizedUser | 0x address or ENS of the recipient |
+
+A detailed description of dataset orders using DataProtector can be found [in this section of the documentation](https://tools.docs.iex.ec/tools/dataprotector/methods/grantaccess)
 
 
 ## Notification system
