@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import SendForm from "../components/SendForm/SendForm";
+import SendForm from "../components/SendForm";
 import { AceContext } from '../context/context';
 import crypto from 'crypto-browserify';
 import StepBar from '../components/StepBar';
