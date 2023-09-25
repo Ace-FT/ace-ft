@@ -129,9 +129,9 @@ A detailed description of the app execution order can be found [in this section 
 ### DataProtector
 Lauched with iExec v8, DataProtector is one of the new iExec dev tools. Implementing iExec DataProtector enables to simplify the whole workflow.
 
-The protectData function simplifies the way of creating and deploying a new dataset. Any kind of data can be protected by the protectData func. The data will be stored in one zip file to create the dataset.
+The `protectData` function simplifies the way of creating and deploying a new dataset. Any kind of data can be protected by the `protectData` func. The data will be stored in one zip file to create the dataset.
 
-The step 2 of the file transfer process is simplified by the grantAccess function. When the sender calls grantAccess he deploys a dataset order on the marketplace. The following arguments of the dataset grantAccess will be used to define the governance rules:
+The step 2 of the file transfer process is simplified by the `grantAccess` function. When the sender calls `grantAccess` he deploys a dataset order on the marketplace. The following arguments of the dataset `grantAccess` will be used to define the governance rules:
 
 | Argument | Description |
 | ------ | ------ |
