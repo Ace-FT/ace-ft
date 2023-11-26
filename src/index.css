@@ -454,7 +454,7 @@ a {
 
 .btn {
     background-color: var(--iexec-yellow);
-    border-radius: 8px;
+    border-radius: 6px;
     clear: both;
     color: rgb(13 13 18);
     cursor: pointer;

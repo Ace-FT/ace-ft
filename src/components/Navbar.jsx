@@ -97,7 +97,7 @@ const NavBar = () => {
             <nav className="top-navigation">
               <ul className="flex list-none">
                 <li>
-                  <NavLink to="/" relative="path">Home</NavLink>
+                  <NavLink to="/home" relative="path">Home</NavLink>
                 </li>
                 <li>
                   {connectedAccount ?

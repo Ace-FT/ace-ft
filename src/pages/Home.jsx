@@ -8,7 +8,6 @@ const APP_NAME = process.env.REACT_APP_NAME;
 
 function Home() {
   const { state, background, bgCreator, bgUrls, bgCreatorSocial, creativeMode, backgroundIsLight } = useContext(AceContext);
-
   
 
   const [message, setMessage] = useState("")

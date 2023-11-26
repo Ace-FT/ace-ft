@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/Navbar";
 import Home from "./pages/Home";
+import Landing from "./pages/Landing";
 import Inbox from "./pages/Inbox";
 import SentItems from "./pages/SentItems";
 import Settings from "./pages/Settings";
@@ -89,7 +90,8 @@ function App() {
           <div className="page-container">
             <main className="w-full text-iexwhite">
               <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Landing />} />
+                <Route path="/home" element={<Home />} />
                 <Route
                   path="/inbox"
                   element={
@@ -117,7 +119,6 @@ function App() {
               </Routes>
             </main>
           </div>
-
         </div>
         <Footer />
       </Router>
