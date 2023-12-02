@@ -3,8 +3,8 @@
     "version": "0.1.2",
     "private": true,
     "engines": {
-    "node": ">=18 <20"
-      } ,
+        "node": ">=18 <20"
+    },
     "dependencies": {
         "@apollo/client": "^3.7.1",
         "@babel/eslint-parser": "^7.19.1",
