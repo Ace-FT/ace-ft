@@ -8,8 +8,10 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
-# Setting an environment variable with the value of a configuration variable
-env_var: ${{ vars.ENV_CONTEXT_VAR }}
+env:
+  # Setting an environment variable with the value of a configuration variable
+  env_var: ${{ vars.ENV_CONTEXT_VAR }}
+
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
