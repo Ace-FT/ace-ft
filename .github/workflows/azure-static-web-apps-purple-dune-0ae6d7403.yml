@@ -35,6 +35,14 @@ jobs:
           ###### End of Repository/Build Configurations ######
         env:
           REACT_APP_NAME: ${{ vars.REACT_APP_NAME }}
+          REACT_APP_BACKEND_URL: ${{ vars.REACT_APP_BACKEND_URL }}
+          REACT_APP_INFURA_ID: ${{ vars.REACT_APP_INFURA_ID }}
+          REACT_APP_INFURA_SECRET_KEY: ${{ vars.REACT_APP_INFURA_SECRET_KEY }}
+          REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
+          REACT_APP_IPFS_GATEWAYS: ${{ vars.REACT_APP_IPFS_GATEWAYS }}
+          REACT_APP_IS_DEBUG: ${{ vars.REACT_APP_IS_DEBUG }}
+          REACT_APP_EXPLORER_BASEURL: ${{ vars.REACT_APP_EXPLORER_BASEURL }}
+
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
