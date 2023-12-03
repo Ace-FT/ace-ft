@@ -10,7 +10,7 @@ on:
       - main
 env:
   # Setting an environment variable with the value of a configuration variable
-  env_var: ${{ vars.ENV_CONTEXT_VAR }}
+  REACT_APP_NAME: ${{ vars.REACT_APP_NAME }}
 
 jobs:
   build_and_deploy_job:
