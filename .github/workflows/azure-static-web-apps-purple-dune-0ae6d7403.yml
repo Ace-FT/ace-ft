@@ -8,9 +8,6 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
-env:
-  # Setting an environment variable with the value of a configuration variable
-  REACT_APP_NAME: ${{ secrets.REACT_APP_NAME }}
 
 jobs:
   build_and_deploy_job:
@@ -37,7 +34,7 @@ jobs:
           output_location: "./build" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
         env:
-          REACT_APP_NAME: "Foo site name"
+          REACT_APP_NAME: ${{ secrets.REACT_APP_NAME }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
