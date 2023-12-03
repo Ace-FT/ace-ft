@@ -37,7 +37,7 @@ jobs:
           output_location: "./build" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
         env:
-          REACT_APP_NAME: ${{ vars.REACT_APP_NAME }}
+          REACT_APP_NAME: "Foo site name"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
