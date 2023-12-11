@@ -171,123 +171,128 @@ function Inbox() {
       <Helmet>
         <title>{APP_NAME} | Inbox</title>
       </Helmet>
-      <div className="mx-8 py-m">
-        <h1 className="table-title">Inbox</h1>
+      <div className="page-container">
+        <main className="w-full text-iexwhite">
+          <div className="mx-8 py-m">
+            <h1 className="table-title">Inbox</h1>
 
-        <ReactTooltip />
+            <ReactTooltip />
 
-        <table className="container w-full max-w-full table-auto border-collapse">
-          <thead>
-            <tr>
-              <th className="text-center">Received date</th>
-              <th className="text-center">From</th>
-              <th className="text-center">Price (in RLC)</th>
-              <th className="text-center">Status</th>
-              <th className="text-center px-8">&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>
-            {inboxItems && inboxItems.length > 0 ? (
-              inboxItems
-                .sort((a, b) => b.sendTimestamp - a.sendTimestamp)
-                .map((inboxItem, i) => {
-                  return (
-                    <tr className="text-center" key={i}>
-                      <td>{formatDate(inboxItem.sendTimestamp)}</td>
-                      <td>{inboxItem.dataOwner}</td>
-                      <td>{(parseInt(inboxItem.price)/10**9)}</td>
-                      <td>
-                        {inboxItem.status === STATUS_OPEN_ORDER && (
-                          <p>
-                            <button
-                              className="btn h-6"
-                              onClick={async () => {
-                                await requestDataset(inboxItem.id, connectedAccount, inboxItem.from, inboxItem.sendDate, inboxItem.price);
-                                localStorage.setItem(`${inboxItem.taskid}`, `loading`)
-                                //window.location.reload(false);
-                              }}
-                            >
-                              Request
-                            </button>
-                          </p>
-                        )}
-                        {inboxItem.status === STATUS_ACTIVE_ORDER &&
-                        (
-                        <>
-                          <p>
-                            Request started on {formatDate(inboxItem.downloadTimestamp)}
-                          </p>
-                          {/* <div className="w-full bg-gray-200 rounded-full">
-                            <div id={inboxItem.taskid} className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `10%`}}>10%</div>
-                          </div>                           */}
-                          {console.log(new Date().getTime(), inboxItem.downloadTimestamp.getTime())}
-                          {new Date().getTime() - inboxItem.downloadTimestamp.getTime() < 45000 ? (
-                            <div className="w-full bg-gray-200 rounded-full">
-                              <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `17%`}}>17%</div>
-                            </div>
-                          ) : (
-                            <div className="w-full bg-gray-200 rounded-full">
-                              <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `65%`}}>65%</div>
-                            </div>
-                          )}
-                        </>     
-                        )
-                        }
-                        {inboxItem.status === STATUS_REVEALING_ORDER && (
-                        <>
-                          <p>
-                            Request started on {formatDate(inboxItem.downloadTimestamp)}
-                          </p>
-                          <div className="w-full bg-gray-200 rounded-full">
-                            <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `90%`}}>90%</div>
-                          </div>
-                        </>     
-                        )}
-                        {inboxItem.status === STATUS_COMPLETED_ORDER && (
-                        <>
-                          {
-                            (isDownloading && inboxItem.taskid === currentDownloading) ? (
-                              <p>Downloading file...</p>
-                            ) : (
+            <table className="container w-full max-w-full table-auto border-collapse">
+              <thead>
+                <tr>
+                  <th className="text-center">Received date</th>
+                  <th className="text-center">From</th>
+                  <th className="text-center">Price (in RLC)</th>
+                  <th className="text-center">Status</th>
+                  <th className="text-center px-8">&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody>
+                {inboxItems && inboxItems.length > 0 ? (
+                  inboxItems
+                    .sort((a, b) => b.sendTimestamp - a.sendTimestamp)
+                    .map((inboxItem, i) => {
+                      return (
+                        <tr className="text-center" key={i}>
+                          <td>{formatDate(inboxItem.sendTimestamp)}</td>
+                          <td>{inboxItem.dataOwner}</td>
+                          <td>{(parseInt(inboxItem.price)/10**9)}</td>
+                          <td>
+                            {inboxItem.status === STATUS_OPEN_ORDER && (
                               <p>
-                                <button className="btn h-6" onClick={async () => await processDownload(inboxItem)}>
-                                  Download
+                                <button
+                                  className="btn h-6"
+                                  onClick={async () => {
+                                    await requestDataset(inboxItem.id, connectedAccount, inboxItem.from, inboxItem.sendDate, inboxItem.price);
+                                    localStorage.setItem(`${inboxItem.taskid}`, `loading`)
+                                    //window.location.reload(false);
+                                  }}
+                                >
+                                  Request
                                 </button>
                               </p>
-                            )  
-                          }
-                        </>
-                        )}
-                      </td>
-                      <td className="text-center">
-                        <ReactTooltip />
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                          data-tip="View in iExec explorer"
-                          fill="none" viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                          className="w-5 h-5 clickable"
-                          onClick={async () => {
-                            openExplorer(inboxItem);
-                          }}>
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                        </svg>
-                      </td>
-                    </tr>
-                  );
-                })
-            ) : (
-              <tr class="text-center">
-                {isLoading ? (
-                  <td colSpan={5}>LOADING ...</td>
-                ) : 
-                  <td colSpan={5}>You have no pending files in your inbox.</td>
-                }
-              </tr>
-            )}
-          </tbody>
-        </table>
+                            )}
+                            {inboxItem.status === STATUS_ACTIVE_ORDER &&
+                            (
+                            <>
+                              <p>
+                                Request started on {formatDate(inboxItem.downloadTimestamp)}
+                              </p>
+                              {/* <div className="w-full bg-gray-200 rounded-full">
+                                <div id={inboxItem.taskid} className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `10%`}}>10%</div>
+                              </div>                           */}
+                              {console.log(new Date().getTime(), inboxItem.downloadTimestamp.getTime())}
+                              {new Date().getTime() - inboxItem.downloadTimestamp.getTime() < 45000 ? (
+                                <div className="w-full bg-gray-200 rounded-full">
+                                  <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `17%`}}>17%</div>
+                                </div>
+                              ) : (
+                                <div className="w-full bg-gray-200 rounded-full">
+                                  <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `65%`}}>65%</div>
+                                </div>
+                              )}
+                            </>     
+                            )
+                            }
+                            {inboxItem.status === STATUS_REVEALING_ORDER && (
+                            <>
+                              <p>
+                                Request started on {formatDate(inboxItem.downloadTimestamp)}
+                              </p>
+                              <div className="w-full bg-gray-200 rounded-full">
+                                <div className="pgbr bg-iexyellow text-base font-medium text-iexblk text-center p-0.5 leading-none mt-2" style={{width: `90%`}}>90%</div>
+                              </div>
+                            </>     
+                            )}
+                            {inboxItem.status === STATUS_COMPLETED_ORDER && (
+                            <>
+                              {
+                                (isDownloading && inboxItem.taskid === currentDownloading) ? (
+                                  <p>Downloading file...</p>
+                                ) : (
+                                  <p>
+                                    <button className="btn h-6" onClick={async () => await processDownload(inboxItem)}>
+                                      Download
+                                    </button>
+                                  </p>
+                                )  
+                              }
+                            </>
+                            )}
+                          </td>
+                          <td className="text-center">
+                            <ReactTooltip />
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                              data-tip="View in iExec explorer"
+                              fill="none" viewBox="0 0 24 24"
+                              strokeWidth="1.5"
+                              stroke="currentColor"
+                              className="w-5 h-5 clickable"
+                              onClick={async () => {
+                                openExplorer(inboxItem);
+                              }}>
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                            </svg>
+                          </td>
+                        </tr>
+                      );
+                    })
+                ) : (
+                  <tr class="text-center">
+                    {isLoading ? (
+                      <td colSpan={5}>LOADING ...</td>
+                    ) : 
+                      <td colSpan={5}>You have no pending files in your inbox.</td>
+                    }
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </main>
       </div>
+
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { disconnect } from "process";
 import React, { useContext, useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { Web3Auth } from "@web3auth/modal";
 import { walletLogin, walletLogout } from "../shared/web3AuthLogin"
 import { AceContext } from "../context/context";
@@ -22,8 +22,11 @@ import ProfileIdentifier from "./ProfileIdentifier";
 const NavBar = () => {
   const IS_DEBUG = process.env.REACT_APP_IS_DEBUG === 'true';
 
-  const { connectWallet, connectedAccount, setConnectedAccount, setW3authPrivatekey, setWeb3authConnectedAccount, userInfo, setUserInfo } = useContext(AceContext);
+  const { connectWallet, connectedAccount, setConnectedAccount, setW3authPrivatekey, setWeb3authConnectedAccount, setUserInfo } = useContext(AceContext);
   const [pendingCount, setPendingCount] = useState("");
+
+  const location = useLocation();
+  const isLandingPage = location.pathname === "/";
 
   const copyAddressToClipboard = () => {
     document.getElementById("walletAddressContainer").innerHTML = `Copied! ${shortenAddress(connectedAccount)} 👋`;
@@ -88,10 +91,13 @@ const NavBar = () => {
   return (
     <>
       <Modal id="navbar-modal" closeHand />
-      <div className="flex w-full items-center justify-center bg-iexblk">
+      <div className={`flex w-full items-center justify-center ${isLandingPage ? 'bg-white' : 'bg-iexblk'}`}>
         <div className="top-container">
-          <div className="flex items-center">
-            <img src="/logo512.png" className="app-logo" /><div className="logo-container h-6 flex-none text-left font-logo text-xl not-italic">
+          { !isLandingPage ? (
+            <>
+            <div className="flex items-center">
+            <img src="/logo512.png" className="app-logo" />
+            <div className="logo-container h-6 flex-none text-left font-logo text-xl not-italic">
               Ace File Transfer
             </div>
             <nav className="top-navigation">
@@ -125,6 +131,36 @@ const NavBar = () => {
             &nbsp;Notification bot
             {/* </NavLink> */}
           </div>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center">
+                <img src="/logo512.png" className="app-logo" />
+                <div className="logo-container h-6 flex-none text-left font-logo text-xl not-italic text-iexblk">
+                  Ace File Transfer
+                </div>
+                {/* <nav className="top-navigation">
+                  <ul className="flex list-none">
+                    <li>
+                      <NavLink to="/home" relative="path">Home</NavLink>
+                    </li>
+                    <li>
+                      {connectedAccount ?
+                        (
+                          <NavLink to="/inbox" relative="path">Inbox&nbsp;
+                            {pendingCount!="" && (<span class="badge text-xs px-1 bg-red-500 text-white-100 rounded-full">{pendingCount}</span>)}
+                          </NavLink>) :
+                        (<span onClick={showModalNotConnected}>Inbox</span>)}
+                    </li>
+                    <li>
+                      {connectedAccount ? (<NavLink to="/sent" relative="path">Sent</NavLink>) : (<span onClick={showModalNotConnected}>Sent</span>)}
+                    </li>
+                  </ul>
+                </nav> */}
+              </div>
+            </>
+          )}
+
           <div className="flex max-w-2/10 basis-1/5">
             {connectedAccount ? (
               <div className="flex ml-auto items-center" >

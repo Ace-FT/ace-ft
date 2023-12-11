@@ -4,7 +4,8 @@
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Mulish:wght@500&display=swap');
+
 #app {
     font-family: 'Mulish', 'sans-serif';
 }
@@ -81,12 +82,12 @@ a {
 }
 
 .page-container {
-    max-width: 1280px;
     display: flex;
+    max-width: 1280px;
+    min-height: calc(100vh - 105px);
+    margin: auto;
     align-items: center;
     justify-content: space-between;
-    margin: auto;
-    min-height: calc(100vh - 105px);
 }
 
 .footer-container {
@@ -291,17 +292,6 @@ a {
     justify-content: center
 }
 
-.see-all {
-    font-size: .5em;
-    margin-left: 8px
-}
-
-.helper-icon {
-    display: inline-block;
-    font-size: 15px;
-    vertical-align: top
-}
-
 .users-logo {
     font-size: 30px
 }
@@ -324,39 +314,6 @@ a {
     flex: 1 1
 }
 
-.hint--iexeccolor:after {
-    background-color: #fcd15a;
-    background-color: var(--iexec-yellow);
-    color: #0d0d12;
-    color: var(--background-color);
-    font-family: Mulish, sans-serif;
-    font-size: .5em;
-    font-weight: 500;
-    text-shadow: none;
-    width: 200px
-}
-
-.hint--iexeccolor.hint--top-left:before,
-.hint--iexeccolor.hint--top-right:before,
-.hint--iexeccolor.hint--top:before {
-    border-top-color: #fcd15a;
-    border-top-color: var(--iexec-yellow)
-}
-
-.hint--iexeccolor.hint--bottom:before {
-    border-bottom-color: #fcd15a;
-    border-bottom-color: var(--iexec-yellow)
-}
-
-.hint--iexeccolor.hint--left:before {
-    border-left-color: #fcd15a;
-    border-left-color: var(--iexec-yellow)
-}
-
-.hint--iexeccolor.hint--right:before {
-    border-right-color: #fcd15a;
-    border-right-color: var(--iexec-yellow)
-}
 
 .footer {
     align-items: center;
@@ -373,12 +330,6 @@ a {
     background: linear-gradient(90deg, #1d1d24 1.56%, #3f0d3f 11.98%, #ce2c68 22.4%, #fcd15a 43.75%, #fcd15a 56.77%, #ce2c68 79.17%, #3f0d3f 90.1%, #1d1d24);
     height: 8px;
     width: 100%
-}
-
-.footer-left {
-    display: flex;
-    flex: 1 1;
-    justify-content: flex-start
 }
 
 .iexec-logo-footer {
@@ -409,52 +360,10 @@ a {
     margin: 0 10px
 }
 
-.mailchimp-form {
-    display: flex;
-    flex-direction: column;
-    font-size: 16px;
-    justify-content: center
-}
-
-.mailchimp-form .form-title {
-    margin-bottom: 20px
-}
-
-.mailchimp-form .field-group {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 3%
-}
-
-.mailchimp-form .field-group label {
-    margin-bottom: 3px
-}
-
-.mailchimp-form .field-group input {
-    border: 1px solid #abb0b2;
-    border-radius: 8px;
-    height: 33px;
-    padding: 8px 0;
-    text-indent: 2%;
-    width: 100%
-}
-
-.mailchimp-form .asterisk {
-    color: #d63838
-}
-
-.mailchimp-form .helper_text {
-    border-radius: 3px;
-    color: #8d8985;
-    font-size: 14px;
-    margin-top: 2px;
-    padding: 3px;
-    z-index: 1
-}
 
 .btn {
     background-color: var(--iexec-yellow);
-    border-radius: 6px;
+    border-radius: 4px;
     clear: both;
     color: rgb(13 13 18);
     cursor: pointer;
@@ -560,26 +469,7 @@ a {
         margin: 0;
         padding: 0 10px
     }
-    .footer-left {
-        grid-column-end: footer-middle;
-        grid-column-start: footer-start
-    }
-    .footer-left,
-    .footer-right {
-        grid-row-end: footer-end;
-        grid-row-start: footer-middle
-    }
-    .footer-right {
-        grid-column-end: footer-end;
-        grid-column-start: footer-middle;
-        text-align: end
-    }
-    .footer-middle {
-        grid-column-end: footer-end;
-        grid-column-start: footer-start;
-        grid-row-end: footer-middle;
-        grid-row-start: footer-start
-    }
+
     .social-logos {
         flex: 1 1;
         margin: 20px 0 10px

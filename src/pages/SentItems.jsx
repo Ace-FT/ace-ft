@@ -88,80 +88,84 @@ const SentItems = () => {
       <Helmet>
         <title>{APP_NAME} | Sent items</title>
       </Helmet>
-      <div className="py-m mx-8">
-        <h1 class="table-title">Sent items</h1>
+      <div className="page-container">
+        <main className="w-full text-iexwhite">
+          <div className="py-m mx-8">
+            <h1 class="table-title">Sent items</h1>
 
-        <table className="w-full border-collapse max-w-full container table-auto">
-          <thead>
-            <tr>
-              <th className="text-center">Send date</th>
-              <th className="text-center">To</th>
-              <th className="text-center">Price (in RLC)</th>
-              <th className="text-center">Status</th>
-              <th className="text-center px-8">&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>
-            {inboxItems && inboxItems.length > 0 ? (
+            <table className="w-full border-collapse max-w-full container table-auto">
+              <thead>
+                <tr>
+                  <th className="text-center">Send date</th>
+                  <th className="text-center">To</th>
+                  <th className="text-center">Price (in RLC)</th>
+                  <th className="text-center">Status</th>
+                  <th className="text-center px-8">&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody>
+                {inboxItems && inboxItems.length > 0 ? (
 
-              inboxItems.sort((a, b) => b.sendTimestamp - a.sendTimestamp).map((inboxItem, i) => {
-                return (
-                  <tr class="text-center" key={i}>
-                    <td>{formatDate(inboxItem.sendTimestamp)}</td>
-                    <td>{inboxItem.to}</td>
-                    <td>{(parseInt(inboxItem.price)/10**9)}</td>
-                    <td>
-                      {
-                        inboxItem.status === STATUS_OPEN_ORDER ?
-                          <p>
-                            Pending
-                          </p>
-                          : ""
-                      }
-                      {
-                        inboxItem.status === STATUS_COMPLETED_ORDER &&
-                        <p>
-                          Downloaded on {formatDate(inboxItem.downloadTimestamp)}
-                        </p>
-                      }
-                      {
-                        inboxItem.status === STATUS_ACTIVE_ORDER &&
-                        <p>
-                          Download started on {formatDate(inboxItem.downloadTimestamp)}
-                        </p>
-                      }
-                    </td>
-                    <td className="text-center">
-                        <ReactTooltip/>
-                        <svg  xmlns="http://www.w3.org/2000/svg"
-                              data-tip="View in iExec explorer"
-                              fill="none" viewBox="0 0 24 24"
-                              stroke-width="1.5"
-                              stroke="currentColor"
-                              className="w-5 h-5 clickable"
-                              onClick={async () => {
-                                openExplorer(inboxItem);
-                              }}>
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                        </svg>
-                      </td>
-                  </tr>
-                );
-              })
-
-            ) : (
-            
-              <tr class="text-center">
-              {isLoading ? (
-                <td colSpan={5}>LOADING ...</td>
-              ) : 
-                <td colSpan={5}>No sent item found.</td>
-              }
-            </tr>           
-        )}
-          </tbody>
-        </table>
+                  inboxItems.sort((a, b) => b.sendTimestamp - a.sendTimestamp).map((inboxItem, i) => {
+                    return (
+                      <tr class="text-center" key={i}>
+                        <td>{formatDate(inboxItem.sendTimestamp)}</td>
+                        <td>{inboxItem.to}</td>
+                        <td>{(parseInt(inboxItem.price)/10**9)}</td>
+                        <td>
+                          {
+                            inboxItem.status === STATUS_OPEN_ORDER ?
+                              <p>
+                                Pending
+                              </p>
+                              : ""
+                          }
+                          {
+                            inboxItem.status === STATUS_COMPLETED_ORDER &&
+                            <p>
+                              Downloaded on {formatDate(inboxItem.downloadTimestamp)}
+                            </p>
+                          }
+                          {
+                            inboxItem.status === STATUS_ACTIVE_ORDER &&
+                            <p>
+                              Download started on {formatDate(inboxItem.downloadTimestamp)}
+                            </p>
+                          }
+                        </td>
+                        <td className="text-center">
+                            <ReactTooltip/>
+                            <svg  xmlns="http://www.w3.org/2000/svg"
+                                  data-tip="View in iExec explorer"
+                                  fill="none" viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  className="w-5 h-5 clickable"
+                                  onClick={async () => {
+                                    openExplorer(inboxItem);
+                                  }}>
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                            </svg>
+                          </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr class="text-center">
+                    {isLoading ? (
+                      <td colSpan={5}>LOADING ...</td>
+                    ) : 
+                      <td colSpan={5}>No sent item found.</td>
+                    }
+                  </tr>           
+                )}
+              </tbody>
+            </table>
+          </div>
+        </main>
       </div>
+    
+      
     </>
 
   );

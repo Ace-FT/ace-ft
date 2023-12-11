@@ -1,0 +1,246 @@
+* {
+    --font-sm: 14px;
+    --font-base: 16px;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: white;
+}
+
+.header_title {
+    max-width: 56rem/* 896px */
+    ;
+    margin: 0 auto;
+    padding: 64px 24px;
+}
+
+.header_title h1 {
+    font-size: 36px;
+    line-height: 45px;
+    font-weight: 800;
+}
+
+.header_title .subtitle {
+    max-width: 56rem/* 896px */
+    ;
+    margin: 0 auto;
+}
+
+.header_title .subtitle p {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-size: 20px;
+    line-height: 25px;
+}
+
+.header_title .buttons_container {
+    display: flex;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--font-base);
+}
+
+.header_title .buttons_container button:nth-child(1) {
+    padding: 8px 24px 8px 24px;
+    border: solid rgb(99 102 241 / 1) 1px;
+    border-radius: 4px;
+}
+
+.header_title .buttons_container button:nth-child(3) {
+    padding: 8px 16px 8px 16px;
+    border: solid rgb(209 213 219 / 1) 1px;
+    border-radius: 4px;
+}
+
+.header_powered {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.header_powered p {
+    font-size: var(--font-sm);
+    line-height: 18px;
+}
+
+.header_powered .brands {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+}
+
+#section3 {
+    padding-top: 112px;
+    padding-bottom: 56px;
+    overflow: hidden;
+    background-color: white;
+}
+
+#section4 {
+    padding-top: 56px;
+    background-color: white;
+}
+
+#section6 {
+    padding-top: 32px;
+    padding-bottom: 56px;
+    background-color: white;
+}
+
+#section7 {
+    padding-top: 48px;
+}
+
+.section3_div,
+.section4_div,
+.section6_div,
+.section7_div {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.section7_div {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.section3_div h2,
+.section4_div h2,
+.section5_div h2,
+.section7_div h2 {
+    font-size: 36px;
+    line-height: 45px;
+}
+
+#section4 .section4_div .container {
+    padding: 0 0 112px 0;
+}
+
+.section5_div {
+    max-width: 80rem;
+    margin: 0 16px;
+    padding-top: 80px;
+}
+
+.section5_div .card {
+    position: relative;
+    width: 92%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 128px;
+    cursor: pointer;
+}
+
+.section5_div .card:hover {
+    --tw-scale-x: 1.05;
+    --tw-scale-y: 1.05;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.section5_div .card .descrTitle {
+    padding-bottom: 4px;
+    font-size: var(--font-sm);
+    line-height: 18px;
+    text-align: center;
+    text-transform: uppercase;
+    color: rgb(55 65 81 / 1);
+}
+
+.section5_div .card .descrP {
+    padding-bottom: 4px;
+    font-size: var(--font-sm);
+    line-height: 18px;
+    text-align: center;
+    color: rgb(107 114 128 / 1);
+}
+
+#section6 .section6_div .quote {
+    margin-bottom: 24px;
+    font-size: var(--font-base);
+    color: rgb(75 85 99 / 1);
+}
+
+#section7 .section7_div h3 {
+    font-weight: 600;
+    font-size: var(--font-sm);
+    line-height: 18px;
+    text-transform: uppercase;
+}
+
+#section7 .section7_div ul {
+    font-size: var(--font-base);
+    line-height: 24px;
+}
+
+@media (min-width: 640px) {
+    .section5_div .card {
+        width: 41.667%;
+        max-width: 320px;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .header_title h1 {
+        font-size: 48px;
+        line-height: 60px;
+    }
+    .section3_div h2,
+    .section4_div h2,
+    .section5_div h2 {
+        font-size: 48px;
+        line-height: 60px;
+    }
+    .section5_div .card {
+        width: 92%
+    }
+}
+
+@media (min-width: 1024px) {
+    .header_title {
+        padding: 64px 32px;
+    }
+    .header_title h1 {
+        font-size: 96px;
+        line-height: 120px;
+    }
+    .header_title .subtitle p {
+        font-size: 30px;
+        line-height: 37.5px;
+    }
+    .section3_div h2,
+    .section4_div h2,
+    .section5_div h2,
+    .section7_div h2 {
+        font-size: 72px;
+        line-height: 90px;
+    }
+    .section5_div {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding-top: 160px;
+    }
+    .section5_div .card {
+        width: 50%;
+        margin-bottom: 80px;
+    }
+}
+
+@media (min-width: 1280px) {
+    .section5_div .card {
+        width: 33.333%;
+        max-width: 380px;
+    }
+}

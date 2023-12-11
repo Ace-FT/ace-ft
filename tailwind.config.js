@@ -37,14 +37,19 @@ module.exports = {
         "8": "32px",
       },
       fontSize: {
+        "base": ["16px", "24px"],
         "l": "15px",
+        "lg": ["18px", "24px"],
         xl: ["1.3rem", "0.2rem"],
-        xl2: ["1.25rem", "2.25rem"],
+        xl2: ["20px", "36px"],
         "2xl": ["1.5rem", "2.5rem"],
-        "6xl": ["3.75rem", "5.25rem"],
-        "8xl": ["6rem", "8.5rem"]
+        "6xl": ["60px", "84px"],
+        "8xl": ["96px", "136px"]
       },
     },
   },
-  plugins: [require("tw-elements/dist/plugin")],
+  plugins: [
+    require("tw-elements/dist/plugin"),
+    require('tailwindcss-filters'), // Assurez-vous d'ajouter ce plugin
+  ],
 };
